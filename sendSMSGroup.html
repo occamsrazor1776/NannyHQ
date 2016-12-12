@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Send SMS/MMS Group&middot; NannyHQ Messaging App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+
+    <!-- Facebook meta tags -->
+    <meta property="og:url" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+
+    <!-- Twitter meta tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="">
+    <meta name="twitter:creator" content="NannyHQ">
+    <meta name="twitter:title" content="NannyHQ Messaging App">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="manifest.json">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#0288d1">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700">
+    <link rel="stylesheet" href="css/vendor.css">
+    <link rel="stylesheet" href="css/elephant.css">
+    <link rel="stylesheet" href="css/application.css">
+    <link rel="stylesheet" href="css/contacts.css">   
+   
+  </head>
+  <body class="layout layout-header-fixed layout-sidebar-fixed">
+    <div class="layout-header">
+      <div class="navbar navbar-default">
+        <div class="navbar-header">
+          <a class="navbar-brand navbar-brand-center" href="/"> <img src="img/NannyHQ.png" alt="Nanny HQ" width="91" /> 
+          </a>
+          <button class="navbar-toggler visible-xs-block collapsed" type="button" data-toggle="collapse" data-target="#sidenav">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="bars">
+              <span class="bar-line bar-line-1 out"></span>
+              <span class="bar-line bar-line-2 out"></span>
+              <span class="bar-line bar-line-3 out"></span>
+            </span>
+            <span class="bars bars-x">
+              <span class="bar-line bar-line-4"></span>
+              <span class="bar-line bar-line-5"></span>
+            </span>
+          </button>
+          <button class="navbar-toggler visible-xs-block collapsed" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="arrow-up"></span>
+            <span class="ellipsis ellipsis-vertical">
+              <img class="ellipsis-object" width="32" height="32" src="img/0180441436.jpg" alt="Teddy Wilson">
+            </span>
+          </button>
+        </div>
+        <div class="navbar-toggleable">
+          <nav id="navbar" class="navbar-collapse collapse">
+            <button class="sidenav-toggler hidden-xs" title="Collapse sidenav ( [ )" aria-expanded="true" type="button">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="bars">
+                <span class="bar-line bar-line-1 out"></span>
+                <span class="bar-line bar-line-2 out"></span>
+                <span class="bar-line bar-line-3 out"></span>
+                <span class="bar-line bar-line-4 in"></span>
+                <span class="bar-line bar-line-5 in"></span>
+                <span class="bar-line bar-line-6 in"></span>
+              </span>
+            </button>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="visible-xs-block">
+                <h4 class="navbar-text text-center">Welcome User</h4>
+              </li>
+              <li class="hidden-xs hidden-sm">
+                <form class="navbar-search navbar-search-collapsed">
+                  <div class="navbar-search-group">
+                    <input class="navbar-search-input" type="text" placeholder="Search for people, companies, and more&hellip;">
+                    <button class="navbar-search-toggler" title="Expand search form ( S )" aria-expanded="false" type="submit">
+                      <span class="icon icon-search icon-lg"></span>
+                    </button>
+                    <button class="navbar-search-adv-btn" type="button">Advanced</button>
+                  </div>
+                </form>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">
+                  <span class="icon-with-child hidden-xs">
+                    <span class="icon icon-envelope-o icon-lg"></span>
+                    <span class="badge badge-danger badge-above right">1</span>
+                  </span>
+                  <span class="visible-xs-block">
+                    <span class="icon icon-envelope icon-lg icon-fw"></span>
+                    <span class="badge badge-danger pull-right">1</span>
+                    Messages
+                  </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+                  <div class="dropdown-header">
+                    <a class="dropdown-link" href="compose.html">New Message</a>
+                    <h5 class="dropdown-heading">Recent messages</h5>
+                  </div>
+                  <div class="dropdown-body">
+                    <div class="list-group list-group-divided custom-scrollbar">
+                      <a class="list-group-item" href="#">
+                        <div class="notification">
+                          <div class="notification-media">
+                            <img class="rounded" width="40" height="40" src="img/0299419341.jpg" alt="Harry Jones">
+                          </div>
+                          <div class="notification-content">
+                            <small class="notification-timestamp">16 min</small>
+                            <h5 class="notification-heading">Harry Jones</h5>
+                            <p class="notification-text">
+                              <small class="truncate">Hi Teddy, Just wanted to let you know we got the project! We should be starting the planning next week. Harry</small>
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="dropdown-footer">
+                    <a class="dropdown-btn" href="#">See All</a>
+                  </div>
+                </div>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">
+                  <span class="icon-with-child hidden-xs">
+                    <span class="icon icon-bell-o icon-lg"></span>
+                    <span class="badge badge-danger badge-above right">1</span>
+                  </span>
+                  <span class="visible-xs-block">
+                    <span class="icon icon-bell icon-lg icon-fw"></span>
+                    <span class="badge badge-danger pull-right">1</span>
+                    Notifications
+                  </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+                  <div class="dropdown-header">
+                    <a class="dropdown-link" href="#">Mark all as read</a>
+                    <h5 class="dropdown-heading">Recent Notifications</h5>
+                  </div>
+                  <div class="dropdown-body">
+                    <div class="list-group list-group-divided custom-scrollbar">
+                      <a class="list-group-item" href="#">
+                        <div class="notification">
+                          <div class="notification-media">
+                            <span class="icon icon-exclamation-triangle bg-warning rounded sq-40"></span>
+                          </div>
+                          <div class="notification-content">
+                            <small class="notification-timestamp">35 min</small>
+                            <h5 class="notification-heading">Update Status</h5>
+                            <p class="notification-text">
+                              <small class="truncate">Failed to get available update data. To ensure the proper functioning of your application, update now.</small>
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="dropdown-footer">
+                    <a class="dropdown-btn" href="#">See All</a>
+                  </div>
+                </div>
+              </li>
+              <li class="dropdown hidden-xs">
+                <button class="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
+                  <img class="rounded" width="36" height="36" src="img/0180441436.jpg" alt="Teddy Wilson"> Teddy Wilson
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">                  
+                  <li><a href="/contacts">Contacts</a></li>
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="/login">Sign out</a></li>
+                </ul>
+              </li>
+              <li class="visible-xs-block">
+                <a href="/contacts">
+                  <span class="icon icon-users icon-lg icon-fw"></span>
+                  Contacts
+                </a>
+              </li>
+              <li class="visible-xs-block">
+                <a href="#">
+                  <span class="icon icon-user icon-lg icon-fw"></span>
+                  Profile
+                </a>
+              </li>
+              <li class="visible-xs-block">
+                <a href="/login">
+                  <span class="icon icon-power-off icon-lg icon-fw"></span>
+                  Sign out
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="layout-main">
+      <div class="layout-sidebar">
+        <div class="layout-sidebar-backdrop"></div>
+        <div class="layout-sidebar-body">
+          <div class="custom-scrollbar">
+            <nav id="sidenav" class="sidenav-collapse collapse">
+              <ul class="sidenav">
+                <li class="sidenav-search hidden-md hidden-lg">
+                  <form class="sidenav-form" action="/">
+                    <div class="form-group form-group-sm">
+                      <div class="input-with-icon">
+                        <input class="form-control" type="text" placeholder="Search…">
+                        <span class="icon icon-search input-icon"></span>
+                      </div>
+                    </div>
+                  </form>
+                </li>
+                <li class="sidenav-heading">Navigation</li>
+                <li class="sidenav-item">
+                  <a href="/contacts" aria-haspopup="true">
+                    <span class="sidenav-icon icon icon-phone-square"></span>
+                    <span class="sidenav-label">Contacts</span>
+                  </a>
+                </li>
+               <li class="sidenav-item">
+                  <a href="/Messenger" aria-haspopup="true">
+                    <span class="sidenav-icon icon icon-mobile"></span>
+                    <span class="sidenav-label">Messanger</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="layout-content">
+        <div class="contact">
+          <div id="contacts" class="contact-sidebar active">
+            <div class="contact-sidebar-header">
+              <div class="title-bar">
+                <h1 class="title-bar-title">
+                  <span class="d-ib">Contacts</span>
+                  <span class="d-ib">
+                    <a class="title-bar-shortcut" href="#" title="Add to shortcut list" data-container="body" data-toggle-text="Remove from shortcut list" data-trigger="hover" data-placement="right" data-toggle="tooltip">
+                      <span class="sr-only">Add to shortcut list</span>
+                    </a>
+                  </span>
+                </h1>
+              </div>
+              <form class="search" action="/">
+                <div class="form-group form-group-sm">
+                  <div class="input-with-icon">
+                 <input type="button" id="btnSendAll" class="bth btn-primary" value="Select All" />
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="contact-sidebar-body">
+              <div class="custom-scrollbar">
+                <ul class="contact-list">
+                  <li class="contact-list-divider">
+                    <span class="icon icon-star-o"></span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eEthans">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0531871454.jpg" alt="Ethan Walker">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Ethan Walker</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">ethan.walker@elephant.theme</span>
+                           <input type="hidden" id="ethanMobile" value="+1 915-822-3702"/>
+                           <input type="hidden" id="EthanName" value="Ethan Walker"/> 
+                           <input type="hidden" id="Ethanimg" value="img/0531871454.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id=eSophia>
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0601274412.jpg" alt="Sophia Evans">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Sophia Evans</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">sophia.evans@elephant.theme</span>
+                            <input type="hidden" id="sophiaMobile" value="+1 176-537-2784"/>
+                           <input type="hidden" id="sophiaName" value="Sophia Evans"/> 
+                           <input type="hidden" id="sophiaimg" value="img/0601274412.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">A</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eAbbey">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/3002121059.jpg" alt="Abbey Robinson">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Abbey Robinson</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">abbey.robinson@elephant.theme</span>
+                           <input type="hidden" id="abbeyMobile" value="+1 799-428-6432"/>
+                           <input type="hidden" id="abbeyName" value="Abbey Robinson"/> 
+                           <input type="hidden" id="abbeyimg" value="img/3002121059.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eAdelaide">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2995015682.jpg" alt="Adelaide Kane">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Adelaide Kane</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">adelaide.kane@elephant.theme</span>
+                           <input type="hidden" id="AdelaideMobile" value="+1 400-180-3207"/>
+                           <input type="hidden" id="AdelaideName" value="Adelaide Kane"/> 
+                           <input type="hidden" id="Adelaideimg" value="img/2995015682.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eAgatha">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2832982242.jpg" alt="Agatha Ford">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Agatha Ford</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">agatha.ford@elephant.theme</span>
+                          <input type="hidden" id="AgathaMobile" value="+1 116-840-7979"/>
+                           <input type="hidden" id="AgathaName" value="Agatha Ford"/> 
+                           <input type="hidden" id="Agathaimg" value="img/2832982242.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eAmelia">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1554502810.jpg" alt="Amelia Taylor">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Amelia Taylor</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">amelia.taylor@elephant.theme</span>
+                            <input type="hidden" id="ameliaMobile" value="+1 938-369-5712"/>
+                           <input type="hidden" id="ameliaName" value="Amelia Taylor"/> 
+                           <input type="hidden" id="ameliaimg" value="img/1554502810.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eAva">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1463296788.jpg" alt="Ava Anderson">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Ava Anderson</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">ava.anderson@elephant.theme</span>
+                           <input type="hidden" id="avaMobile" value="+1 319-281-3439"/>
+                           <input type="hidden" id="avaName" value="Ava Anderson"/> 
+                           <input type="hidden" id="avaimg" value="img/1463296788.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">B</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eBeatrix">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2790515408.jpg" alt="Beatrix Walker">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Beatrix Walker</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">beatrix.walker@elephant.theme</span>
+                           <input type="hidden" id="BeatrixMobile" value="+1 388-522-9917"/>
+                           <input type="hidden" id="BeatrixName" value="Beatrix Walker"/> 
+                           <input type="hidden" id="Beatriximg" value="img/2790515408.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eBrad">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1376812548.jpg" alt="Brad Miller">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Brad Miller</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">brad.miller@elephant.theme</span>
+                           <input type="hidden" id="bradMobile" value="+1 825-752-3675"/>
+                           <input type="hidden" id="BradName" value="Brad Miller"/> 
+                           <input type="hidden" id="Bradimg" value="img/1376812548.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eBrenda">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2621512521.jpg" alt="Brenda West">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Brenda West</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">brenda.west@elephant.theme</span>
+                           <input type="hidden" id="brendaMobile" value="+1 308-131-3748"/>
+                           <input type="hidden" id="brendaName" value="Brenda West"/> 
+                           <input type="hidden" id="brendaimg" value="img/2621512521.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">C</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="echarlotte">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0460697039.jpg" alt="Charlotte Harrison">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Charlotte Harrison</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">charlotte.harrison@elephant.theme</span>
+                           <input type="hidden" id="charlotteMobile" value="+1 183-947-4858"/>
+                           <input type="hidden" id="charlotteName" value="Charlotte Harrison"/> 
+                           <input type="hidden" id="charlotteimg" value="img/0460697039.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="echristina">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2565559510.jpg" alt="Christina Simpson">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Christina Simpson</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">christina.simpson@elephant.theme</span>
+                            <input type="hidden" id="christinaMobile" value="+1 317-435-7163"/>
+                           <input type="hidden" id="christinaName" value="Christina Simpson"/> 
+                           <input type="hidden" id="christinaimg" value="img/2565559510.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eclara">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2440513918.jpg" alt="Clara Khan">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Clara Khan</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">clara.khan@elephant.theme</span>
+                           <input type="hidden" id="claraMobile" value="+1 576-748-5845"/>
+                           <input type="hidden" id="claraName" value="Clara Khan"/> 
+                           <input type="hidden" id="claraimg" value="img/2440513918.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">D</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eDaniel">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0310728269.jpg" alt="Daniel Taylor">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Daniel Taylor</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">daniel.taylor@elephant.theme</span>
+                           <input type="hidden" id="DanielMobile" value="+1 647-710-3430"/>
+                           <input type="hidden" id="DanielName" value="Daniel Taylor"/> 
+                           <input type="hidden" id="Danielimg" value="img/0310728269.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eDracie">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2362153679.jpg" alt="Darcie Russell">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Darcie Russell</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">darcie.russell@elephant.theme</span>
+                           <input type="hidden" id="DracieMobile" value="+1 800-383-8874"/>
+                           <input type="hidden" id="DracieName" value="Darcie Russell"/> 
+                           <input type="hidden" id="Dracieimg" value="img/2362153679.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eDave">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2234124529.jpg" alt="Dave Hamilton">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Dave Hamilton</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">dave.hamilton@elephant.theme</span>
+                           <input type="hidden" id="DaveMobile" value="+1 337-221-5923"/>
+                           <input type="hidden" id="DaveName" value="Dave Hamilton"/> 
+                           <input type="hidden" id="Daveimg" value="img/2234124529.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">E</span>
+                  </li>
+                 
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eElla">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1182824800.jpg" alt="Ella Davis">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Ella Davis</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">ella.davis@elephant.theme</span>
+                           <input type="hidden" id="ellaMobile" value="+1 451-624-1860"/>
+                           <input type="hidden" id="ellaName" value="Ella Davis"/> 
+                           <input type="hidden" id="ellaimg" value="img/1182824800.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>                 
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eEthans1">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0531871454.jpg" alt="Ethan Walker">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Ethan Walker</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">ethan.walker@elephant.theme</span>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">H</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eHarry">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0299419341.jpg" alt="Harry Jones">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Harry Jones</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">harry.jones@elephant.theme</span>                     
+                           <input type="hidden" id="HarryMobile" value="+1 949-360-4639"/>
+                           <input type="hidden" id="HarryName" value="Harry Jones"/> 
+                           <input type="hidden" id="Harryimg" value="img/0299419341.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eHarryW">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0777931269.jpg" alt="Harry Walker">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Harry Walker</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">harry.walker@elephant.theme</span>                    
+                           <input type="hidden" id="HarryWMobile" value="+1 473-148-8997"/>
+                           <input type="hidden" id="HarryWName" value="Harry Walker"/> 
+                           <input type="hidden" id="HarryWimg" value="img/0777931269.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">J</span>
+                  </li>                 
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eJessica">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1099386850.jpg" alt="Jessica Brown">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Jessica Brown</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">jessica.brown@elephant.theme</span>
+                           <input type="hidden" id="JessicaMobile" value="+1 341-782-1481"/>
+                           <input type="hidden" id="JessicaName" value="Jessica Brown"/> 
+                           <input type="hidden" id="Jessicaimg" value="img/1099386850.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eJohn">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/2079247459.jpg" alt="John Miller">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">John Miller</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">john.miller@elephant.theme</span>
+                           <input type="hidden" id="JohnMobile" value="+1 563-124-5331"/>
+                           <input type="hidden" id="JohnName" value="John Miller"/> 
+                           <input type="hidden" id="Johnimg" value="img/2079247459.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">M</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="emark">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1968946964.jpg" alt="Mark Gibson">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Mark Gibson</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">mark.gibson@elephant.theme</span>
+                           <input type="hidden" id="markMobile" value="+1 249-340-2879"/>
+                           <input type="hidden" id="markName" value="Mark Gibson"/> 
+                           <input type="hidden" id="markimg" value="img/1968946964.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eMia">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1272501223.jpg" alt="Mia Ming">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Mia Ming</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">mia.ming@elephant.theme</span>
+                          <input type="hidden" id="miaMobile" value="+1 971-365-2058"/>
+                           <input type="hidden" id="miaName" value="Mia Ming"/> 
+                           <input type="hidden" id="miaimg" value="img/1272501223.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">R</span>
+                  </li>                 
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eRuby">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/1699893867.jpg" alt="Ruby Dixon">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Ruby Dixon</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">ruby.dixon@elephant.theme</span>
+                          <input type="hidden" id="rubyMobile" value="+1 249-177-8530"/>
+                           <input type="hidden" id="rubyName" value="Ruby Dixon"/> 
+                           <input type="hidden" id="rubyimg" value="img/1699893867.jpg"/>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="contact-list-divider">
+                    <span class="contact-list-heading">S</span>
+                  </li>
+                  <li class="contact-list-item">
+                    <a class="contact-list-link" href="#0531871454" data-toggle="tab" id="eSophia1">
+                      <div class="contact-list-avatar">
+                        <img class="rounded" width="40" height="40" src="img/0601274412.jpg" alt="Sophia Evans">
+                      </div>
+                      <div class="contact-list-details">
+                        <h5 class="contact-list-name">
+                          <span class="truncate">Sophia Evans</span>
+                        </h5>
+                        <small class="contact-list-email">
+                          <span class="truncate">sophia.evans@elephant.theme</span>
+                        </small>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        
+      
+         
+          
+        
+         
+          
+          <div id="0531871454" class="contact-content" style="display:block !important">
+            <div class="contact-content-header">
+              <div class="contact-toolbar">
+                <div class="contact-toolbar-tools pull-xs-left">
+                  <div class="btn-group hidden-md hidden-lg">
+                    <button class="btn btn-link link-muted" data-target="#contacts" data-toggle="tab" type="button">
+                      <span class="icon icon-caret-left icon-lg icon-fw"></span>
+                      Contacts
+                    </button>
+                  </div>
+                </div>
+             
+                <div class="contact-toolbar-tools pull-xs-right">
+                 
+                  
+                </div>
+              </div>
+            </div>
+            <div class="contact-content-body">
+             
+              
+              <div class="contact-form">
+                <form class="form-horizontal" action="/">
+                  <div class="form-groups">
+                   
+                    <div class="form-group">
+                      <label class="col-md-3 control-label">Mobile</label>
+                      <div class="col-md-9 col-lg-6">
+                        <textarea id="empPhone" class="form-control" rows="3"></textarea>
+
+                      </div>
+
+                    </div>
+                  </div>   
+                   <div id="spinload" class="spinner spinner-primary pos-r sq-32"></div>                
+                  <div class="form-groups">
+                    <div class="form-group">
+                      <label class="col-md-3 control-label">Message</label>
+                      <div class="col-md-9 col-lg-6">
+                        <textarea class="form-control" rows="3" id="msg"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-md-offset-3">
+                        <button id="btnSend" class="btn btn-primary" type="button" >Send</button>
+                        <a href="/contacts"  class="btn btn-default" >Cancel</a>
+                        <label name="lblSucess" id="lblPass"  class="label label-success" >Message Sent successfully</label>
+                        <label name="lblfailed" id="lblfail"  class="label label-danger" >Message Sending failed</label>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/vendor.js"></script>
+    <script src="js/elephant.js"></script>
+    <script src="js/application.js"></script>
+    <script src="js/contacts.js"></script>
+    <script src="js/SendSMSGroup.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-XXXXX-X', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

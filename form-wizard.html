@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Messaging App</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <meta name="description" content="Elephant is a front-end template created to help you build modern web applications, fast and in a professional manner.">
+    <meta property="og:url" content="http://demo.naksoid.com/elephant">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="The fastest way to build modern admin site for any platform, browser, or device">
+    <meta property="og:description" content="Elephant is a front-end template created to help you build modern web applications, fast and in a professional manner.">
+    <meta property="og:image" content="http://demo.naksoid.com/elephant/img/ae165ef33d137d3f18b7707466aa774d.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@naksoid">
+    <meta name="twitter:creator" content="@naksoid">
+    <meta name="twitter:title" content="The fastest way to build modern admin site for any platform, browser, or device">
+    <meta name="twitter:description" content="Elephant is a front-end template created to help you build modern web applications, fast and in a professional manner.">
+    <meta name="twitter:image" content="http://demo.naksoid.com/elephant/img/ae165ef33d137d3f18b7707466aa774d.jpg">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="manifest.json">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#0288d1">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400italic,500,700">
+    <link rel="stylesheet" href="css/vendor.min.css">
+    <link rel="stylesheet" href="css/elephant.min.css">
+    <link rel="stylesheet" href="css/application.min.css">
+    <link rel="stylesheet" href="css/demo.min.css">
+    <link rel="stylesheet" href="css/compose.min.css">
+  </head>
+  <body class="layout layout-header-fixed">
+    <div class="layout-header">
+      <div class="navbar navbar-default">
+        <div class="navbar-header">
+          <a class="navbar-brand navbar-brand-center" href="index.html">
+           Messaging App
+          </a>
+          <button class="navbar-toggler visible-xs-block collapsed" type="button" data-toggle="collapse" data-target="#sidenav">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="bars">
+              <span class="bar-line bar-line-1 out"></span>
+              <span class="bar-line bar-line-2 out"></span>
+              <span class="bar-line bar-line-3 out"></span>
+            </span>
+            <span class="bars bars-x">
+              <span class="bar-line bar-line-4"></span>
+              <span class="bar-line bar-line-5"></span>
+            </span>
+          </button>
+          <button class="navbar-toggler visible-xs-block collapsed" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="arrow-up"></span>
+            <span class="ellipsis ellipsis-vertical">
+              <img class="ellipsis-object" width="32" height="32" src="img/0180441436.jpg" alt="Teddy Wilson">
+            </span>
+          </button>
+        </div>
+        <div class="navbar-toggleable">
+          <nav id="navbar" class="navbar-collapse collapse">
+            <button class="sidenav-toggler hidden-xs" title="Collapse sidenav ( [ )" aria-expanded="true" type="button">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="bars">
+                <span class="bar-line bar-line-1 out"></span>
+                <span class="bar-line bar-line-2 out"></span>
+                <span class="bar-line bar-line-3 out"></span>
+                <span class="bar-line bar-line-4 in"></span>
+                <span class="bar-line bar-line-5 in"></span>
+                <span class="bar-line bar-line-6 in"></span>
+              </span>
+            </button>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="visible-xs-block">
+                <h4 class="navbar-text text-center">Welcome, User</h4>
+              </li>
+              <li class="hidden-xs hidden-sm">
+                <form class="navbar-search navbar-search-collapsed">
+                  <div class="navbar-search-group">
+                    <input class="navbar-search-input" type="text" placeholder="Search for people, companies, and more&hellip;">
+                    <button class="navbar-search-toggler" title="Expand search form ( S )" aria-expanded="false" type="submit">
+                      <span class="icon icon-search icon-lg"></span>
+                    </button>
+                    <button class="navbar-search-adv-btn" type="button">Advanced</button>
+                  </div>
+                </form>
+              </li>
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">
+                  <span class="icon-with-child hidden-xs">
+                    <span class="icon icon-envelope-o icon-lg"></span>
+                    <span class="badge badge-danger badge-above right">1</span>
+                  </span>
+                  <span class="visible-xs-block">
+                    <span class="icon icon-envelope icon-lg icon-fw"></span>
+                    <span class="badge badge-danger pull-right">1</span>
+                    Messages
+                  </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+                  <div class="dropdown-header">
+                    <a class="dropdown-link" href="compose.html">New Message</a>
+                    <h5 class="dropdown-heading">Recent messages</h5>
+                  </div>
+                  <div class="dropdown-body">
+                    <div class="list-group list-group-divided custom-scrollbar">
+                      <a class="list-group-item" href="#">
+                        <div class="notification">
+                          <div class="notification-media">
+                            <img class="rounded" width="40" height="40" src="img/0299419341.jpg" alt="Harry Jones">
+                          </div>
+                          <div class="notification-content">
+                            <small class="notification-timestamp">16 min</small>
+                            <h5 class="notification-heading">Harry Jones</h5>
+                            <p class="notification-text">
+                              <small class="truncate">Hi Teddy, Just wanted to let you know we got the project! We should be starting the planning next week. Harry</small>
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="dropdown-footer">
+                    <a class="dropdown-btn" href="#">See All</a>
+                  </div>
+                </div>
+              </li>
+              <li class="visible-xs-block">
+              <li class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true">
+                  <span class="icon-with-child hidden-xs">
+                    <span class="icon icon-bell-o icon-lg"></span>
+                    <span class="badge badge-danger badge-above right">1</span>
+                  </span>
+                  <span class="visible-xs-block">
+                    <span class="icon icon-bell icon-lg icon-fw"></span>
+                    <span class="badge badge-danger pull-right">1</span>
+                    Notifications
+                  </span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg">
+                  <div class="dropdown-header">
+                    <a class="dropdown-link" href="#">Mark all as read</a>
+                    <h5 class="dropdown-heading">Recent Notifications</h5>
+                  </div>
+                  <div class="dropdown-body">
+                    <div class="list-group list-group-divided custom-scrollbar">
+                      <a class="list-group-item" href="#">
+                        <div class="notification">
+                          <div class="notification-media">
+                            <span class="icon icon-exclamation-triangle bg-warning rounded sq-40"></span>
+                          </div>
+                          <div class="notification-content">
+                            <small class="notification-timestamp">35 min</small>
+                            <h5 class="notification-heading">Update Status</h5>
+                            <p class="notification-text">
+                              <small class="truncate">Failed to get available update data. To ensure the proper functioning of your application, update now.</small>
+                            </p>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="dropdown-footer">
+                    <a class="dropdown-btn" href="#">See All</a>
+                  </div>
+                </div>
+              </li>
+              <li class="dropdown hidden-xs">
+                <button class="navbar-account-btn" data-toggle="dropdown" aria-haspopup="true">
+                  <img class="rounded" width="36" height="36" src="img/0180441436.jpg" alt="Teddy Wilson"> User
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                 
+                  <li><a href="contacts.html">Contacts</a></li>
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="login.html">Sign out</a></li>
+                </ul>
+              </li>
+                <a href="contacts.html">
+                  <span class="icon icon-users icon-lg icon-fw"></span>
+                  Contacts
+                </a>
+              </li>
+              <li class="visible-xs-block">
+                <a href="#">
+                  <span class="icon icon-user icon-lg icon-fw"></span>
+                  Profile
+                </a>
+              </li>
+              <li class="visible-xs-block">
+                <a href="login.html">
+                  <span class="icon icon-power-off icon-lg icon-fw"></span>
+                  Sign out
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <div class="layout-main">
+      <div class="layout-sidebar">
+        <div class="layout-sidebar-backdrop"></div>
+        <div class="layout-sidebar-body">
+          <div class="custom-scrollbar">
+            <nav id="sidenav" class="sidenav-collapse collapse">
+              <ul class="sidenav">
+                <li class="sidenav-search hidden-md hidden-lg">
+                  <form class="sidenav-form" action="/">
+                    <div class="form-group form-group-sm">
+                      <div class="input-with-icon">
+                        <input class="form-control" type="text" placeholder="Search…">
+                        <span class="icon icon-search input-icon"></span>
+                      </div>
+                    </div>
+                  </form>
+                </li>
+                <li class="sidenav-heading">Navigation</li>
+                <li class="sidenav-item has-subnav">
+                  <a href="dashboard-1.html" aria-haspopup="true">
+                    <span class="sidenav-icon icon icon-home"></span>
+                    <span class="sidenav-label">Dashboards</span>
+                  </a>
+                  <ul class="sidenav-subnav collapse">
+                    <li class="sidenav-subheading">Dashboards</li>
+                    <li><a href="index.html">Dashboard</a></li>                 
+                  </ul>
+                </li>
+                <li class="sidenav-item has-subnav">
+                  <a href="dashboard-1.html" aria-haspopup="true">
+                    <span class="sidenav-icon icon icon-mobile"></span>
+                    <span class="sidenav-label">Messaging</span>
+                  </a>
+                  <ul class="sidenav-subnav collapse">
+                    <li class="sidenav-subheading">Message Wizard</li>
+                    <li><a href="form-wizard.html">Message Wizard</a></li> 
+                    <li class="sidenav-subheading">Messanger</li>
+                    <li><a href="Messenger.html">Messanger</a></li>                 
+                  </ul>
+                </li>
+                <li class="sidenav-item">
+                  <a href="contacts.html" aria-haspopup="true">
+                    <span class="sidenav-icon icon icon-home"></span>
+                    <span class="sidenav-label">Contact</span>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="layout-content">
+        <div class="layout-content-body">
+          <div class="title-bar">
+            <h1 class="title-bar-title">
+              <span class="d-ib">Messaging App</span>
+            
+            </h1>
+         
+          </div>
+          <div class="row">
+            <div class="col-lg-9 col-lg-offset-2">
+              <div class="demo-form-wrapper">
+                <form id="demo-form-wizard-1" novalidate>
+                  <ul class="steps">
+                    <li class="step col-xs-2 active">
+                      <a class="step-segment" href="#tab-1" data-toggle="tab">
+                        <span class="step-icon icon icon-cloud-upload"></span>
+                      </a>
+                      <div class="step-content">
+                        <strong class="hidden-xs">Upload CSV</strong>
+                      </div>
+                    </li>
+                    <li class="step col-xs-2">
+                      <a class="step-segment" href="#tab-2" data-toggle="tab">
+                        <span class="step-icon icon icon-table"></span>
+                      </a>
+                      <div class="step-content">
+                        <strong class="hidden-xs">View Data</strong>
+                      </div>
+                    </li>
+                    <li class="step col-xs-2">
+                      <a class="step-segment" href="#tab-3" data-toggle="tab">
+                        <span class="step-icon icon icon-envelope-o"></span>
+                      </a>
+                      <div class="step-content">
+                        <strong class="hidden-xs">Compose</strong>
+                      </div>
+                    </li>
+                    <li class="step col-xs-2">
+                      <a class="step-segment" href="#tab-4" data-toggle="tab">
+                        <span class="step-icon icon icon-check-square"></span>
+                      </a>
+                      <div class="step-content">
+                       <strong class="hidden-xs">Verify</strong>
+                      </div>
+                    </li>
+                    <li class="step col-xs-2">
+                      <a class="step-segment" href="#tab-5" data-toggle="tab">
+                        <span class="step-icon icon icon-check-circle"></span>
+                      </a>
+                      <div class="step-content">
+                       <strong class="hidden-xs">Success</strong>
+                      </div>
+                    </li>
+                  </ul>
+                  <div class="tab-content">
+                    <div id="tab-1" class="tab-pane active">
+                      <h4 class="text-center m-y-md">
+                        <span>Please Upload CSV Data</span>
+                      </h4>
+                      <div class="row">
+                      <div class="col-xs-12">
+                        <form id="demo-uploader" action="//uploader.naksoid.com/" method="post" enctype="multipart/form-data">
+                          <div class="form-group">
+                            <label class="file-upload-btn btn btn-primary">
+                              Upload files
+                              <input class="file-upload-input" type="file" name="files[]" multiple="multiple">
+                            </label>
+                          </div>
+                          <div class="form-group">
+                            <ul class="file-list"></ul>
+                          </div>
+                        </form>
+
+                               <button type="button" class="btn btn-primary btn-next">Next</button>
+                               </div>
+                               </div>
+                      </div>
+                  
+                    <div id="tab-2" class="tab-pane">
+                      <h4 class="text-center m-y-md">
+                        <span>View Data</span>
+                      </h4>
+                      <div class="row">
+                        <div class="col-md-12">
+                             <div class="panel panel-default">
+                            <div class="panel-heading">Static table Report</div>
+                            <div class="panel-body panel-collapse" data-toggle="match-height">
+                             <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </th>
+                        <th class="text-left">User</th>
+                        <th class="text-right">Message Quantity</th>
+                        <th class="text-right">Deliverability</th>
+                        <th class="text-right">Reply Rate</th>
+                        <th class="text-right">Trend</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr class="active">
+                        <td class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </td>
+                        <td class="text-left">Scott summers</td>
+                        <td class="text-right">2500</td>
+                        <td class="text-right">150</td>
+                        <td class="text-right">1213</td>
+                         <td class="text-right">180</td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </td>
+                        <td class="text-left">Chris Evans</td>
+                        <td class="text-right">79,048</td>
+                        <td class="text-right">2007</td>
+                        <td class="text-right">5531</td>
+                         <td class="text-right">185</td>
+                      </tr>
+                      <tr class="success">
+                        <td class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </td>
+                        <td class="text-left">Tony Stark</td>
+                        <td class="text-right">25,592</td>
+                        <td class="text-right">1203</td>
+                        <td class="text-right">1021</td>
+                         <td class="text-right">22,000</td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </td>
+                        <td class="text-left">Bruce Waynes</td>
+                        <td class="text-right">34,179</td>
+                        <td class="text-right">1014</td>
+                        <td class="text-right">1041</td>
+                         <td class="text-right">32,000</td>
+                      </tr>
+                      <tr class="info">
+                        <td class="text-center">
+                          <label class="custom-control custom-control-primary custom-checkbox">
+                            <input class="custom-control-input" type="checkbox">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </td>
+                        <td class="text-left">Peter Parker</td>
+                        <td class="text-right">9,031</td>
+                        <td class="text-right">1012</td>
+                        <td class="text-right">1091</td>
+                         <td class="text-right">1202</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                              <a href="#tab-1" data-toggle="tab" class="btn btn-info">Previous</a>
+                               <button type="button" class="btn btn-primary btn-next">Next</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                    </div>
+                    <div id="tab-3" class="tab-pane">
+                      <h4 class="text-center m-y-md">
+                        <span>Compose message</span>
+                      </h4>
+                     
+                         
+                       <div class="compose">
+                        <div class="compose-header">
+                          <div class="compose-field">
+                            <div class="compose-field-right">
+                              <div class="btn-group">
+                                <button class="btn btn-link link-muted" title="Show Cc" data-target="#cc" data-toggle="collapse" type="button">
+                                  <small>Cc</small>
+                                </button>
+                                <button class="btn btn-link link-muted" title="Show Bcc" data-target="#bcc" data-toggle="collapse" type="button">
+                                  <small>Bcc</small>
+                                </button>
+                              </div>
+                            </div>
+                            <div class="compose-field-left">
+                              <button class="compose-label" type="button">To</button>
+                            </div>
+                            <div class="compose-field-body">
+                              <input class="compose-input" type="text" name="to" autocomplete="off" spellcheck="false">
+                            </div>
+                          </div>
+                          <div class="compose-fields">
+                            <div class="collapse" id="cc">
+                              <div class="compose-field">
+                                <div class="compose-field-left">
+                                  <button class="compose-label" type="button">Cc</button>
+                                </div>
+                                <div class="compose-field-body">
+                                  <input class="compose-input" type="text" name="cc" autocomplete="off" spellcheck="false">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="collapse" id="bcc">
+                              <div class="compose-field">
+                                <div class="compose-field-left">
+                                  <button class="compose-label" type="button">Bcc</button>
+                                </div>
+                                <div class="compose-field-body">
+                                  <input class="compose-input" type="text" name="bcc" autocomplete="off" spellcheck="false">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="compose-field">
+                            <div class="compose-field-body">
+                              <input class="compose-input" type="text" name="subject" placeholder="Add a subject">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="compose-body">
+                          <div class="compose-message">
+                            <div class="compose-editor"></div>
+                            <div class="compose-toolbar">
+                              <div class="btn-toolbar" data-role="editor-toolbar">
+                                <div class="btn-group">
+                                  <div class="btn-group dropup">
+                                    <button class="btn btn-link link-muted" title="Font Size" data-toggle="dropdown" type="button">
+                                      <span class="icon icon-text-height"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                      <li><a class="fs-Five" data-edit="fontSize 5">Huge</a></li>
+                                      <li><a class="fs-Three" data-edit="fontSize 3">Normal</a></li>
+                                      <li><a class="fs-One" data-edit="fontSize 1">Small</a></li>
+                                    </ul>
+                                  </div>
+                                  <div class="btn-group">
+                                    <button class="btn btn-link link-muted" title="Bold (Ctrl/Cmd+B)" data-edit="bold" type="button">
+                                      <span class="icon icon-bold"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Italic (Ctrl/Cmd+I)" data-edit="italic" type="button">
+                                      <span class="icon icon-italic"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Strikethrough" data-edit="strikethrough" type="button">
+                                      <span class="icon icon-strikethrough"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Underline (Ctrl/Cmd+U)" data-edit="underline" type="button">
+                                      <span class="icon icon-underline"></span>
+                                    </button>
+                                  </div>
+                                  <div class="btn-group">
+                                    <button class="btn btn-link link-muted" title="Bullet list" data-edit="insertunorderedlist" type="button">
+                                      <span class="icon icon-list-ul"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Number list" data-edit="insertorderedlist" type="button">
+                                      <span class="icon icon-list-ol"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Reduce indent (Shift+Tab)" data-edit="outdent" type="button">
+                                      <span class="icon icon-outdent"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Indent (Tab)" data-edit="indent" type="button">
+                                      <span class="icon icon-indent"></span>
+                                    </button>
+                                  </div>
+                                  <div class="btn-group">
+                                    <button class="btn btn-link link-muted" title="Align Left (Ctrl/Cmd+L)" data-edit="justifyleft" type="button">
+                                      <span class="icon icon-align-left"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Center (Ctrl/Cmd+E)" data-edit="justifycenter" type="button">
+                                      <span class="icon icon-align-center"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Align Right (Ctrl/Cmd+R)" data-edit="justifyright" type="button">
+                                      <span class="icon icon-align-right"></span>
+                                    </button>
+                                    <button class="btn btn-link link-muted" title="Justify (Ctrl/Cmd+J)" data-edit="justifyfull" type="button">
+                                      <span class="icon icon-align-justify"></span>
+                                    </button>
+                                  </div>
+                                  <div class="btn-group">
+                                    <label class="btn btn-link link-muted file-upload-btn" title="Insert picture">
+                                      <span class="icon icon-picture-o"></span>
+                                      <input class="file-upload-input" type="file" name="file" data-edit="insertImage">
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="compose-actions">
+
+                            <button class="btn btn-default" type="button">Discard</button>
+                             <a  href="#tab-2" data-toggle="tab" class="btn btn-primary">Previous</a>
+                             <button type="button" class="btn btn-primary btn-next">Next</button>
+                          </div>
+                        </div>                   
+                    </div>                       
+                  </div>
+                   <div id="tab-4" class="tab-pane">
+                      <h4 class="text-center m-y-md">
+                        <span>you are about to send message</span>
+                      </h4>
+                      <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                              <textarea id="form-control-8" class="form-control" rows="3" disabled="true">This is dummy text as your message</textarea>
+                            </div>  
+                                  <a  href="#tab-3" data-toggle="tab" class="btn btn-primary">Go Back</a>
+                                <button type="button" class="btn btn-primary btn-next">SEND</button>
+                        </div>
+                      </div>  
+                   </div>
+                    <div id="tab-5" class="tab-pane">
+                      <h4 class="text-center m-y-md">
+                       <label class="label label-success">Message successfully sent </label>
+                      </h4>
+                   </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="layout-footer">
+        <div class="layout-footer-body">
+          <small class="version">Version 1.1</small>
+          <small class="copyright">2016 &copy; Elephant By <a href="http://naksoid.com/">Naksoid</a></small>       
+    </div>
+    <div class="theme">
+      <div class="theme-panel theme-panel-collapsed">
+       
+        
+        <div class="theme-panel-footer">
+          <a class="rounded sq-36 bg-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fdemo.naksoid.com%2Felephant&t=The%20fastest%20way%20to%20build%20modern%20admin%20site%20for%20any%20platform%2C%20browser%2C%20or%20device" title="Share on Facebook" target="_blank">
+            <span class="icon icon-facebook"></span>
+          </a>
+          <a class="rounded sq-36 bg-twitter" href="https://twitter.com/intent/tweet?source=http%3A%2F%2Fdemo.naksoid.com%2Felephant&text=The%20fastest%20way%20to%20build%20modern%20admin%20site%20for%20any%20platform%2C%20browser%2C%20or%20device:%20http%3A%2F%2Fdemo.naksoid.com%2Felephant&via=naksoid" title="Tweet" target="_blank">
+            <span class="icon icon-twitter"></span>
+          </a>
+          <a class="rounded sq-36 bg-googleplus" href="https://plus.google.com/share?url=http%3A%2F%2Fdemo.naksoid.com%2Felephant" title="Share on Google+" target="_blank">
+            <span class="icon icon-google-plus"></span>
+          </a>
+          <a class="rounded sq-36 bg-linkedin" href="http://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Fdemo.naksoid.com%2Felephant&title=The%20fastest%20way%20to%20build%20modern%20admin%20site%20for%20any%20platform%2C%20browser%2C%20or%20device&summary=Elephant%20is%20a%20front-end%20template%20created%20to%20help%20you%20build%20modern%20web%20applications%2C%20fast%20and%20in%20a%20professional%20manner.&source=http%3A%2F%2Fdemo.naksoid.com%2Felephant" title="Share on LinkedIn" target="_blank">
+            <span class="icon icon-linkedin"></span>
+          </a>
+          <a class="rounded sq-36 bg-pinterest" href="http://pinterest.com/pin/create/button/?url=http%3A%2F%2Fdemo.naksoid.com%2Felephant&media=http://demo.naksoid.com/elephant/img/ae165ef33d137d3f18b7707466aa774d.jpg&description=Elephant%20is%20a%20front-end%20template%20created%20to%20help%20you%20build%20modern%20web%20applications%2C%20fast%20and%20in%20a%20professional%20manner." title="Pin it" target="_blank">
+            <span class="icon icon-pinterest-p"></span>
+          </a>
+          <a class="rounded sq-36 bg-default" href="mailto:?subject=The%20fastest%20way%20to%20build%20modern%20admin%20site%20for%20any%20platform%2C%20browser%2C%20or%20device&body=Elephant%20is%20a%20front-end%20template%20created%20to%20help%20you%20build%20modern%20web%20applications%2C%20fast%20and%20in%20a%20professional%20manner.:%20http%3A%2F%2Fdemo.naksoid.com%2Felephant" title="Send email" target="_blank">
+            <span class="icon icon-envelope-o"></span>
+          </a>
+        </div>
+      </div>
+       </div>
+      </div>
+    </div>
+     <script id="template-upload" type="text/x-tmpl">
+      {% for (var i=0, file; file=o.files[i]; i++) { %}
+      <li class="file template-upload fade">
+        <div class="file-thumbnail">
+          <div class="spinner spinner-default spinner-sm"></div>
+        </div>
+        <div class="file-info">
+          <span class="file-ext">{%= file.ext %}</span>
+          <span class="file-name">{%= file.name %}</span>
+        </div>
+      </li>
+      {% } %}
+    </script>
+    <script id="template-download" type="text/x-tmpl">
+      {% for (var i=0, file; file=o.files[i]; i++) { %}
+      <li class="file template-download fade">
+        <a class="file-link" href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}">
+          {% if (file.thumbnailUrl) { %}
+          <div class="file-thumbnail" style="background-image: url({%=file.thumbnailUrl%});"></div>
+          {% } else { %}
+          <div class="file-thumbnail {%=file.thumbnail%}"></div>
+          {% } %}
+          <div class="file-info">
+          <span class="file-ext">{%=file.extension%}</span>
+          <span class="file-name">{%=file.filename%}.</span>
+          </div>
+          </a>
+        <button class="file-delete-btn delete" title="Delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" type="button">
+          <span class="icon icon-remove"></span>
+          </button>
+      </li>
+      {% } %}
+    </script>
+    <script src="js/vendor.min.js"></script>
+    <script src="js/elephant.min.js"></script>
+    <script src="js/application.min.js"></script>
+    <script src="js/demo.min.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-XXXXX-X', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>
