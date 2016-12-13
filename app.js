@@ -59,6 +59,14 @@ app.get('/password', function (req, res) {
   res.sendFile(Path.join(__dirname + '/password.html'));
 });
 
+app.get('/bulkmessaging', function (req, res) {
+	 if (req.session && req.session.user) { // Check if session exists
+    	res.sendFile(Path.join(__dirname + '/index.html'));
+    } else {
+    	res.redirect('/login');
+	}
+});
+
 app.get('/messenger', function (req, res) {
 	 if (req.session && req.session.user) { // Check if session exists
     	res.sendFile(Path.join(__dirname + '/messenger.html'));
@@ -85,7 +93,7 @@ app.get('/newcontact', function(req,res){
 
 app.get('/importContact', function(req, res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/index.html'));
+    	res.sendFile(Path.join(__dirname + '/importContact.html'));
     } else {
     	res.redirect('/login');
 	}
