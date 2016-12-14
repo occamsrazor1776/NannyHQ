@@ -1,11 +1,8 @@
 (function($) {
 
-  $(document).ready(function () {
-     
-  });
+  'use strict';
 
-   
-
+  $(document).ready(function () { 
 
      $("#btnSave").click(function(){ 
         var f_name = $("#f_name").val();
@@ -22,28 +19,29 @@
           data :JSON.stringify(dataS),
           url: "./newcontact",
           contentType: "application/json"
-        }).done(function() {
-          $('#f_name').val('');
-          $('#m_name').val('');
-          $('#l_name').val('');
-          $('#emailadd').val('');
-          $('#mobile').val('');
-          $('#j_title').val('');
-          $('#employer').val('');
-          $('#notes').val('');
-          $("#lblSucess").val("Contact Saved Successfully");
+        }).done(function(data) {
+            if(data.success==true){
+            $('#f_name').val('');
+            $('#m_name').val('');
+            $('#l_name').val('');
+            $('#emailadd').val('');
+            $('#mobile').val('');
+            $('#j_title').val('');
+            $('#notes').val('');
+            $('#txtPlaces').val('');
+            $("#lblSuccess").html("Contact Saved Successfully");
+          }
+          else
+          {
+            $("#lblfail").html(data.status);            
+          }
 
         }).fail(function() {
-          $("#lbllblfail").val("error occured during process.");
+          $("#lblfail").html("error occured during process.");
        });      
-     });
-      
-
-
-  'use strict';
-
-
-       
+     });  
+     
+  });      
       
 
    function formWizardBasicExample() {
@@ -55,7 +53,7 @@
     });
   }
 
-  	function formWizardWithValidationExample() {
+  function formWizardWithValidationExample() {
     var $formWizard = $('#demo-form-wizard-2');
 
     $formWizard.bootstrapWizard({

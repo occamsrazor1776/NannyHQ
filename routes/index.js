@@ -130,6 +130,10 @@ exports.getContacts = function(req, res) {
 	{		 
 		if(err){
 			console.log(err);
+		  	res.send({
+				success: false, 
+				status: err
+			});
 		}
 		else{
 			
@@ -145,6 +149,10 @@ exports.getSingleContact = function(req, res) {
 	{		 
 		if(err){
 			console.log(err);
+		  	res.send({
+				success: false, 
+				status: err
+			});
 		}
 		else{
 			
@@ -154,32 +162,45 @@ exports.getSingleContact = function(req, res) {
 };
 
 exports.newContact = function(req, res) {
-  var sqlQuery ="INSERT INTO tb_contacts (FirstName,MiddleNamw,LastName,Email,Mobile,jobTitle,Employer,Notes) VALUES ('" + req.body.F_name + "',' "+ req.body.M_name + "','" + req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"')";
+  var sqlQuery ="INSERT INTO tb_contacts (FirstName,MiddleName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate) VALUES ('" + req.body.F_name + "',' "+ req.body.M_name + "','" + req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"',NOW())";
 	
 	connection.query(sqlQuery,function(err, result) 
 	{                                                      
 	 if (err) {
 	  	console.log(err);
+	  	res.send({
+			success: false, 
+			status: "Contact Insertion Failed " + err
+		});
 	  }
 	  else
 	  {
-	  	console.log('Changed ' + result.changedRows + ' rows');	
-
+	  	res.send({
+			success: true, 
+			status: "Contact Inserted!!"
+		});
 	  }	  
 	});	
 };
 
 exports.updateContact = function(req, res) {
-  var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleNamw = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Employer='"+req.body.Location+"', Notes='"+req.body.Notes+"' Where Id ="+req.body.Id;
+  var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleName = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Location='"+req.body.Location+"', Notes='"+req.body.Notes+"', modifiedDate=NOW() Where Id ="+req.body.Id;
 	connection.query(querySql,function(err, result) 
 	{                                                      
 	 if (err) {
 	  	console.log(err);
+	  	res.send({
+			success: false, 
+			status: "Contact Insertion Failed!!"
+		});
 	  }
 	  else
 	  {
 	  	console.log('Changed ' + result.changedRows + ' rows');	
-
+	  	res.send({
+			success: true, 
+			status: "Contact Updated!!"
+		});
 	  }
 	 });	 
 };
