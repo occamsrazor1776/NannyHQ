@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include ../partials/head.html %>
+  <link rel="stylesheet" href="css/contacts.css">    
+</head>
+<body class="layout layout-header-fixed layout-sidebar-fixed">
+  <% include ../partials/header.html %>  
+  <div class="layout-main">  
+    <% include ../partials/leftsidebar.html %>  
+    <div class="layout-content">
+      <div class="contact">
+        <div id="contacts" class="contact-sidebar active">
+          <div class="contact-sidebar-header">
+            <div class="title-bar">
+              <h1 class="title-bar-title">
+                <span class="d-ib">Contacts</span>
+                <span class="d-ib">
+                  <a class="title-bar-shortcut" href="#" title="Add to shortcut list" data-container="body" data-toggle-text="Remove from shortcut list" data-trigger="hover" data-placement="right" data-toggle="tooltip">
+                    <span class="sr-only">Add to shortcut list</span>
+                  </a>
+                </span>
+              </h1>
+            </div>
+            <form class="search" action="/">
+              <div class="form-group form-group-sm">
+                <div class="input-with-icon">
+                 <input type="button" id="btnSendAll" class="bth btn-primary" value="Select All" />
+               </div>
+             </div>
+           </form>
+         </div>
+         <div class="contact-sidebar-body">
+          <div class="custom-scrollbar">
+           <ul class="contact-list">              
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">A</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">B</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">C</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">D</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">E</span>
+            </li>
+
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">F</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">H</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">J</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">M</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">R</span>
+            </li>
+            
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">S</span>
+            </li>                 
+            <li class="contact-list-divider">
+              <span class="contact-list-heading">T</span>
+            </li>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">U</span>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">V</span>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">W</span>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">X</span>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">Y</span>
+          </li>               
+          <li class="contact-list-divider">
+            <span class="contact-list-heading">Z</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>            
+  
+  <div id="0531871454" class="contact-content" style="display:block !important">
+    <div class="contact-content-header">
+      <div class="contact-toolbar">
+        <div class="contact-toolbar-tools pull-xs-left">
+          <div class="btn-group hidden-md hidden-lg">
+            <button class="btn btn-link link-muted" data-target="#contacts" data-toggle="tab" type="button">
+              <span class="icon icon-caret-left icon-lg icon-fw"></span>
+              Contacts
+            </button>
+          </div>
+        </div>             
+        <div class="contact-toolbar-tools pull-xs-right">
+         
+          
+        </div>
+      </div>
+    </div>
+    <div class="contact-content-body">
+     
+      
+      <div class="contact-form">
+        <form class="form-horizontal" action="/">
+          <div class="form-groups">
+           
+            <div class="form-group">
+              <label class="col-md-3 control-label">Mobile</label>
+              <div class="col-md-9 col-lg-6">
+                <textarea id="empPhone" class="form-control" rows="3"></textarea>
+
+              </div>
+
+            </div>
+          </div>   
+          <div id="spinload" class="spinner spinner-primary pos-r sq-32"></div>                
+          <div class="form-groups">
+            <div class="form-group">
+              <label class="col-md-3 control-label">Message</label>
+              <div class="col-md-9 col-lg-6">
+                <textarea class="form-control" rows="3" id="msg"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-6 col-md-offset-3">
+                <button id="btnSend" class="btn btn-primary" type="button" >Send</button>
+                <a href="/contacts"  class="btn btn-default" >Cancel</a>
+                <label name="lblSucess" id="lblPass"  class="label label-success" >Message Sent successfully</label>
+                <label name="lblfailed" id="lblfail"  class="label label-danger" >Message Sending failed</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer.html %>
+<script src="js/SendSmSGroup.js"></script>   
+</body>
+</html>

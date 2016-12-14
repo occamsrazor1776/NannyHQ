@@ -1,19 +1,44 @@
 var http = require('http');
-var Express =require('express');
+var express =require('express');
 var Path = require('path');
 var Routes = require('./routes');
-var app = Express();
 var request = require('request-json');
 var bodyParser = require('body-parser');
 var session = require('client-sessions');
 var fileUpload = require('express-fileupload');
 
+var oneDay = 86400000;
+
+var app = express();
+var router = express.Router();
+app.set("view options", {layout: false});  
+app.engine('html', require('ejs').renderFile); 
+//app.use(app.router);
+app.set('view engine', 'html');
+app.set('views', __dirname + "/public/views/pages");
+ 
+app.all("*", function(req, res, next) {
+    var request = req.params[0];
+    if((request === "/")||(request === "")) {
+		res.redirect('/contacts');
+	}
+	else {
+	    if((request.substr(0, 1) === "/")&&(request.substr(request.length - 4) === "html")) {
+	         request = request.substr(1);
+	         res.render(request);
+	     } else {
+	         next();
+	     }
+	 }
+
+});
+
+app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
+
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
 
 app.use(fileUpload());
-app.use(Express.static(__dirname + '/public'));
-app.use('/static', Express.static(__dirname + '/public'));
 app.enable('trust proxy');
 app.set('port', process.env.PORT || 8080);
 
@@ -34,8 +59,6 @@ function requireHTTPS(req, res, next) {
 }
 
 
-
-
 //Pages
 app.get('/', function(req, res) {
 	 if (req.session && req.session.user) { // Check if session exists
@@ -48,7 +71,7 @@ app.get('/', function(req, res) {
 	      } else {
 	        // expose the user to the template
 	        res.locals.user = user;*/
-    	res.sendFile(Path.join(__dirname + '/contacts.html'));
+    	res.render('contacts.html', {Title:'Contacts'});
     } else {
     	res.redirect('/login');
   	}
@@ -56,16 +79,16 @@ app.get('/', function(req, res) {
 
 app.get('/login', function (req, res) {
 	req.session.reset();
-  	res.sendFile(Path.join(__dirname + '/login.html'));
+  	res.render('login.html', {Title:'Log In'});
 });
 
 app.get('/password', function (req, res) {
-  res.sendFile(Path.join(__dirname + '/password.html'));
+  res.render('password.html', {Title:'Reset Your Password'});
 });
 
 app.get('/bulkmessaging', function (req, res) {
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/index.html'));
+    	res.render('index.html', {Title:'Bulk Messaging'});
     } else {
     	res.redirect('/login');
 	}
@@ -73,7 +96,7 @@ app.get('/bulkmessaging', function (req, res) {
 
 app.get('/messenger', function (req, res) {
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/messenger.html'));
+    	res.render('messenger.html', {Title:'Messenger'});
     } else {
     	res.redirect('/login');
 	}
@@ -81,7 +104,7 @@ app.get('/messenger', function (req, res) {
 
 app.get('/contacts', function(req,res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/contacts.html'));
+    	res.render('contacts.html', {Title:'Contacts'});
     } else {
     	res.redirect('/login');
 	}
@@ -89,7 +112,7 @@ app.get('/contacts', function(req,res){
 
 app.get('/newcontact', function(req,res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/newcontact.html'));
+    	res.render('newcontact.html', {Title:'New Contact'});
     } else {
     	res.redirect('/login');
 	}
@@ -97,7 +120,7 @@ app.get('/newcontact', function(req,res){
 
 app.get('/importContact', function(req, res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/importContact.html'));
+    	res.render('importcontact.html', {Title:'Import Contacts'});
         
     } else {
     	res.redirect('/login');
@@ -105,7 +128,7 @@ app.get('/importContact', function(req, res){
 });
 app.get('/importContacts', function(req, res){
      if (req.session && req.session.user) { // Check if session exists
-        res.sendFile(Path.join(__dirname + '/importContact.html'));
+        res.render('importcontact.html', {Title:'Import Contacts'});
         
     } else {
         res.redirect('/login');
@@ -114,7 +137,7 @@ app.get('/importContacts', function(req, res){
 
 app.get('/sendSMSSingle', function(req, res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/sendSMSSingle.html'));
+    	res.render('sendsmssingle.html', {Title:'Send SMS / MMS 1:1'});
     } else {
     	res.redirect('/login');
 	}
@@ -122,14 +145,11 @@ app.get('/sendSMSSingle', function(req, res){
 
 app.get('/sendSMSGroup', function(req, res){
 	 if (req.session && req.session.user) { // Check if session exists
-    	res.sendFile(Path.join(__dirname + '/sendSMSGroup.html'));
+    	res.render('sendsmsgroup.html', {Title:'Send SMS / MMS to List or a group'});
     } else {
     	res.redirect('/login');
 	}
-});
-
-
- 
+}); 
 
 app.post('/importContact', function(req, res) {
     var sampleFile;
@@ -151,8 +171,6 @@ app.post('/importContact', function(req, res) {
         }
     });
 });
-
-
 
 //app.post('/ImportContact', Routes.)
 

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <% include ../partials/head.html %>
+  <link rel="stylesheet" href="css/contacts.css">
+</head>
+<body class="layout layout-header-fixed layout-sidebar-fixed">
+ <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDGNwbBTxnw7_CX22bZQOGIvZO9PsRXLKQ&sensor=false&libraries=places"></script>
+ <script type="text/javascript">
+  google.maps.event.addDomListener(window, 'load', function () {
+    var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+    google.maps.event.addListener(places, 'place_changed', function () {
+      var place = places.getPlace();
+      var address = place.formatted_address;
+      var latitude = place.geometry.location.lat();
+      var longitude = place.geometry.location.lng();
+      var mesg = "Address: " + address;
+      mesg += "\nLatitude: " + latitude;
+      mesg += "\nLongitude: " + longitude;
+               // alert(mesg);
+             });
+  });
+</script>
+<% include ../partials/header.html %>  
+<div class="layout-main">  
+  <% include ../partials/leftsidebar.html %>  
+  <div class="layout-content">
+    <div class="contact">
+      <div id="contacts" class="contact-sidebar active">
+        <div class="contact-sidebar-header">
+          <div class="title-bar">
+            <h1 class="title-bar-title">
+              <span class="d-ib">Contacts</span>
+              <span class="d-ib">
+                <a class="title-bar-shortcut" href="#" title="Add to shortcut list" data-container="body" data-toggle-text="Remove from shortcut list" data-trigger="hover" data-placement="right" data-toggle="tooltip">
+                  <span class="sr-only">Add to shortcut list</span>
+                </a>
+              </span>
+            </h1>
+          </div>
+          <form class="search" action="/">
+            <div class="form-group form-group-sm">
+              <div class="input-with-icon">
+                <input class="form-control" type="text" placeholder="Search for anyone&hellip;">
+                <span class="icon icon-search input-icon"></span>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="contact-sidebar-body">
+          <div class="custom-scrollbar">
+            <ul class="contact-list">              
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">A</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">B</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">C</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">D</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">E</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">F</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">H</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">J</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">M</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">R</span>
+              </li>
+
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">S</span>
+              </li>                 
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">T</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">U</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">V</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">W</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">X</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">Y</span>
+              </li>               
+              <li class="contact-list-divider">
+                <span class="contact-list-heading">Z</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div id="0531871454" class="contact-content">
+        <div class="contact-content-header">
+          <div class="contact-toolbar">
+            <div class="contact-toolbar-tools pull-xs-left">
+              <div class="btn-group hidden-md hidden-lg">
+                <button class="btn btn-link link-muted" data-target="#contacts" data-toggle="tab" type="button">
+                  <span class="icon icon-caret-left icon-lg icon-fw"></span>
+                  Contacts
+                </button>
+              </div>
+            </div>          
+
+          </div>
+        </div>
+        <div class="contact-content-body">
+         <form ref='uploadForm' id='uploadForm' action='/importContact' method='post' encType="multipart/form-data">
+          <div class="contact-avatar">
+            <label class="contact-avatar-btn">
+              <span class="icon icon-camera"></span>
+              <input class="file-upload-input" type="file"  name="sampleFile" >
+            </label>
+            <img id="c_img" class="img-rounded" width="128" height="128" src="img/nophoto.jpg" alt="">
+          </div>
+          <div class="form-group">
+            <input type='submit' class="btn btn-primary" value='Upload!' />
+          </div>
+
+        </form>   
+        <div class="contact-info">
+          <h2 id="c_name" class="contact-name"></h2>
+          <p id="c_JobTitle" class="contact-job-title"></p>
+        </div>
+        <div class="contact-form">
+          <form class="form-horizontal">
+            <div class="form-groups">
+              <div class="form-group">
+                <label class="col-md-3 control-label">First Name</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_f_name" class="form-control" type="text" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Middle Name</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_m_name" class="form-control" type="text">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Last Name</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_l_name" class="form-control" type="text" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Email</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_email" class="form-control" type="email" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Mobile</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_mobile" class="form-control" type="text" value="">
+                </div>
+              </div>
+            </div>
+            <div class="spinner spinner-primary pos-r sq-32"></div>
+            <div class="form-groups">
+              <div class="form-group">
+                <label class="col-md-3 control-label">Job Title</label>
+                <div class="col-md-9 col-lg-6">
+                  <input id="c_JobTitleText" class="form-control" type="text" value="">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-md-3 control-label">Location</label>
+                <div class="col-md-9 col-lg-6">
+                  <input type="text" id="txtPlaces" class="form-control" placeholder="Enter a location" />
+                </div>
+              </div>
+            </div>
+            <div class="form-groups">
+              <div class="form-group">
+                <label class="col-md-3 control-label">Notes</label>
+                <div class="col-md-9 col-lg-6">
+                  <textarea id="c_notes" class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-3">
+                  <button class="btn btn-primary" id="btnUpContact" type="button">Save</button>
+                  <button class="btn btn-default" id="btnCancel" type="button">Cancel</button>
+                </div>
+              </div>                  
+              <div class="form-group">
+                <div class="col-md-6 col-md-offset-3">
+                  <label class="label label-success" id="lblSuccess"></label>
+                  <label class="label label-danger" id="lblfail"></label>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div id="contctSettings" class="contact-settings">
+      <div class="contact-settings-body">
+        <div class="contact-settings-inner">
+          <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+              <ul class="media-list">
+                <li class="media">
+                  <div class="media-left">
+                    <span class="icon icon-share icon-3x icon-plus"></span>
+                  </div>
+                  <div class="media-body">
+                    <h3 class="media-heading">Create Contact</h3>
+                    <p class="media-description">
+                      <small>Add a new Contact to your address.</small>
+                    </p>
+                    <p class="media-action"><a id="createContact" class="btn btn-default btn-sm" href="/newcontact">Create contact</a></p>
+                    <input type="hidden" id="hidId" name="hidId">
+                  </div>
+                </li>
+                <li class="media">
+                  <div class="media-left">
+                    <span class="icon icon-share icon-3x icon-fw"></span>
+                  </div>
+                  <div class="media-body">
+                    <h3 class="media-heading">Import Contacts</h3>
+                    <p class="media-description">
+                      <small>Import your contacts from another account.</small>
+                    </p>
+                    <p class="media-action"><a class="btn btn-default btn-sm" href="/ImportContact">Import contacts</a></p>
+                  </div>
+                </li>
+                <li class="media">
+                  <div class="media-left">
+                    <span class="icon icon-clone icon-3x icon-fw"></span>
+                  </div>
+                  <div class="media-body">
+                    <h3 class="media-heading">Send SMS / MMS 1:1</h3>
+                    <p class="media-description">
+                      <small>Send SMS/MMS to Single contact</small>
+                    </p>
+                    <p class="media-action"><a class="btn btn-default btn-sm" href="/SendSMSSingle">Send SMS/MMS</a></p>
+                  </div>
+                </li>
+                <li class="media">
+                  <div class="media-left">
+                    <span class="icon icon-refresh icon-3x icon-fw"></span>
+                  </div>
+                  <div class="media-body">
+                    <h3 class="media-heading">Send SMS / MMS to List or a group</h3>
+                    <p class="media-description">
+                      <small>Send SMS/MMS to a group or list of contacts.</small>
+                    </p>
+                    <p class="media-action"><a class="btn btn-default btn-sm" href="/SendSMSGroup">Send SMS/MMS</a></p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% include ../partials/footer.html %>
+<script src="js/contacts.js"></script>
+</body>
+</html>
