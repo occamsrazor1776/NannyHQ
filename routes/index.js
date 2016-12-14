@@ -136,8 +136,11 @@ exports.getContacts = function(req, res) {
 			});
 		}
 		else{
-			
-			res.send(result);
+			res.send({
+				success: true, 
+				status: "",
+				data:result
+			});
 		}
 	});
 };
