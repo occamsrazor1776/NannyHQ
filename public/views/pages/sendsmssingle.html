@@ -30,147 +30,81 @@
                 </div>
               </div>
             </form>
-          </div>
-          <div class="contact-sidebar-body">
-            <div class="custom-scrollbar">
-             <ul class="contact-list">              
+          </div>          
+          <% include ../partials/contactlist.html %>
+        </div>              
 
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">A</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">B</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">C</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">D</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">E</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">F</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">H</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">J</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">M</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">R</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">S</span>
-              </li>
-
-              <li class="contact-list-divider">
-                <span class="contact-list-heading">T</span>
-              </li>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">U</span>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">V</span>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">W</span>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">X</span>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">Y</span>
-            </li>               
-            <li class="contact-list-divider">
-              <span class="contact-list-heading">Z</span>
-            </li>
-          </ul>
+        <div style="float: right;width:211px;margin-top: 25px;position: relative;z-index: 9999;">
+          <a href="/SendSMSGroup" class="btn btn-primary"> Send to All </a>
+          <a href="/contacts" class="btn btn-primary"> << Back</a>
         </div>
-      </div>
-    </div>              
 
-    <div style="float: right; width:211px; margin-top: 25px;">
-      <a href="/SendSMSGroup" class="btn btn-primary"> Send to All </a>
-      <a href="/contacts" class="btn btn-primary"> << Back</a>
-    </div>
-
-    <div id="0531871454" class="contact-content">
-      <div class="contact-content-header">
-        <div class="contact-toolbar">
-          <div class="contact-toolbar-tools pull-xs-left">
-            <div class="btn-group hidden-md hidden-lg">
-              <button class="btn btn-link link-muted" data-target="#contacts" data-toggle="tab" type="button">
-                <span class="icon icon-caret-left icon-lg icon-fw"></span>
-                Contacts
-              </button>
-            </div>
-          </div>
-
-        </div>
-      </div>
-      <div class="contact-content-body">
-        <div class="contact-avatar">
-          <label class="contact-avatar-btn">
-            <span class="icon icon-camera"></span>
-            <input class="file-upload-input" type="file" name="file">
-          </label>
-          <img id="c_img" class="img-rounded" width="128" height="128" src="img/nophoto.jpg" alt="">
-        </div>
-        <div class="contact-info">
-          <h2 id="c_name" class="contact-name"></h2>
-          <p id="c_JobTitle" class="contact-job-title"></p>
-        </div>
-        <div class="spinner spinner-primary pos-r sq-32"></div>
-        <div class="contact-form">
-          <form class="form-horizontal" action="/">
-            <div class="form-groups">
-
-              <div class="form-group">
-                <label class="col-md-3 control-label">Mobile</label>
-                <div class="col-md-9 col-lg-6">
-                  <input id="empPhone" class="form-control" type="text" value="">
-                </div>
-              </div>                 
-              <div class="form-groups">
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Message</label>
-                  <div class="col-md-9 col-lg-6">
-                    <textarea id="smsmsg" class="form-control" rows="3"></textarea>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <div class="col-md-6 col-md-offset-3">
-                    <button class="btn btn-primary" id="btnSend" type="button">Send</button>
-                    <button class="btn btn-default" id="btncancel" type="button">Cancel</button>
-                    <label class="label label-success" name="lblPass" id="lblPass">Message Send Successfully.</label>
-                  </div>
+        <div id="0531871454" class="contact-content">
+          <div class="contact-content-header">
+            <div class="contact-toolbar">
+              <div class="contact-toolbar-tools pull-xs-left">
+                <div class="btn-group hidden-md hidden-lg">
+                  <button class="btn btn-link link-muted" data-target="#contacts" data-toggle="tab" type="button">
+                    <span class="icon icon-caret-left icon-lg icon-fw"></span>
+                    Contacts
+                  </button>
                 </div>
               </div>
-            </form>
+
+            </div>
+          </div>
+          <div class="contact-content-body">
+            <div class="contact-avatar">
+              <label class="contact-avatar-btn">
+                <span class="icon icon-camera"></span>
+                <input class="file-upload-input" type="file" name="file">
+              </label>
+              <img id="c_img" class="img-rounded" width="128" height="128" src="img/nophoto.jpg" alt="">
+            </div>
+            <div class="contact-info">
+              <h2 id="c_name" class="contact-name"></h2>
+              <p id="c_JobTitle" class="contact-job-title"></p>
+            </div>
+            <div class="spinner spinner-primary pos-r sq-32"></div>
+            <div class="contact-form">
+              <form class="form-horizontal" action="/">
+                <div class="form-groups">
+
+                  <div class="form-group">
+                    <label class="col-md-3 control-label">Mobile</label>
+                    <div class="col-md-9 col-lg-6">
+                      <input id="empPhone" class="form-control" type="text" value="">
+                    </div>
+                  </div>                 
+                  <div class="form-groups">
+                    <div class="form-group">
+                      <label class="col-md-3 control-label">Message</label>
+                      <div class="col-md-9 col-lg-6">
+                        <textarea id="smsmsg" class="form-control" rows="3"></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-md-offset-3">
+                        <button class="btn btn-primary" id="btnSend" type="button">Send</button>
+                        <button class="btn btn-default" id="btncancel" type="button">Cancel</button>
+                        <label class="label label-success" name="lblPass" id="lblPass">Message Send Successfully.</label>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-<% include ../partials/footer.html %>
-<script src="/js/send.js"></script>
-</body>
-</html>
+    <% include ../partials/footer.html %>
+    <script src="/js/send.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){ 
+        getContacts();
+      });
+    </script>
+  </body>
+  </html>
