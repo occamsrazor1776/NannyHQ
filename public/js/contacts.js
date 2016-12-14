@@ -6,19 +6,24 @@
           $(document).on('click', '.contact-list-link', function(){
               var id= $(this).attr("Id");
               $.get( './getSinglecontact', {  Id : id} , function(data){
-                 $.each(data,function(index, element){
+                 $.each(data,function(index, element){  
+                    $("#lblSuccess").html('');    
+                    $("#lblfail").html('');                 
                     $("#c_f_name").val(element.FirstName);
                     $("#c_m_name").val(element.MiddleNamw);
                     $("#c_l_name").val(element.LastName);
                     $("#c_email").val(element.Email);
                     $("#c_mobile").val(element.Mobile);
                     $("#c_JobTitleText").val(element.jobTitle);
-                    $("#c_company").val(element.Employer);
+                    $("#txtPlaces").val(element.Location);
                     $("#c_notes").val(element.Notes);
-                    $("#c_name").html(element.FirstName+" "+ element.MiddleNamw +" "+element.LastName);
+                    $("#c_name").html(element.FirstName+" "+ element.MiddleName +" "+element.LastName);
                     $("#c_JobTitle").html(element.jobTitle);
+                    if(element.ProfilePic != null)
+                      $("#c_img").attr("src",element.ProfilePic);
+
                     $("#hidId").val (element.Id);
-                    var hfval = $("#hidId").attr ("value");                 
+                    var hfval = $("#hidId").attr ("value");  
                  });
               })
               $("#contctSettings").hide();
@@ -38,10 +43,10 @@
              var emailadd = $("#c_email").val();
              var mobile = $("#c_mobile").val();
              var j_title = $("#c_JobTitleText").val();
-             var c_comp = $("#c_company").val();
+             var c_comp = $("#txtPlaces").val();
              var notes = $("#c_notes").val();
              var id = $("#hidId").attr ("value");
-             var dataS= {F_name : f_name, M_name : m_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Employer : c_comp, Notes : notes,Id : id };
+             var dataS= {F_name : f_name, M_name : m_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Location : c_comp, Notes : notes,Id : id };
              //$(".spinner").show();               
 
              $.ajax({
@@ -50,24 +55,27 @@
                 url: "./updateContact",
                 contentType: "application/json",
                 success: function( data ){
-                  console.log(data);
-                  debugger;
-                  alert("done");
-                  $("#0531871454").hide();
-                  //$(".spinner").hide();  
+                   if(data.success==true){
+                      $("#lblSuccess").html("Contact Saved Successfully");
+                   }
+                    else
+                    {
+                      $("#lblfail").html(data.status);            
+                    }
                 },
                 error: function( data ){
-
+                      $("#lblfail").html(data.status);      
                 }          
               });
         });
 
 
   $(document).ready(function(){ 
- 
+      
       $.get( "/getcontacts", function( data ){
+         console.log(data);
+        if(data.success==true){
         $.each(data, function(index, element){
-         
          var createtag =(" <li class='contact-list-item'><a id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
           // $("ul.contact-list").prepend(createtag);
              if(element.FirstName.substring(0,1)=="A"){
@@ -254,11 +262,10 @@
                   $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
                 }                  
             });  
-          }
-          
-         
+          }  
            
-        });                         
+        });   
+        }                      
       });     
     });
 
@@ -266,7 +273,6 @@
         $("#0531871454").hide();
         $("#contctSettings").show();
     });
-  "use strict";
 
   var Contacts = {
     Constants: {

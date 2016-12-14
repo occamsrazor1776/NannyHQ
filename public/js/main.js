@@ -21,20 +21,20 @@
           contentType: "application/json"
         }).done(function(data) {
             if(data.success==true){
-            $('#f_name').val('');
-            $('#m_name').val('');
-            $('#l_name').val('');
-            $('#emailadd').val('');
-            $('#mobile').val('');
-            $('#j_title').val('');
-            $('#notes').val('');
-            $('#txtPlaces').val('');
-            $("#lblSuccess").html("Contact Saved Successfully");
-          }
-          else
-          {
-            $("#lblfail").html(data.status);            
-          }
+              $('#f_name').val('');
+              $('#m_name').val('');
+              $('#l_name').val('');
+              $('#emailadd').val('');
+              $('#mobile').val('');
+              $('#j_title').val('');
+              $('#notes').val('');
+              $('#txtPlaces').val('');
+              $("#lblSuccess").html("Contact Saved Successfully");
+            }
+            else
+            {
+              $("#lblfail").html(data.status);            
+            }
 
         }).fail(function() {
           $("#lblfail").html("error occured during process.");
