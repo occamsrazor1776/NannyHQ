@@ -15,7 +15,7 @@ app.use(fileUpload());
 app.use(Express.static(__dirname + '/public'));
 app.use('/static', Express.static(__dirname + '/public'));
 app.enable('trust proxy');
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 
 app.use(session({
   cookieName: 'session',
