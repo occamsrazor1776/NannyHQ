@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('client-sessions');
 var fileUpload = require('express-fileupload');
 
-var oneDay = 86400000;
+var oneDay = 1000;
 
 var app = express();
 var router = express.Router();
@@ -33,7 +33,7 @@ app.all("*", function(req, res, next) {
 
 });
 
-app.use(express.static(__dirname + '/public')); //, { maxAge: oneDay }
+app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
