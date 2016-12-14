@@ -33,7 +33,7 @@ app.all("*", function(req, res, next) {
 
 });
 
-app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
+app.use(express.static(__dirname + '/public')); //, { maxAge: oneDay }
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
