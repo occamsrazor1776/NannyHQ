@@ -37,35 +37,47 @@
 	});
 
 	$("#btnSendAll").click(function() {
-
-		$( "ul.contact-list li.contact-list-item" ).addClass("active");	
-		$("#empPhone").val(hv + ',' + hv1 + ',' + hv2 + ',' + hv3 + ',' + hv4 + ',' + hv5 + ',' + hv6 + ',' + hv7 + ',' + hv8 + ',' + hv9 + ',' + hv10 + ',' + hv11 + ',' + hv12 + ',' + hv13 + ',' + hv14 + ',' + hv15 + ',' + hv16 + ',' + hv17 + ',' + hv18 + ',' + hv19 + ',' + hv20 + ',' + hv21 + ',' + hv22 + ',' + hv23 + ',' + hv24 + ',' + hv25);
+		var numlist ;		
+		$('.contact-list .hdnServiceCode').each(function() {
+			if(numlist == null){
+			   numlist =  $(this).val() + "," ;
+			}
+			else
+			{
+				numlist = numlist + $(this).val() + "," ;
+			}
+		});	
+		$("#empPhone").val(numlist.substring(0,numlist.length - 1));
 	});
 
 	$("#btnSend").click(function (){
-		var str = ['+918126763474', '+918557988984', '+918909373895'];
-		var SMSmsg = $('#msg').val();
-		$("#spinload").show();	
-		$.each(str, function( index, value ) {
-			var dataS = { Mobile : value ,Message :SMSmsg };
-  			alert( index + ": " + value );
-  			$.ajax({
-	        type: "POST",
-	        data :JSON.stringify(dataS),
-	        url: "./SendSMSSingle",
-	        contentType: "application/json"
-	    }).done(function() {
-    		$('#empPhone').val("");
-    		$('#msg').val("");
-    		$("#lblPass").show();
-    		$("#spinload").hide();
-  		}).fail(function() {
-		    $("#lblfail").show();
-		 });
+		var numlist  ;		
+		$('.contact-list .hdnServiceCode').each(function() {			
+			   numlist =  $(this).val() ;
+			   var SMSmsg = $('#msg').val();
+				$("#spinload").show();	
+		
+				var dataS = { Mobile : numlist ,Message :SMSmsg };
+	  			//alert( index + ": " + value );
+	  			$.ajax({
+		        type: "POST",
+		        data :JSON.stringify(dataS),
+		        url: "./SendSMSSingle",
+		        contentType: "application/json"
+		    }).done(function() {
+	    		$('#empPhone').val('');
+	    		$('#msg').val('');
+	    		$("#lblPass").show();
+	    		$("#spinload").hide();
+	  		}).fail(function() {
+			    $("#lblfail").show();
+			 });
 		});
 	});
 
-
+$('.contact-list-item').on('click',function() {    
+    console.log('testing');
+});
 
 	
 

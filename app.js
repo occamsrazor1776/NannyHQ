@@ -6,11 +6,12 @@ var app = Express();
 var request = require('request-json');
 var bodyParser = require('body-parser');
 var session = require('client-sessions');
+var fileUpload = require('express-fileupload');
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-
+app.use(fileUpload());
 app.use(Express.static(__dirname + '/public'));
 app.use('/static', Express.static(__dirname + '/public'));
 app.enable('trust proxy');
@@ -31,6 +32,9 @@ function requireHTTPS(req, res, next) {
         return res.redirect('https://' + req.get('host') + req.url);
     }
 }
+
+
+
 
 //Pages
 app.get('/', function(req, res) {
@@ -94,9 +98,18 @@ app.get('/newcontact', function(req,res){
 app.get('/importContact', function(req, res){
 	 if (req.session && req.session.user) { // Check if session exists
     	res.sendFile(Path.join(__dirname + '/importContact.html'));
+        
     } else {
     	res.redirect('/login');
 	}
+});
+app.get('/importContacts', function(req, res){
+     if (req.session && req.session.user) { // Check if session exists
+        res.sendFile(Path.join(__dirname + '/importContact.html'));
+        
+    } else {
+        res.redirect('/login');
+    }
 });
 
 app.get('/sendSMSSingle', function(req, res){
@@ -115,6 +128,33 @@ app.get('/sendSMSGroup', function(req, res){
 	}
 });
 
+
+ 
+
+app.post('/importContact', function(req, res) {
+    var sampleFile;
+ 
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+  
+    sampleFile = req.files.sampleFile;
+    console.log(sampleFile);
+    sampleFile.mv('files/' + sampleFile.name, function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+           // console.log(res);
+            res.send('importContact');
+        }
+    });
+});
+
+
+
+//app.post('/ImportContact', Routes.)
 
 //APIs
 app.post('/login', Routes.loginUser);

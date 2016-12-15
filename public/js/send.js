@@ -2,7 +2,9 @@
 
 (function ($) {	
 
-	$(document).ready(function(){		
+	$(document).ready(function(){
+	$(".spinner").hide();
+	$("#lblPass").hide();
 		  $.get( "/getcontacts", function( data ){
 			  $.each(data, function(index, element){
 	 				console.log(element.FirstName);
@@ -13,8 +15,9 @@
 	$('#btnSend').click(function(){
 		var mobile = $('#empPhone').val();
 		var SMSmsg = $('#smsmsg').val();
-		var dataS = { Mobile : mobile ,Message :SMSmsg };	
-		$("#spinload").show();
+		var dataS = { Mobile : mobile ,Message :SMSmsg };
+		$("#btnSend").attr("disabled", true);	
+		$(".spinner").show();
 		$.ajax({
 	        type: "POST",
 	        data :JSON.stringify(dataS),
@@ -23,8 +26,9 @@
 	    }).done(function() {
     		$('#empPhone').val("");
     		$('#smsmsg').val("");
-    		$("#lblPass").show();
-    		$("#spinload").hide();
+    		$("#lblPass").show().delay(5000).fadeOut();;
+    		$(".spinner").hide();
+			$("#btnSend").attr("disabled", false);
   		}).fail(function() {
 		    $("#lblfail").show();
 		 });
@@ -39,6 +43,9 @@
                  });
               })
            });
+
+
+
 
 
 

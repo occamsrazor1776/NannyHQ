@@ -141,22 +141,21 @@ exports.getContacts = function(req, res) {
 exports.getSingleContact = function(req, res) {
   console.log(req.query.Id);
 	var sqlQuery ="Select * from tb_contacts where Id=" + req.query.Id;
-	console.log(sqlQuery);
 	connection.query(sqlQuery, function(err, result)
 	{		 
 		if(err){
 			console.log(err);
 		}
 		else{
-			console.log(result);
+			
 			res.send(result);
 		}
 	});
 };
 
 exports.newContact = function(req, res) {
-  var sqlQuery ="INSERT INTO tb_contacts (FirstName,MiddleNamw,LastName,Email,Mobile,jobTitle,Employer,Notes) VALUES ('" + req.body.F_name + "',' "+ req.body.M_name + "','" + req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Employer + "','"+ req.body.Notes +"')";
-	console.log(sqlQuery);
+  var sqlQuery ="INSERT INTO tb_contacts (FirstName,MiddleNamw,LastName,Email,Mobile,jobTitle,Employer,Notes) VALUES ('" + req.body.F_name + "',' "+ req.body.M_name + "','" + req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"')";
+	
 	connection.query(sqlQuery,function(err, result) 
 	{                                                      
 	 if (err) {
@@ -171,8 +170,7 @@ exports.newContact = function(req, res) {
 };
 
 exports.updateContact = function(req, res) {
-  var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleNamw = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Employer='"+req.body.Employer+"', Notes='"+req.body.Notes+"' Where Id ="+req.body.Id;
-	console.log(querySql);
+  var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleNamw = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Employer='"+req.body.Location+"', Notes='"+req.body.Notes+"' Where Id ="+req.body.Id;
 	connection.query(querySql,function(err, result) 
 	{                                                      
 	 if (err) {
@@ -184,4 +182,30 @@ exports.updateContact = function(req, res) {
 
 	  }
 	 });	 
+};
+
+exports.importContact = function (req, res){
+	var sampleFile; 
+    if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+ 
+    sampleFile = req.files.sampleFile;
+    sampleFile.mv('files/' + sampleFile.name, function(err, result) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+            console.log(sampleFile.name);  
+           
+            res.send({
+				success: true,
+				result: " Contacts Uploaded successfully."
+			});
+
+			
+        }
+
+    });
 };

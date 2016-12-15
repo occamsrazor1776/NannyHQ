@@ -345,45 +345,7 @@
                     </button>
                   </div>
                 </div>
-                <div class="contact-toolbar-tools pull-sm-left">
-                  <div class="btn-group">
-                    <button class="btn btn-link link-muted" type="button">
-                      <span class="icon icon-star icon-lg icon-fw"></span>
-                      <span class="visible-lg-inline">Starred</span>
-                    </button>
-                    <button class="btn btn-link link-muted" type="button">
-                      <span class="icon icon-trash icon-lg icon-fw"></span>
-                      <span class="visible-lg-inline">Delete</span>
-                    </button>
-                    <div class="btn-group dropdown">
-                      <button class="btn btn-link link-muted" aria-haspopup="true" data-toggle="dropdown" type="button">
-                        <span class="icon icon-bars icon-lg icon-fw"></span>
-                        <span class="visible-lg-inline">Assign to lists</span>
-                        <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#">Family</a></li>
-                        <li><a href="#">Friends</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">New contact list</a></li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div class="contact-toolbar-tools pull-xs-right">
-                  <div class="btn-group hidden-xs">
-                    <span>
-                      <b>18</b> of 29</span>
-                  </div>
-                  <div class="btn-group hidden-xs">
-                    <button class="btn btn-link link-muted" type="button">
-                      <span class="icon icon-angle-left icon-lg"></span>
-                    </button>
-                    <button class="btn btn-link link-muted" type="button">
-                      <span class="icon icon-angle-right icon-lg"></span>
-                    </button>
-                  </div>
-                </div>
+              
               </div>
             </div>
             <div class="contact-content-body">
@@ -398,6 +360,7 @@
                 <h2 id="c_name" class="contact-name"></h2>
                 <p id="c_JobTitle" class="contact-job-title"></p>
               </div>
+              <div class="spinner spinner-primary pos-r sq-32"></div>
               <div class="contact-form">
                 <form class="form-horizontal" action="/">
                   <div class="form-groups">
@@ -419,6 +382,7 @@
                       <div class="col-md-6 col-md-offset-3">
                         <button class="btn btn-primary" id="btnSend" type="button">Send</button>
                         <button class="btn btn-default" id="btncancel" type="button">Cancel</button>
+                        <label class="label label-success" name="lblPass" id="lblPass">Message Send Successfully.</label>
                       </div>
                     </div>
                   </div>

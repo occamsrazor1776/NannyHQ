@@ -1,4 +1,12 @@
 (function($) {
+
+  $(document).ready(function () {
+     
+  });
+
+   
+
+
      $("#btnSave").click(function(){ 
         var f_name = $("#f_name").val();
         var m_name = $("#m_name").val();
@@ -6,9 +14,9 @@
         var emailadd = $("#emailadd").val();
         var mobile = $("#mobile").val();
         var j_title = $("#j_title").val();
-        var employer = $("#employer").val();
+        var location = $("#txtPlaces").val();
         var notes = $("#notes").val();    
-        var dataS= {F_name : f_name, M_name : m_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Employer : employer, Notes : notes};
+        var dataS= {F_name : f_name, M_name : m_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Location : location, Notes : notes};
         $.ajax({
           type: "POST",
           data :JSON.stringify(dataS),
@@ -37,7 +45,6 @@
 
        
       
-      $("#btnUploadFile").attr('disabled','disabled');
 
    function formWizardBasicExample() {
     var $formWizard = $('#demo-form-wizard-1');
