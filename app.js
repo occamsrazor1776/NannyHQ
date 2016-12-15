@@ -7,17 +7,16 @@ var bodyParser = require('body-parser');
 var session = require('client-sessions');
 var fileUpload = require('express-fileupload');
 
-var oneDay = 1000;
 
 var app = express();
 var router = express.Router();
+
 app.set("view options", {layout: false});  
 app.engine('html', require('ejs').renderFile); 
-//app.use(app.router);
 app.set('view engine', 'html');
 app.set('views', __dirname + "/public/views/pages");
  
-app.all("*", function(req, res, next) {
+/*app.all("*", function(req, res, next) {
     var request = req.params[0];
     if((request === "/")||(request === "")) {
 		res.redirect('/contacts');
@@ -31,16 +30,18 @@ app.all("*", function(req, res, next) {
 	     }
 	 }
 
-});
+});*/
 
+var oneDay = 86400000;
 app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
 
-app.use(fileUpload());
 app.enable('trust proxy');
 app.set('port', process.env.PORT || 8080);
+
+app.use(fileUpload());
 
 app.use(session({
   cookieName: 'session',
