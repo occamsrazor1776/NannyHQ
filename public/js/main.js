@@ -1,7 +1,84 @@
   'use strict';
 
   $(document).ready(function () { 
+      $('#btnData').prop("disabled", true);
+
       $(".contact-list-divider").hide();
+
+        $("#impcontUpload").on('change',function(e) {
+
+            var ext = $("input#impcontUpload").val().split(".").pop().toLowerCase();
+            if($.inArray(ext, ["csv"]) == -1) {
+              alert('Format not supported Upload only CSV');
+              return false;
+            }
+            if (e.target.files != undefined) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  var csvval = e.target.result.split("\n");
+                 
+                  $('#hiddenCOntacts').attr('value', e.target.result);
+                  
+                  for(var j=1;j<csvval.length;j++)
+                  {                    
+                    var csvvalue = csvval[j].split(",");
+                    for(var i =1; i < csvvalue.length; i++)
+                    { 
+                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " "+ csvvalue[1] + "</td> <td class='text-right'>" + csvvalue[2] + "</td> <td class='text-right'>"+ csvvalue[3] +"</td> <td class='text-right'>" + csvvalue[4]+"</td>";
+                      $("#tbContact  > tbody").append(appStr);   
+                    }
+                  }
+                  $("#csvimporthinttitle").show();                  
+                  $('#btnData').prop("disabled", false);                
+              };
+             reader.readAsText(e.target.files.item(0));
+          }
+          return false;
+        });
+
+         $("#impcontUpload1").on('change',function(e) {
+
+            var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
+            var numlist ;
+            if($.inArray(ext, ["csv"]) == -1) {
+              alert('Format not supported Upload only CSV');
+              return false;
+            }
+            if (e.target.files != undefined) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                  var csvval = e.target.result.split("\n");
+                 
+                  $('#hiddenCOntacts').attr('value', e.target.result);
+                  
+                  for(var j=1;j<csvval.length;j++)
+                  {                    
+                    var csvvalue = csvval[j].split(",");
+
+                    for(var i =1; i < csvvalue.length; i++)
+                    { 
+                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " "+ csvvalue[1] + "</td> <td class='text-right'>" + csvvalue[2] + "</td> <td class='text-right'>"+ csvvalue[3] +"</td> <td class='text-right'>" + csvvalue[4]+"</td>";
+                      $("#tbContact  > tbody").append(appStr);   
+                      if(numlist == null){
+                        numlist =  csvvalue[2] + "," ;
+                      }
+                      else
+                      {
+                        numlist = numlist + csvvalue[2] + "," ;
+                      }
+                    }
+                  }
+                  $("#txtTo").val(numlist);
+                  $("#csvimporthinttitle").show();                  
+                  $('#btnData').prop("disabled", false);                
+              };
+             reader.readAsText(e.target.files.item(0));
+          }
+          return false;
+        });
+
+        
+
 
      $("#btnSave").click(function(){ 
         var f_name = $("#f_name").val();
@@ -37,11 +114,51 @@
 
         }).fail(function() {
           $("#lblfail").html("error occured during process.");
+
        });      
      });  
      
-  });      
+       
 
+       $(document).on("click", ".scont", function(){
+            var contval =  $('#hiddenCOntacts').attr('value');
+           // console.log(contval);
+            var csvval = contval.split("\n");
+            var m_name="";
+            for(var j=1;j<csvval.length;j++)
+            {              
+              var csvvalue = csvval[j].split(",");    
+              
+                
+              for(var i =1; i < csvvalue.length; i++)
+              {           
+                 console.log(csvvalue);
+                 //var dataS= {F_name : csvvalue[0], M_name : m_name, L_name : csvvalue[1], Emailadd : csvvalue[2], Mobile : csvvalue[3], J_title : csvvalue[4], Location : location, Notes : notes};
+                  //$.ajax({
+                  //  type: "POST",
+                  //  data :JSON.stringify(dataS),
+                  //  url: "./newcontact",
+                  //  contentType: "application/json"
+                  //}).done(function(data) {
+                    //  if(data.success==true){                       
+                    //    //$("#lblSuccess").html("Contact Saved Successfully");
+                    //  }
+                    //  else
+                    //  {
+                    //    //$("#lblfail").html(data.status);            
+                    //  }
+                //  }).fail(function() {
+                   // $("#lblfail").html("error occured during process.");
+                 //}); 
+              }        
+              
+            }           
+       });
+
+  });  
+
+
+   
   function getContacts()
   {
       $.get( "/getcontacts", function( data ){   

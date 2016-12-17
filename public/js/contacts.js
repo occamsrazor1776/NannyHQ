@@ -31,10 +31,14 @@
     });
 
 
-    $("#iupload").change(function() {
-     var filename =   $('#iupload').val().replace(/C:\\fakepath\\/i, '')
-     alert('changed!');
-   });
+   // $("#impcontUpload").change(function() {
+     //var filename =   $('#iupload').val().replace(/C:\\fakepath\\/i, '');
+    // alert(filename);
+    
+    //});
+
+     
+  
 
     $("#btnUpContact").click(function () {
      var f_name = $("#c_f_name").val();

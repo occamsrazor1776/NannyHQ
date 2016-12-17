@@ -2,40 +2,108 @@
 <html lang="en">
 <head>
   <% include ../partials/head.html %>
-  <link rel="stylesheet" href="css/demo.css">
+  <link rel="stylesheet" href="css/contacts.css">
 </head>
-<body class="layout layout-header-fixed">    
-  <% include ../partials/header.html %>  
-  <div class="layout-main">      
-    <% include ../partials/leftsidebar.html %>  
-    <div class="layout-content">
-     <div class="layout-content-body">
-      <div class="title-bar">
-        <h1 class="title-bar-title">
-          <span class="d-ib">Import Contacts</span>           
-        </h1>
-
-      </div><!-- /.title-bar -->
-      <div class="row">
-        <div class="col-xs-12">  
-          <form ref='uploadForm' id='uploadForm' action='/importContact' method='post' encType="multipart/form-data">
-            <div class="form-group">
-              <input type="file" name="sampleFile" id="iupload" />
-            </div>
-            <div class="form-group">
-              <input type='submit' class="btn btn-primary" value='Upload!' />
-            </div>
-          </form>   
+<body class="layout layout-header-fixed layout-sidebar-fixed">
+<% include ../partials/header.html %>  
+<div class="layout-main">  
+  <% include ../partials/leftsidebar.html %>  
+  <div class="layout-content">
+    <div class="layout-content-body">
+        <div class="title-bar">
+          <h1 class="title-bar-title">
+            <span class="d-ib">Import Contacts</span>
+            
+          </h1>
+          <p class="title-bar-description">
+            <small>Upload Contact CSV and then save them.</small>
+          </p>
         </div>
-      </div><!-- /.row -->
-    </div><!-- /.layout-content-body -->
+       <div class="row">
+         <div class="col-lg-8 col-lg-offset-2">
+            <div class="demo-form-wrapper">
+             <form id="demo-form-wizard-2" data-toggle="validator">
+                <ul class="steps">
+                  <li class="step col-xs-4 active">
+                    <a id="tab1" class="step-segment" href="#tab-1" data-toggle="tab" >
+                      <span class="step-icon icon icon-cloud-upload"></span>
+                    </a>
+                    <div class="step-content">
+                      <strong class="hidden-xs">Upload CSV</strong>
+                    </div>
+                  </li>
+                  <li id="listep2" class="step col-xs-4 disabled">
+                    <a id="tab2" class="step-segment" href="#tab-2" data-toggle="tab">
+                      <span class="step-icon icon icon-table"></span>
+                    </a>
+                    <div class="step-content">
+                      <strong class="hidden-xs">View ans Save Contacts</strong>
+                    </div>
+                  </li>                
+              </ul>
+              <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                  <h4 class="text-center m-y-md">
+                    <span>Upload your CSV File </span>
+                  </h4>
+                 <div class="row">
+                    <div class="col-xs-12">           
+                        <div class="form-group">
+                         <!-- <label class="file-upload-btn btn btn-primary">
+                            Upload files-->
+                            <input   type="file" name="sampleFile"  id="impcontUpload">
+                         <!-- </label>-->                          
+                        </div>     
+                        <div class="form-group">                           
+                          <input type="button" id="btnData" class="btn btn-primary btn-next" value="Next"></input>
+                        </div>
+                       
+                    </div>
+                  </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                   <h4 class="text-center m-y-md">
+                    <span>View Data</span>
+                  </h4>
+                  <div class="row">
+                    <div class="col-md-12">
+                     <div class="panel panel-default">
+                      <div class="panel-heading">Static table Report</div>
+                      <input type="hidden" name="hiddenCOntacts" id="hiddenCOntacts"/>
+                      <div class="panel-body panel-collapse" data-toggle="match-height">
+                       <table id="tbContact" class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th class="text-left">User</th>
+                            <th class="text-right">Phone number</th>
+                            <th class="text-right">Date of expiration</th>
+                            <th class="text-right">Missing Certificate</th>                           
+                          </tr>
+                        </thead>
+                        <tbody>
+                        
+                        </tbody>
+                      </table>
+                      <a href="#tab-1" data-toggle="tab" class="btn btn-info">Previous</a>
+                     <input type="button" id="btnContactSave" name="btnContactSave" class="scont btn btn-primary" value="SAVE">
+                    </div>
+                  </div>
+                 </div>
+                 </div>
+                 </div> 
+               </div>
+              </div> 
+              </form> 
+            </div>
+         </div>
+       </div>
+     
+   </div>
   </div>
 </div>
 <% include ../partials/footer.html %>
-<!-- /build -->
-<!-- build:js js/demo.min.js -->
-<script src="js/demo.js?v=1.1"></script>
-<!-- /build -->
 <script src="js/contacts.js?v=1.1"></script>
+<script src="js/main.js?v=1.1"></script>
+
 </body>
 </html>
