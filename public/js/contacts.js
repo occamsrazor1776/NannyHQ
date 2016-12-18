@@ -119,7 +119,8 @@ var Contacts = {
   handleLinkClick: function handleLinkClick(evt) {
     var $link = $(evt.currentTarget),
     $item = $link.closest('.' + this.CssClasses.CONTACT_LIST_ITEM);
-
+    alert("Aaa");
+    console.log($link);
      // if ($item.hasClass(this.CssClasses.ACTIVE)) $item.removeClass(this.CssClasses.ACTIVE);
 
      this.rememberScrollbarPos();

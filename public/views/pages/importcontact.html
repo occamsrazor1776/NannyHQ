@@ -53,7 +53,8 @@
                             Upload files-->
                             <input   type="file" name="sampleFile"  id="impcontUpload">
                          <!-- </label>-->                          
-                        </div>     
+                        </div>  
+                        <div id="impSpin" class="spinner spinner-primary"></div>
                         <div class="form-group">                           
                           <input type="button" id="btnData" class="btn btn-primary btn-next" value="Next"></input>
                         </div>
@@ -65,7 +66,7 @@
                    <h4 class="text-center m-y-md">
                     <span>View Data</span>
                   </h4>
-                  <div class="row">
+                  <div class="row gutter-xs">
                     <div class="col-md-12">
                      <div class="panel panel-default">
                       <div class="panel-heading">Static table Report</div>
@@ -74,10 +75,13 @@
                        <table id="tbContact" class="table table-hover">
                         <thead>
                           <tr>
-                            <th class="text-left">User</th>
-                            <th class="text-right">Phone number</th>
-                            <th class="text-right">Date of expiration</th>
-                            <th class="text-right">Missing Certificate</th>                           
+                            <th class="text-left">First Name</th>
+                            <th class="text-left">Last Name</th>
+                            <th class="text-left">Address 1</th>
+                            <th class="text-left">City</th>                           
+                            <th class="text-left">State</th>                           
+                            <th class="text-left">Zip Code</th>                           
+                            <th class="text-left">Phone number</th>     
                           </tr>
                         </thead>
                         <tbody>
@@ -86,6 +90,9 @@
                       </table>
                       <a href="#tab-1" data-toggle="tab" class="btn btn-info">Previous</a>
                      <input type="button" id="btnContactSave" name="btnContactSave" class="scont btn btn-primary" value="SAVE">
+                     <label class="label label-success" id="lblDone"></label>
+                     <label class="label label-danger" id="lblerr"></label>
+                     <label class="label label-info" id="lblinfo"></label>
                     </div>
                   </div>
                  </div>
@@ -104,6 +111,8 @@
 <% include ../partials/footer.html %>
 <script src="js/contacts.js?v=1.1"></script>
 <script src="js/main.js?v=1.1"></script>
+<script type="text/javascript">
 
+</script>
 </body>
 </html>

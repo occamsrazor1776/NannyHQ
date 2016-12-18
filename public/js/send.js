@@ -9,6 +9,11 @@
 
    $('#btnSend').click(function(){
     var mobile = $('#empPhone').val();
+    mobile = mobile.replace('(','');
+    mobile = mobile.replace(')','');
+    mobile = mobile.replace(' ','');
+    mobile = mobile.replace('-','');
+    console.log(mobile);
     var SMSmsg = $('#smsmsg').val();
     var dataS = { Mobile : mobile ,Message :SMSmsg };
     $("#btnSend").attr("disabled", true);	
