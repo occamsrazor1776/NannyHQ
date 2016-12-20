@@ -62,6 +62,7 @@ function requireHTTPS(req, res, next) {
 
 //Pages
 app.get('/', function(req, res) {
+    console.log(req.session);
 	 if (req.session && req.session.user) { // Check if session exists
 	 	/*User.findOne({ email: req.session.user.email }, function (err, user) {
 	      if (!user) {
@@ -71,9 +72,11 @@ app.get('/', function(req, res) {
 	        res.redirect('/login');
 	      } else {
 	        // expose the user to the template
-	        res.locals.user = user;*/
+	        res.locals.user = user
+        };*/
     	res.render('contacts.html', {Title:'Contacts'});
-    } else {
+    } 
+    else {
     	res.redirect('/login');
   	}
 });
@@ -117,6 +120,14 @@ app.get('/newcontact', function(req,res){
     } else {
     	res.redirect('/login');
 	}
+});
+
+app.get('/profile', function(req,res){
+     if (req.session && req.session.user) { // Check if session exists
+        res.render('Profile.html', {Title:'Profile'});
+    } else {
+        res.redirect('/login');
+    }
 });
 
 app.get('/importContact', function(req, res){
@@ -176,15 +187,17 @@ app.post('/importContact', function(req, res) {
 //app.post('/ImportContact', Routes.)
 
 //APIs
-app.post('/login', Routes.loginUser);
+app.post('/login', Routes.login);
 app.get('/smsList', Routes.getSMSList);
 app.post('/sendMultipleSMS', Routes.sendMultipleSMS);
 app.post('/SendSMSSingle', Routes.SendSMSSingle);
 
-app.get('/getContacts', Routes.getContacts);
+app.get('/getContacts',  Routes.getContacts);
 app.get('/getSingleContact', Routes.getSingleContact);
 app.post('/newContact', Routes.newContact);
 app.post('/updateContact', Routes.updateContact);
+app.get('/getProfile',Routes.LoginProfile);
+app.get('/getrole', Routes.roles);
 
 //Starting Server
 http.createServer(app).listen(app.get('port'), function(){

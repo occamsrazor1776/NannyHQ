@@ -35,10 +35,36 @@ exports.getvalue = function(req,res){
 	});
 };
 
-exports.loginUser = function(req,res){	
-	var user={ username: 'admin', password: 'test1234'}
-	req.session.user = user;
-	res.redirect('/');
+exports.login = function(req, res){	
+	handleDisconnect();
+	//var user = { username: 'admin', password: 'test1234'}
+
+	var sqlQuery="select * from tb_users where userName='"+ req.body.username +"' and userPassword ='" + req.body.password + "'";
+
+	console.log(req.body);
+	console.log(sqlQuery);
+	
+	connection.query(sqlQuery, function(err, user)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			console.log(user);
+			req.session.user = user;
+			//req.session.user = user;
+			connection.destroy();
+			res.redirect('/');
+		}
+	});
+
+	
+	//res.redirect('/');
 };
 
 exports.getSMSList = function(req, res) {
@@ -137,6 +163,7 @@ exports.getContacts = function(req, res) {
 			});
 		}
 		else{
+			console.log(result);
 			connection.destroy();
 			res.send({
 				success: true, 
@@ -145,6 +172,57 @@ exports.getContacts = function(req, res) {
 			});
 		}
 	});
+};
+
+exports.LoginProfile = function(req, res){
+	handleDisconnect();
+	var userid = req.session.user;
+	console.log(userid);
+	var sqlQuery ="Select * from tb_users where userId = 2";
+	
+	connection.query(sqlQuery, function(err,result){
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false,
+				status: err
+			})
+		}
+		else{
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "",
+				data:result
+			});
+		}
+	});
+};
+
+exports.roles = function(req, res){
+	handleDisconnect();
+	var sqlQuery="select * from tb_roles where roleId = "+req.body.Id;
+	console.log(req.body.Id);
+	connection.query(sqlQuery, function(err,result){
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false,
+				status: err
+			})
+		}
+		else{
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "",
+				data:result
+			});
+		}
+	});
+
 };
 
 exports.getSingleContact = function(req, res) {
@@ -166,6 +244,15 @@ exports.getSingleContact = function(req, res) {
 		}
 	});
 };
+
+
+
+
+exports.findOne = function(req, res){
+	handleDisconnect();
+
+
+}
 
 exports.newContact = function(req, res) {
 	handleDisconnect();

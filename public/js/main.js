@@ -1,6 +1,31 @@
   'use strict';
 
   $(document).ready(function () { 
+       // $("#lbllogfail").hide();
+       // $("lbllogDone").hide();
+     // $("#signin").click(function (){
+      //  var UserName = $("#username").val();
+      //  var Password = $("#password").val();
+
+       
+      //  if(username === '' && password===''){
+        //  $("#lbllogfail").show().delay(5000).fadeOut();
+        //  $("#lbllogfail").html("Please Fill username and password.");
+      //  }
+      //  else{
+            //  var dataS = { username : UserName, password : Password };
+            //  console.log(dataS);             
+            //  $.ajax({
+            //  type: "POST",
+            //  data :JSON.stringify(dataS),
+            //  url: "./login",
+            //  contentType: "application/json"
+            //  });
+        //}
+
+        //var dataS
+     // });
+
       $('#btnData').prop("disabled", true);
       $("#bulkspin").hide(); 
       $(".contact-list-divider").hide();
@@ -52,6 +77,7 @@
             var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
             var numlist ;
             var name;
+            var num1;   
             var missingCertificates;
             var expDate;
             if($.inArray(ext, ["csv"]) == -1) {
@@ -73,12 +99,17 @@
                     { 
                       var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td><td class='text-left'>"+ csvvalue[4] +"</td>";
                       $("#demo-datatables-1  > tbody").append(appStr);   
+                      num1 = newallcontacts[2].replace('(','');
+                      num1 = num1.replace(')','');
+                      num1 = num1.replace('-', '');
+                      num1 = num1.replace(' ', '');
+                      mobile = "+1" + num1;
                       if(numlist == null){
-                        numlist =  csvvalue[2] + "," ;
+                        numlist =  mobile + "," ;
                       }
                       else
                       {
-                        numlist = numlist + csvvalue[2] + "," ;
+                        numlist = numlist + mobile + "," ;
                       }
                      
                     }
@@ -126,18 +157,6 @@
                       });
                  }  
               }
-
-
-
-              $.each(nums, function( index, value ) {
-                
-                num1 = value.replace('(','');
-                num1 = num1.replace(')','');
-                num1 = num1.replace(' ', '');
-                num1 = num1.replace(' ', '');
-                mobile= num1;
-                SMSmsg="Hello"
-              });
          });
 
 
@@ -189,6 +208,9 @@
            // console.log(contval);
             var csvval = contval.split("\n");
             var m_name="";
+            var cmobile;
+            var num1;
+            var count = 0 ;
             for(var j=1;j<csvval.length;j++)
             {              
               var csvvalue = csvval[j].split(",");    
@@ -197,26 +219,41 @@
               for(var i =1; i < csvvalue.length; i++)
               {           
                  console.log(csvvalue);
-                 var dataS= {F_name : csvvalue[0], M_name : m_name, L_name : csvvalue[1], Emailadd :'', Mobile : csvvalue[6], J_title : '', Location : csvvalue[2] + "," + csvvalue[3] + "," + csvvalue[4] + "," + csvvalue[5], Notes : ''};
-                 $.ajax({
-                    type: "POST",
-                    data :JSON.stringify(dataS),
-                    url: "./newcontact",
-                    contentType: "application/json"
-                  }).done(function(data) {
-                      if(data.success==true){                       
-                        $("#lblDone").html("Contacts Saved Successfully");
-                         console.log("saved Successfully");
-                      }
-                      else
-                      {
-                        $("#lblerr").html(data.status);
-                        console.log(data.status);            
-                      }
-                  }).fail(function() {
-                    $("#lbllblinfo").html("error occured during process.")
-                    console.log("error occured during process.");
-                 }); 
+                 if(cmobile != null){
+                    if(csvvalue[6] == cmobile){
+                        count = count  + 1 ;
+                    }
+                    else{
+                      num1 = csvvalue[6].replace('(','');
+                      num1 = num1.replace(')','');
+                      num1 = num1.replace(' ', '');
+                      num1 = num1.replace('-', '');
+                       var dataS= {F_name : csvvalue[0], M_name : m_name, L_name : csvvalue[1], Emailadd :'', Mobile : '+1' +  num1, J_title : '', Location : csvvalue[2] + "," + csvvalue[3] + "," + csvvalue[4] + "," + csvvalue[5], Notes : ''};
+                       $.ajax({
+                          type: "POST",
+                          data :JSON.stringify(dataS),
+                          url: "./newcontact",
+                          contentType: "application/json"
+                        }).done(function(data) {
+                            if(data.success==true){                       
+                              $("#lblDone").html("Contacts Saved Successfully and "+ count +"  duplicate contacts are not saved.");
+                               console.log("saved Successfully" );
+                            }
+                            else
+                            {
+                              $("#lblerr").html(data.status);
+                              console.log(data.status);            
+                            }
+                        }).fail(function() {
+                          $("#lbllblinfo").html("error occured during process.")
+                          console.log("error occured during process.");
+                       }); 
+                    }
+                 }
+                 else{
+                  cmobile = csvvalue[6];
+                 }
+            
                   
               }        
               
@@ -250,13 +287,13 @@
            var cmob =  $("#hidContact").attr("value").split(',');
            //console.log(cmob);
            $.each(cmob, function(index, element){
-               var mobile1 = element;
+              var mobile1 = element;
               mobile1 = mobile1.replace('(','');
               mobile1 = mobile1.replace(')','');
-              mobile1 = mobile1.replace(' ','');
               mobile1 = mobile1.replace('-','');
+              mobile1 = mobile1.replace(' ','');
               console.log(mobile1);
-              var SMSmsg = $('#msg').val();
+              var SMSmsg ="+1" + $('#msg').val();
               var dataS = { Mobile : mobile1 ,Message :SMSmsg };
                $.ajax({
                    type: "POST",
@@ -278,7 +315,41 @@
 
   });  
 
+ function getProfile(){
+  $.get("/getProfile", function ( data ){
+      console.log(data);
+        if( data.success == false){
+
+        }
+        if(data.success == true){
+          console.log(data);
+            $.each(data.data , function(index, element){
+               $("#f_name").val(element.userFirstname);
+               $("#l_name").val(element.userLastName);
+               $("#emailadd").val(element.userEmail);
+               $("#u_name").val(element.userName);
+               $("#password").val(element.userPassword);
+                getrole();
+
+            });
+        }
+     })
+ };
     
+
+    function getrole(id){
+      $('/getrole' ,{Id : id }, function( data ){
+        console.log(data);
+        if(data.success==false){
+        }
+        if(data.success==true){
+           $.each(data.data, function(index, element){
+              $("#u_role").val(element.role);
+              console.log(element.role);
+          });
+        }
+      })
+    }
 
    
   function getContacts()
@@ -288,7 +359,7 @@
         if(data.success==false){
           $(".contact-sidebar-body").hide();
         }
-
+console.log(data);
         if(data.success==true){          
           $.each(data.data, function(index, element){
             var createtag =(" <li class='contact-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
