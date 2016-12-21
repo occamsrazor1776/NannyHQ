@@ -45,22 +45,24 @@
                 var reader = new FileReader();
                 reader.onload = function(e) {
                   var csvval = e.target.result.split("\n");
-                  console.log(csvval);
+                 
                   $("#impSpin").show(); 
                   $('#hiddenCOntacts').attr('value', e.target.result);
-                  
+                  console.log(csvval.length);
                   for(var j=1;j<csvval.length;j++)
                   { 
 
                     var csvvalue = csvval[j].split(",");
+                    console.log(csvvalue.length);
+                    console.log(csvvalue);
 
 
-                    for(var i =1; i < csvvalue.length; i++)
-                    { 
+                    //for(var i =1; i <= csvvalue.length; i++)
+                    //{ 
                          
                       var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td> <td class='text-left'>" + csvvalue[4]+"</td><td class='text-left'>" + csvvalue[5] + "</td><td class='text-left'>"+csvvalue[6]+"</td>";
                       $("#tbContact  > tbody").append(appStr);   
-                    }
+                    //}
                   }
                   $("#impSpin").hide();
                   $("#csvimporthinttitle").show();                  
@@ -101,11 +103,11 @@
                     { 
                       var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td><td class='text-left'>"+ csvvalue[4] +"</td>";
                       $("#demo-datatables-1  > tbody").append(appStr);   
-                      num1 = newallcontacts[2].replace('(','');
+                      num1 = csvvalue[2].replace('(','');
                       num1 = num1.replace(')','');
                       num1 = num1.replace('-', '');
                       num1 = num1.replace(' ', '');
-                      mobile = "+1" + num1;
+                    var  mobile = "+91" + num1;
                       if(numlist == null){
                         numlist =  mobile + "," ;
                       }
@@ -141,8 +143,8 @@
                     num1 = newallcontacts[2].replace('(','');
                     num1 = num1.replace(')','');
                     num1 = num1.replace(' ', '');
-                    num1 = num1.replace(' ', '');
-                    mobile= num1;
+                    num1 = num1.replace('-', '');
+                    mobile="+91" + num1;
                     SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  newallcontacts[4]+" that expired on "+ newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
                     var dataS = { Mobile : mobile ,Message :SMSmsg };
                     console.log(mobile);
@@ -167,14 +169,14 @@
 
      $("#btnSave").click(function(){ 
         var f_name = $("#f_name").val();
-        var m_name = $("#m_name").val();
+      
         var l_name = $("#l_name").val();
         var emailadd = $("#emailadd").val();
         var mobile = $("#mobile").val();
         var j_title = $("#j_title").val();
         var location = $("#txtPlaces").val();
         var notes = $("#notes").val();    
-        var dataS= {F_name : f_name, M_name : m_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Location : location, Notes : notes};
+        var dataS= {F_name : f_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Location : location, Notes : notes};
         $.ajax({
           type: "POST",
           data :JSON.stringify(dataS),
@@ -294,15 +296,23 @@
       
 
        $("ul.contact-list").on("click","li.contact-list-item", function(){
-           var mobile = $(this).find("a").attr("data");
-           console.log(mobile);
+           var mobile = $(this).find("a").attr("data");         
            var newmobile;
            
             if ($.trim($('#empPhone').val()).length > 0)
-            {
-                  console.log($('#empPhone').val().indexOf(mobile));
-                if($('#empPhone').val().indexOf(mobile) > - 1){
-                   alert("Number is already added");
+            {                
+                var numberslst = $('#empPhone').val().split(',');
+                
+                if(numberslst.indexOf(mobile) > - 1){
+                   $('#empPhone').val('');
+                  $.each(numberslst, function(index, element){
+                    if(mobile != element){
+                       newmobile =  element + ",";
+                     }                    
+
+                  });
+                  $('#empPhone').val(newmobile.substring(0, newmobile.length -1));
+                  // alert("Number is already added");
               }
               else{
                  newmobile =  $('#empPhone').val() + "," + mobile;
@@ -321,8 +331,8 @@
               var mobile1 = element;
               mobile1 = mobile1.replace('(','');
               mobile1 = mobile1.replace(')','');
-              mobile1 = mobile1.replace('-','');
               mobile1 = mobile1.replace(' ','');
+              mobile1 = mobile1.replace('-','');
               console.log(mobile1);
               var SMSmsg ="+1" + $('#msg').val();
               var dataS = { Mobile : mobile1 ,Message :SMSmsg };

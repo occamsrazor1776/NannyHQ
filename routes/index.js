@@ -277,7 +277,7 @@ exports.findOne = function(req, res){
 
 exports.newContact = function(req, res) {
 	handleDisconnect();
-	var sqlQuery ="INSERT INTO tb_contacts (FirstName,MiddleName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate) VALUES ('" + req.body.F_name + "',' "+ req.body.M_name + "','" + req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"',NOW())";
+	var sqlQuery ="INSERT INTO tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate) VALUES ('" + req.body.F_name + "',' "+  req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"',NOW())";
 	
 	connection.query(sqlQuery,function(err, result) 
 	{                                                      
@@ -304,7 +304,7 @@ exports.newContact = function(req, res) {
 
 exports.updateContact = function(req, res) {
 	handleDisconnect();
-	var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleName = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Location='"+req.body.Location+"', Notes='"+req.body.Notes+"', modifiedDate=NOW() Where Id ="+req.body.Id;
+	var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Location='"+req.body.Location+"', Notes='"+req.body.Notes+"', modifiedDate=NOW() Where Id ="+req.body.Id;
 	connection.query(querySql,function(err, result) 
 	{                                                      
 		if (err) {
