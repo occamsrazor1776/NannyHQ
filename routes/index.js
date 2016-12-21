@@ -55,7 +55,7 @@ exports.login = function(req, res){
 			});
 		}
 		else{
-			console.log(user);
+			
 			req.session.user = user;
 			//req.session.user = user;
 			connection.destroy();
@@ -155,7 +155,6 @@ exports.getContacts = function(req, res) {
 	connection.query(sqlQuery, function(err, result)
 	{		 
 		if(err){
-			console.log(err);
 			connection.destroy();
 			res.send({
 				success: false, 
@@ -163,7 +162,7 @@ exports.getContacts = function(req, res) {
 			});
 		}
 		else{
-			console.log(result);
+			
 			connection.destroy();
 			res.send({
 				success: true, 
@@ -177,7 +176,7 @@ exports.getContacts = function(req, res) {
 exports.LoginProfile = function(req, res){
 	handleDisconnect();
 	var userid = req.session.user;
-	console.log(userid);
+	console.log("session " + userid.userId);
 	var sqlQuery ="Select * from tb_users where userId = 2";
 	
 	connection.query(sqlQuery, function(err,result){
@@ -250,7 +249,29 @@ exports.getSingleContact = function(req, res) {
 
 exports.findOne = function(req, res){
 	handleDisconnect();
-
+	handleDisconnect();
+	var userid = req.session.user;
+	console.log(userid);
+	var sqlQuery ="Select * from tb_users where userId = 2";
+	
+	connection.query(sqlQuery, function(err,result){
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false,
+				status: err
+			})
+		}
+		else{
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "",
+				data:result
+			});
+		}
+	});
 
 }
 
@@ -279,6 +300,8 @@ exports.newContact = function(req, res) {
 	});	
 };
 
+
+
 exports.updateContact = function(req, res) {
 	handleDisconnect();
 	var querySql = "Update tb_contacts set FirstName = '"+req.body.F_name+"', MiddleName = '"+req.body.M_name+"', LastName='"+req.body.L_name+"', Email='"+req.body.Emailadd+"', Mobile='"+req.body.Mobile+"', jobTitle='"+req.body.J_title+"', Location='"+req.body.Location+"', Notes='"+req.body.Notes+"', modifiedDate=NOW() Where Id ="+req.body.Id;
@@ -302,6 +325,32 @@ exports.updateContact = function(req, res) {
 			});
 		}
 	});	 
+};
+
+
+exports.updateUserProfile = function(req, res){
+	handleDisconnect();
+	var querySql="Update tb_users set userName ='" + req.body.Username + "', userPassword ='" + req.body.Password +"', userFirstName ='" + req.body.F_name +"', userLastName = '" + req.body.L_name + "', userEmail='"+ req.body.Email +"' where userId ="+req.body.Id;
+	connection.query(querySql,function(err, result) 
+	{                                                      
+		if (err) {
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: "Contact Insertion Failed!!"
+			});
+		}
+		else
+		{
+			console.log('Changed ' + result.changedRows + ' rows');	
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "Contact Updated!!"
+			});
+		}
+	});	
 };
 
 exports.importContact = function (req, res){

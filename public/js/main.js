@@ -53,6 +53,8 @@
                   { 
 
                     var csvvalue = csvval[j].split(",");
+
+
                     for(var i =1; i < csvvalue.length; i++)
                     { 
                          
@@ -200,6 +202,35 @@
 
        });      
      });  
+
+     $("#btnUpdateProfile").click(function (){ 
+        $("#spinProfile").show();
+        var f_name = $("#f_name").val();
+        var l_name = $("#l_name").val();
+        var email  =  $("#emailadd").val();
+        var id = $("#hidProId").attr("value");
+        var userName = $("#u_name").val();
+        var userPassword = $("#password").val();
+
+        var dataS = {F_name : f_name, L_name : l_name, Id : id, Email : email, Username : userName, Password : userPassword };
+        
+        $.ajax({
+            type : "POST",
+            data : JSON.stringify(dataS),
+            url  : "./updateProfile",
+            contentType : "application/json"
+        }).done(function (data){
+            if(data.success == true){
+              console.log("Successfully updated");
+              $("#spinProfile").hide();
+              $("#lblSuccess").html("Contact Updated Successfully");
+            }
+            if(data.success==false){
+              console.log("operation unsuccessful");
+            }
+        })
+
+     });
      
        
 
@@ -269,7 +300,7 @@
            
             if ($.trim($('#empPhone').val()).length > 0)
             {
-                
+                  console.log($('#empPhone').val().indexOf(mobile));
                 if($('#empPhone').val().indexOf(mobile) > - 1){
                    alert("Number is already added");
               }
@@ -317,24 +348,29 @@
 
  function getProfile(){
   $.get("/getProfile", function ( data ){
-      console.log(data);
+       $("#spinProfile").show();
+     
         if( data.success == false){
 
         }
         if(data.success == true){
-          console.log(data);
+         
             $.each(data.data , function(index, element){
                $("#f_name").val(element.userFirstname);
                $("#l_name").val(element.userLastName);
                $("#emailadd").val(element.userEmail);
                $("#u_name").val(element.userName);
                $("#password").val(element.userPassword);
+               $("#hidProId").attr("value",element.userId);
+               $("#lbluser").html(element.username);
                 getrole();
-
+                 $("#spinProfile").hide();
             });
         }
      })
  };
+
+
     
 
     function getrole(id){

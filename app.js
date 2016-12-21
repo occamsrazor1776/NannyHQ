@@ -198,6 +198,7 @@ app.post('/newContact', Routes.newContact);
 app.post('/updateContact', Routes.updateContact);
 app.get('/getProfile',Routes.LoginProfile);
 app.get('/getrole', Routes.roles);
+app.post('/updateProfile', Routes.updateUserProfile);
 
 //Starting Server
 http.createServer(app).listen(app.get('port'), function(){
