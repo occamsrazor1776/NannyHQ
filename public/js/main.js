@@ -49,7 +49,7 @@
                   $("#impSpin").show(); 
                   $('#hiddenCOntacts').attr('value', e.target.result);
                   console.log(csvval.length);
-                  for(var j=1;j<csvval.length;j++)
+                  for(var j=1;j<csvval.length -1;j++)
                   { 
 
                     var csvvalue = csvval[j].split(",");
@@ -95,32 +95,42 @@
                  
                   $('#hiddenCOntacts').attr('value', e.target.result);
                     $("#bulkspin").show(); 
-                  for(var j=1;j<csvval.length;j++)
+                  for(var j=1;j<csvval.length - 1;j++)
                   {                    
                     var csvvalue = csvval[j].split(",");
 
-                    for(var i =1; i < csvvalue.length; i++)
-                    { 
+                    
                       var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td><td class='text-left'>"+ csvvalue[4] +"</td>";
-                      $("#demo-datatables-1  > tbody").append(appStr);   
-                      num1 = csvvalue[2].replace('(','');
-                      num1 = num1.replace(')','');
-                      num1 = num1.replace('-', '');
-                      num1 = num1.replace(' ', '');
-                    var  mobile = "+91" + num1;
-                      if(numlist == null){
-                        numlist =  mobile + "," ;
-                      }
-                      else
+                      $("#demo-datatables-1  > tbody").append(appStr); 
+
+
+                      console.log(csvvalue.length);
+                      for(var i = 1 ; i< csvval.length -1 ; i++)  
                       {
-                        numlist = numlist + mobile + "," ;
-                      }
-                     
-                    }
+                        console.log(csvvalue[2]);
+                        num1 = csvvalue[2];
+                        num1 = csvvalue[2].replace('(','');
+                        num1 = num1.replace(')','');
+                        num1 = num1.replace('-', '');
+                        num1 = num1.replace(' ', '');
+                        var  mobile = "+91" + num1;
+                        if(numlist == null){
+                          numlist =  num1 + "," ;
+                        }
+                        else
+                        {
+                          numlist = numlist + num1 + "," ;
+                        }
+                     }
+                    
                   }
                   console.log(numlist);
                   $("#bulkspin").hide(); 
-                  $("#txtTo").val(numlist);                
+                  var formatnums = numlist.split(',');
+                  var newfnums;
+                  var num2;
+                  
+                  $("#txtTo").val(numlist.substring(0, numlist.length-1));                
 
                  // $("#csvimporthinttitle").show();                  
                   $('#btnData').prop("disabled", false);                
