@@ -305,27 +305,41 @@
 
       
 
-       $("ul.contact-list").on("click","li.contact-list-item", function(){
+       $("ul#contMulti").on("click","li.contact-list-item", function(){
            var mobile = $(this).find("a").attr("data");         
            var newmobile;
            
             if ($.trim($('#empPhone').val()).length > 0)
             {                
-                var numberslst = $('#empPhone').val().split(',');
-                
+                var numberslst = $('#empPhone').val();
+                console.log(numberslst);
                 if(numberslst.indexOf(mobile) > - 1){
-                   $('#empPhone').val('');
-                  $.each(numberslst, function(index, element){
-                    if(mobile != element){
-                       newmobile =  element + ",";
+                  $('#empPhone').val('');
+                  $.each(numberslst.split(','), function(index, element){
+                    console.log("newmobile : "+ newmobile);
+                    if(mobile === element){
+                      $('#empPhone').val(newmobile.substring(newmobile.length - 1));
+                     }
+                     else{      
+
+                       if(element === ""){                        
+                                            
+                       }
+                       else{
+                        newmobile = element + ",";   
+                       }
+                        
+                        
                      }                    
 
                   });
-                  $('#empPhone').val(newmobile.substring(0, newmobile.length -1));
+                  $('#empPhone').val(newmobile);
                   // alert("Number is already added");
               }
               else{
+                if($('#empPhone').val() != ','){
                  newmobile =  $('#empPhone').val() + "," + mobile;
+                }
                 $('#empPhone').val(newmobile);
               }
             }   
@@ -335,7 +349,29 @@
 
             $("#hidContact").attr("value", $("#empPhone").val());
          
-           var cmob =  $("#hidContact").attr("value").split(',');
+          
+        });
+       $("ul#contlistSingle").on("click","li.contact-list-item", function(){
+           var mobile = $(this).find("a").attr("data");         
+           var newmobile;
+           
+            if ($.trim($('#empPhone').val()).length > 0)
+            {                
+               
+            }   
+            else{
+              $("#empPhone").val(mobile);
+            }
+
+            $("#hidContact").attr("value", $("#empPhone").val());
+         
+          
+        });
+
+       $("#btnSend").click(function (){
+           
+             var cmob =  $("#hidContact").attr("value").split(',');
+              $("#btnSend").attr("disabled", true);
            //console.log(cmob);
            $.each(cmob, function(index, element){
               var mobile1 = element;
@@ -362,7 +398,8 @@
                 });
            });
 
-        });
+
+       }); 
 
   });  
 
@@ -407,6 +444,26 @@
       })
     }
 
+    function getMessageContacts()
+    {
+      $.get( "/getcontacts", function( data ){   
+
+        if(data.success==false){
+          $(".messenger-sidebar-body").hide();
+        }
+        console.log(data);
+        if(data.success==true){          
+          $.each(data.data, function(index, element){
+            var createtag =(" <li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><h5 class='messenger-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+             $(createtag).insertAfter( $('.messenger-list'));
+          
+        });           
+        $("#messengerlist").fadeIn();
+        $("#spinloadcontact").hide();
+      }     
+    }); 
+  } 
+
    
   function getContacts()
   {
@@ -415,9 +472,9 @@
         if(data.success==false){
           $(".contact-sidebar-body").hide();
         }
-console.log(data);
         if(data.success==true){          
           $.each(data.data, function(index, element){
+             
             var createtag =(" <li class='contact-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
            
             $(".contact-list-heading").each(function(){

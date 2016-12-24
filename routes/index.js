@@ -40,9 +40,6 @@ exports.login = function(req, res){
 	//var user = { username: 'admin', password: 'test1234'}
 
 	var sqlQuery="select * from tb_users where userName='"+ req.body.username +"' and userPassword ='" + req.body.password + "'";
-
-	console.log(req.body);
-	console.log(sqlQuery);
 	
 	connection.query(sqlQuery, function(err, user)
 	{		 
@@ -56,7 +53,7 @@ exports.login = function(req, res){
 		}
 		else{
 			
-			req.session.user = user;
+			req.session.user = user;			
 			//req.session.user = user;
 			connection.destroy();
 			res.redirect('/');
