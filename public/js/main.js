@@ -73,6 +73,22 @@
           }
           return false;
         });
+         $("#profilepic").on('change',function(e) {                   
+             var tmppath = URL.createObjectURL(e.target.files[0]);
+                $("#imgProfile").fadeIn("fast").attr('src',URL.createObjectURL(e.target.files[0]));
+                var filename = $('#profilepic').val();
+                 var dataS ={path : 'C:/fakepath/', filename : e.target.files[0]};
+                $.ajax({
+                        type : "POST",
+                        data : JSON.stringify(dataS),
+                        url  : "./uploadPhoto",
+                        contentType : "application/json"
+                    })
+
+         
+          return false;
+        });
+
         $(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
         $("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
 
@@ -454,7 +470,7 @@
         console.log(data);
         if(data.success==true){          
           $.each(data.data, function(index, element){
-            var createtag =(" <li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><h5 class='messenger-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+            var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>jun 22</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>dummy message</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
              $(createtag).insertAfter( $('.messenger-list'));
           
         });           
@@ -464,6 +480,32 @@
     }); 
   } 
 
+   $("ul#msglist").on("click","li.messenger-list-item", function(){
+           var mobile = $(this).find("a").attr("data");         
+           var newmobile; 
+      });
+
+   function getmessngerProfile(){
+       $.get( "/getmessngerProfile", function( data ){
+          if(data.success==true){
+            console.log("data : " + data);
+            $.each(data.data , function(index, element){
+              $("#username").html("Welcome  " + element.userName +" !");
+            })
+          };
+       });
+   };
+
+   function getuserDetails(){
+       $.get( "/getmessngerProfile", function( data ){
+          if(data.success==true){
+            console.log("data : " + data);
+            $.each(data.data , function(index, element){
+              $("#lbluser").html(element.userName);
+            })
+          };
+       });
+   };
    
   function getContacts()
   {

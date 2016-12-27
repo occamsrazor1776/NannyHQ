@@ -1,13 +1,5 @@
 (function($) {
   "use strict";
-
-  $(document).ready(function (){
-
-  
-
-                      
-});
-
   var Messenger = {
     Constants: {
       CUSTOM_SCROLLBAR_ALWAYS_VISIBLE: true,

@@ -64,6 +64,7 @@ exports.login = function(req, res){
 	//res.redirect('/');
 };
 
+
 exports.getSMSList = function(req, res) {
 	client.sms.messages.list(function(err, data) {
 		data.smsMessages.forEach(function(sms) {
@@ -169,6 +170,20 @@ exports.getContacts = function(req, res) {
 		}
 	});
 };
+
+
+exports.getmessngerProfile = function(req,res){
+	if(req.session.user){		
+		res.send({
+				success: true, 
+				status: "",
+				data:req.session.user
+			});
+	}
+	else{
+		
+	}
+}
 
 exports.LoginProfile = function(req, res){
 	handleDisconnect();

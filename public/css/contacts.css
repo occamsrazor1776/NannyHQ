@@ -205,10 +205,219 @@ body {
 .media-heading {
   font-weight: 300;
 }
+
+.messenger-welcome{
+  text-align: center;
+}
+.messenger-welcome-body{
+  display: table;
+  height: 100%;
+  table-layout: fixed;
+  width: 100%;
+}
+.messenger-welcome-inner{
+  display: table-cell;
+  height: 100%;
+  padding-bottom: 45px;
+  padding-top: :45px;
+  vertical-align: middle;
+  width:100%;
+}
+.messenger-avatar{
+  margin: 15px auto;
+  position: relative;
+  width: 120px;
+}
+.messenger-avatar-btn{
+  background-color: rgba(0,0,0,.5);
+  background-image: none;
+  border: none;
+  border-radius:  0 0;
+  bottom: 0;
+  color: #fff;
+  cursor: pointer;
+  display: block;
+  font-size:13px;
+  height: 30px;
+  margin:0;
+  overflow: hidden;
+  padding:0;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  width:30px;
+}
+.messenger-heading{
+  font-weight: 400;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.messenger-nav{
+  list-style: none;
+  margin-bottom: 0;
+  padding-left: 0; 
+}
+.messenger-nav>li{
+  display: block;
+  position: relative;
+}
+.messenger-nav>li>a{
+  display: inline-block;
+  padding:10px 15px;
+  position: relative;
+}
+.messenger-content{
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: fadeInRight;
+  display: none;
+}
+.messenger-sidebar.active{
+  display: block;
+}
+.messenger-content-inner{
+  display: table;
+  height: 100%;
+  table-layout: fixed;
+  width: 100%;  
+}
+.messenger-content-header{
+  border-collapse: collapse;
+  display: table-row;
+}
+.messenger-content-header-inner{
+  display: table-cell;
+  height:  0;
+  width: 100%;
+}
+.messenger-toolbar{
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+}
+.messenger-toolbar-tools{
+  float: right;
+}    
+.pull-xs-left{
+  float: left !important;
+}
+.messenger-content-body{
+  border-collapse: collapse;
+  display: table-row;
+}
+.messenger-content-body-inner{
+  display: table-cell;
+  height: 100%;
+  width: 100% ;
+}
+.messenger-scrollable-content{
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0 ;
+  width: 100%;
+}
+
+.conversation{
+  margin-bottom: 0;
+  padding-: 15px;
+}
+
+.conversation-item{
+  display: block;
+  margin-bottom: 15px;
+  position: relative;
+}
+.conversation-messages{
+  overflow: hidden;
+}
+
+.conversation-message{
+  border-radius: 0;
+  margin-bottom: 1px;
+  margin-top: 1px;
+  padding: 6px 12px;
+  position: relative;
+  word-wrap: break-word;
+}
+
+.conversation-self .conversation-message{
+  background-color: #eee;
+  clear: left;
+  color: #424242;
+  float: left;
+}
+
+.conversation-self .conversation-avatar{
+  float:left;
+}
+
+.conversation-self .conversation-messages{
+  padding-left: 15px;
+}
+.conversation-other .conversation-avatar{
+  float: right;
+}
+
+.conversation-other .conversation-messages{
+  padding-right: 15px;
+}
+.conversation-other .conversation-message{
+  background-color: #0288d1;
+  clear: right;
+  color: #fff;
+  float: right;
+}
+
+.messenger-content-footer{
+  border-collapse: collapse;
+  display: table-row;
+}
+.messenger-content-footer-inner{
+  display: table-cell;
+  height: 0;
+  width: 100%;
+}
+.messenger-compose{
+  background-color: #fff;
+  border-top: 1px solid #eee;
+  padding:10px 15px;
+}
+.messenger-compose-actions{
+  float: right;
+  margin-left: 15px;
+}
+.messenger-compose-action{
+  float: left;
+}
+.messenger-compose-message{
+  overflow: hidden;
+}
+.messenger-compose-input{
+  background-color: #fff;
+  background-image: none;
+  border: none;
+  color: #757575;
+  display: block;
+  font-size:13px;
+  line-height: 1.538462;
+  max-height: 100px;
+  min-height: 40px;
+  outline: 0;
+  padding:0;
+  width: 100%;
+}
+
 @media (min-width: 480px) {
   .contact-list-item {
     float: left;
     width: 50%;
+  }
+}
+
+@media (min-width: 762px){
+  .conversation-message
+  {
+    max-width: 75%;
   }
 }
 @media (min-width: 992px) {
@@ -286,5 +495,29 @@ body {
   }
   .title-bar {
     display: none;
+  }
+
+  .messenger-welcome{
+    bottom: 0;
+    display: block;
+    left: 280px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top:0;
+  }
+  .messenger-content{
+    bottom: 0;
+    left: 280px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+
+  .conversation-message{
+    max-width: 50%;
   }
 }
