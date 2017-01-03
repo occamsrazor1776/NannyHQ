@@ -6,7 +6,6 @@ var request = require('request-json');
 var bodyParser = require('body-parser');
 var session = require('client-sessions');
 var fileUpload = require('express-fileupload');
-var mailer = mailer = require('express-mailer');
 
 var app = express();
 var router = express.Router();
@@ -59,14 +58,6 @@ function requireHTTPS(req, res, next) {
         return res.redirect('https://' + req.get('host') + req.url);
     }
 }
-
-
-
-
-
-
-
-
 
 //Pages
 app.get('/', function(req, res) {
@@ -203,12 +194,6 @@ app.post('/uploadPhoto', function (req, res) {
      
 
 });
-
-
-
-
-
-
 
 //app.post('/ImportContact', Routes.)
 
