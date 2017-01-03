@@ -34,7 +34,7 @@ app.set('views', __dirname + "/public/views/pages");
 
 var oneDay = 86400000;
 app.use(express.static(__dirname + '/public', { maxAge: oneDay }));
-app.use(bodyParser({uploadDir:'c:/fakepath/'}));
+
 
 app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); 
@@ -188,24 +188,41 @@ app.post('/importContact', function(req, res) {
     });
 });
 
-var path = require('path'),
-    fs = require('fs');
+var path = require('path');
+ var formidable = require('formidable');
+var fs = require('fs');
+const osTmpdir = require('os-tmpdir');
+ 
+osTmpdir();
 // ...
 app.post('/uploadPhoto', function (req, res) {
-    var tempPath = req.files.file.path,
-        targetPath = path.resolve('./upload/photos/image.png');
-    if (path.extname(req.files.file.name).toLowerCase() === '.png') {
-        fs.rename(tempPath, targetPath, function(err) {
-            if (err) throw err;
-            console.log("Upload completed!");
-        });
-    } else {
-        fs.unlink(tempPath, function () {
-            if (err) throw err;
-            console.error("Only .png files are allowed!");
-        });
-    }
-    // ...
+     var form = new formidable.IncomingForm();
+
+  // specify that we want to allow the user to upload multiple files in a single request
+  form.multiples = true;
+
+  // store all uploads in the /uploads directory
+  form.uploadDir = path.join(__dirname, '/upload/photos');
+
+  // every time a file has been uploaded successfully,
+  // rename it to it's orignal name
+  form.on('file', function(field, file) {
+    fs.rename(file.path, path.join(form.uploadDir, file.name));
+  });
+
+  // log any errors that occur
+  form.on('error', function(err) {
+    console.log('An error has occured: \n' + err);
+  });
+
+  // once all the files have been uploaded, send a response to the client
+  form.on('end', function() {
+    res.end('success');
+  });
+
+  // parse the incoming request containing the form data
+  form.parse(req);
+
 });
 
 //app.post('/ImportContact', Routes.)

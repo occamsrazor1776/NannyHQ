@@ -48,13 +48,11 @@
                  
                   $("#impSpin").show(); 
                   $('#hiddenCOntacts').attr('value', e.target.result);
-                  console.log(csvval.length);
+               
                   for(var j=1;j<csvval.length -1;j++)
                   { 
 
                     var csvvalue = csvval[j].split(",");
-                    console.log(csvvalue.length);
-                    console.log(csvvalue);
 
 
                     //for(var i =1; i <= csvvalue.length; i++)
@@ -73,20 +71,39 @@
           }
           return false;
         });
-         $("#profilepic").on('change',function(e) {                   
-             var tmppath = URL.createObjectURL(e.target.files[0]);
-                $("#imgProfile").fadeIn("fast").attr('src',URL.createObjectURL(e.target.files[0]));
-                var filename = $('#profilepic').val();
-                 var dataS ={path : 'C:/fakepath/', filename : e.target.files[0]};
-                $.ajax({
-                        type : "POST",
-                        data : JSON.stringify(dataS),
-                        url  : "./uploadPhoto",
-                        contentType : "application/json"
-                    })
 
-         
-          return false;
+         $("#profilepic").on('change',function(e) {                    
+             var files = $(this).get(0).files;
+
+                if (files.length > 0){
+                  // One or more files selected, process the file upload
+
+                  // create a FormData object which will be sent as the data payload in the
+                  // AJAX request
+                  var formData = new FormData();
+
+                  // loop through all the selected files
+                  for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+
+
+                    // add the files to formData object for the data payload
+                    formData.append('uploads[]', file, file.name);
+
+                    console.log(file, file.name)
+                  }
+                    $.ajax({
+                     type: "POST",
+                     data : formData,
+                     url: "./uploadPhoto",
+                     processData: false,
+                     contentType: false,
+                     success: function(data){
+                      console.log('upload successful!');
+                    }
+                  });
+
+                }
         });
 
         $(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
@@ -259,30 +276,54 @@
         })
 
      });
+
+      // $("#impcontUpload").on('change',function(e) {
+          //alert('aa');
+       //});
      
        
 
        $(document).on("click", ".scont", function(){
             var contval =  $('#hiddenCOntacts').attr('value');
+            console.log(contval);
            // console.log(contval);
             var csvval = contval.split("\n");
+            console.log(csvval);
             var m_name="";
             var cmobile;
             var num1;
             var count = 0 ;
-            for(var j=1;j<csvval.length;j++)
+            console.log(csvval.length);
+            for(var j = 1; j <  csvval.length; j++)
             {              
-              var csvvalue = csvval[j].split(",");    
-              
-                
-              for(var i =1; i < csvvalue.length; i++)
+               var csvvalue = csvval[j].split(",");  
+               // for(var i =1; i < j; i++)
+              //{           
+                 
+                 if(cmobile != null){
+                  console.log('csvvalue = '+ csvvalue[6] +'== cmobile = '+ cmobile);
+                    if(csvvalue[6] == cmobile){
+                        count = count  + 1 ;
+                    }
+                    else{
+                      if (typeof csvvalue[6] === "undefined") {
+    // ...
+                        }
+                        else{
+                        console.log('else' + csvvalue[6]);
+                        num1 = csvvalue[6].replace('(','');
+                        num1 = num1.replace(')','');
+                        num1 = num1.replace(' ', '');
+                        num1 = num1.replace('-', '');
+                          for(var i =1; i < j; i++)
               {           
-                 console.log(csvvalue);
+                 
                  if(cmobile != null){
                     if(csvvalue[6] == cmobile){
                         count = count  + 1 ;
                     }
                     else{
+                   
                       num1 = csvvalue[6].replace('(','');
                       num1 = num1.replace(')','');
                       num1 = num1.replace(' ', '');
@@ -315,8 +356,22 @@
             
                   
               }        
+                    }
+                      
+                    }
+                 }
+                 else{
+                  console.log('cmobile is null :');
+                  cmobile = csvvalue[6];
+                  console.log('cmobile is filled first time ' + cmobile);
+                 }
+            
+                  
+              //}        
               
-            }           
+            }   
+
+
        });
 
       
@@ -514,7 +569,8 @@
         if(data.success==false){
           $(".contact-sidebar-body").hide();
         }
-        if(data.success==true){          
+        if(data.success==true){    
+        console.log(data.data)      ;
           $.each(data.data, function(index, element){
              
             var createtag =(" <li class='contact-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
