@@ -3,6 +3,7 @@ var twilio = require('twilio');
 var mysql = require('mysql');
 var Config = require('../classes/config');
 var config = Config();
+var moment = require('moment');
 var connection;
 
 function handleDisconnect() {
@@ -113,8 +114,24 @@ exports.sendMultipleSMS = function(req, res) {
 			})
 };
 
+exports.sendMail = function(req, res){
+	var api_key = config.smtp.apikey;
+	var domain = config.smtp.domain;
+	var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
+	var data = {
+	  from: 'Excited User <me@samples.mailgun.org>',
+	  to: 'amitvasdev01@gmail.com',
+	  subject: 'Hello',
+	  text: 'Testing some Mailgun awesomness!'
+	};
+	mailgun.messages().send(data, function (error, body) {
+	  console.log(body);
+	});
+}
+
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
+	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
 	//var obj = JSON.parse(req.body);
 	//var mobile = obj[0];
@@ -136,14 +153,34 @@ exports.SendSMSSingle = function(req, res) {
 			console.log(responseData.from); // outputs "+14506667788"
 			console.log(responseData.body); // outputs "word to your mother."
 
-			res.send({
-				success: true,
-				result: "Message Sent successfully."
-			});
+		var sqlQuery ="INSERT INTO * from tb_messagedetail (messageText,userId,userToPhone,sendDate,msgStatus) values ("+ req.body.Message +","+ req.body.userID +","+req.body.Mobile+","+ mysqlTimestamp +",' ')";
+		connection.query(sqlQuery, function(err, result)
+		{		 
+			if(err){
+				console.log(err);
+				connection.destroy();
+				res.send({
+					success: false, 
+					status: err
+				});
+			}
+			else{
+				connection.destroy();
+				res.send(result);
+			}
+		});
+
+			//res.send({
+				//success: true,
+				//result: "Message Sent successfully."
+			//});
 
 		} else {
 			result: "Message Sendingfailed failed."
 		}
+
+		
+
 	});
 };
 
@@ -168,6 +205,7 @@ exports.getContacts = function(req, res) {
 				data:result
 			});
 		}
+
 	});
 };
 
@@ -342,7 +380,8 @@ exports.updateContact = function(req, res) {
 
 exports.updateUserProfile = function(req, res){
 	handleDisconnect();
-	var querySql="Update tb_users set userName ='" + req.body.Username + "', userPassword ='" + req.body.Password +"', userFirstName ='" + req.body.F_name +"', userLastName = '" + req.body.L_name + "', userEmail='"+ req.body.Email +"' where userId ="+req.body.Id;
+	console.log(req.body.PhoneNUm);
+	var querySql="Update tb_users set userName ='" + req.body.Username + "', userPassword ='" + req.body.Password +"', userFirstName ='" + req.body.F_name +"', userLastName = '" + req.body.L_name + "', userEmail='"+ req.body.Email +"', userPhone ='"+ req.body.PhoneNUm + "' where userId ="+req.body.Id;
 	connection.query(querySql,function(err, result) 
 	{                                                      
 		if (err) {
