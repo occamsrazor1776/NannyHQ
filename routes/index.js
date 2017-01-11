@@ -41,6 +41,7 @@ exports.login = function(req, res){
 	//var user = { username: 'admin', password: 'test1234'}
 
 	var sqlQuery="select * from tb_users where userName='"+ req.body.username +"' and userPassword ='" + req.body.password + "'";
+	console.log(sqlQuery);
 	
 	connection.query(sqlQuery, function(err, user)
 	{		 
@@ -68,9 +69,42 @@ exports.login = function(req, res){
 
 exports.getSMSList = function(req, res) {
 	client.sms.messages.list(function(err, data) {
-		data.smsMessages.forEach(function(sms) {
-			console.log(sms.to);
-		});
+		res.send({
+					success: true, 
+					status: err,
+					data:data
+				});
+		//data.smsMessages.forEach(function(sms) {
+			//console.log(sms);
+		//});
+	});
+};
+
+exports.getMessagesSent = function(req,res){
+	var userIdTo = req.query.UserIdTo;
+	var userIdFrom = req.query.UserIdFrom;
+	handleDisconnect();
+	var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo;
+	console.log(querySql);
+	connection.query(querySql, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{			
+				connection.destroy();
+				res.send({
+					success: true, 
+					status: err,
+					data:result
+				});
+			//res.redirect('/');
+		}
 	});
 };
 
@@ -118,27 +152,64 @@ exports.sendMail = function(req, res){
 	var api_key = config.smtp.apikey;
 	var domain = config.smtp.domain;
 	var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
-	var data = {
-	  from: 'Excited User <me@samples.mailgun.org>',
-	  to: 'amitvasdev01@gmail.com',
-	  subject: 'Hello',
-	  text: 'Testing some Mailgun awesomness!'
-	};
-	mailgun.messages().send(data, function (error, body) {
-	  console.log(body);
+	handleDisconnect();
+	var sqlQuery ="select * from tb_users where userEmail = '"+req.body.uName+"'";
+	connection.query(sqlQuery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);				
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else
+		{
+			connection.destroy();
+			console.log(result[0].userPassword);
+			var data = {
+	  		from: 'Excited User <me@samples.mailgun.org>',
+			to: req.body.uName,
+			subject: 'sending Password',
+			//text: 'Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
+			html : 'Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
+			};
+			console.log( data);
+			mailgun.messages().send(data, function (error, body) {
+			  console.log(body);
+			  if(!error){
+		  		res.send({
+					success: true, 
+					status: ""
+				});
+				
+			  }
+			  else{
+					res.send({
+						success: false, 
+						status: error
+					});
+				}
+			});
+			//res.send(result);
+		}
 	});
+	
 }
 
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
 	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+	console.log(mysqlTimestamp);
 
 	//var obj = JSON.parse(req.body);
 	//var mobile = obj[0];
 	//var smsmsg = obj[1];
 	//var lblSuccess = req.body.lblSucess;
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
-	console.log(req.body.Mobile);
+	//console.log(req.body.Mobile);
+	console.log(req.body);
 	//Send an SMS text message
 	client.messages.create({
 
@@ -152,24 +223,29 @@ exports.SendSMSSingle = function(req, res) {
 			
 			console.log(responseData.from); // outputs "+14506667788"
 			console.log(responseData.body); // outputs "word to your mother."
+			handleDisconnect();
+			if(req.body.userID === undefined){
 
-		var sqlQuery ="INSERT INTO * from tb_messagedetail (messageText,userId,userToPhone,sendDate,msgStatus) values ("+ req.body.Message +","+ req.body.userID +","+req.body.Mobile+","+ mysqlTimestamp +",' ')";
-		connection.query(sqlQuery, function(err, result)
-		{		 
-			if(err){
-				console.log(err);
-				connection.destroy();
-				res.send({
-					success: false, 
-					status: err
+			}
+			else {
+				var sqlQuery ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId) values ('"+ req.body.Message +"',"+ req.body.useridTO +",'"+req.body.Mobile+"','"+ mysqlTimestamp +"','"+config.twilio.from+"',"+ req.body.userID +")";
+				console.log(sqlQuery);
+				connection.query(sqlQuery, function(err, result)
+				{		 
+					if(err){
+						console.log(err);				
+						connection.destroy();
+						res.send({
+							success: false, 
+							status: err
+						});
+					}
+					else{
+						connection.destroy();
+						res.send(result);
+					}
 				});
 			}
-			else{
-				connection.destroy();
-				res.send(result);
-			}
-		});
-
 			//res.send({
 				//success: true,
 				//result: "Message Sent successfully."

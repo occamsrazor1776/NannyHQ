@@ -165,6 +165,15 @@ app.get('/sendSMSGroup', function(req, res){
 	}
 }); 
 
+app.get('/report', function(req, res){
+    if(req.session && req.session.user){
+        res.render('report.html', {Title : 'Displaying Log of sms'});
+    }
+    else{
+        res.redirect('/login');
+    }
+});
+
 app.post('/importContact', function(req, res) {
     var sampleFile;
  
@@ -206,7 +215,7 @@ app.post('/login', Routes.login);
 app.get('/smsList', Routes.getSMSList);
 app.post('/sendMultipleSMS', Routes.sendMultipleSMS);
 app.post('/SendSMSSingle', Routes.SendSMSSingle);
-
+app.get('/getMessagesSent', Routes.getMessagesSent);
 app.get('/getContacts',  Routes.getContacts);
 app.get('/getSingleContact', Routes.getSingleContact);
 app.post('/newContact', Routes.newContact);

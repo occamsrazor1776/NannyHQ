@@ -38,10 +38,17 @@
              data :JSON.stringify(dataS),
              url: "./forgot",
              contentType: "application/json"
-           }).done(function() {
+           }).done(function( data) {
+              if(data.success==true){
+                $('#lblSuccess').html('Password sent Successfully');
+                $('#username').val('');
+              }
+              else{
+                $('#lblfail').html(data.status);
+              }
             
           }).fail(function() {
-           
+            
           });
         }
      });
@@ -91,6 +98,8 @@
           }
           return false;
         });
+
+
 
          $("#profilepic").on('change',function(e) {                    
              var files = $(this).get(0).files;
@@ -393,7 +402,8 @@
           
         });
        $("ul#contlistSingle").on("click","li.contact-list-item", function(){
-           var mobile = $(this).find("a").attr("data");         
+           var mobile = $(this).find("a").attr("data");    
+            var Id = $(this).find("a").attr("id");       
            var newmobile;
            
             if ($.trim($('#empPhone').val()).length > 0)
@@ -405,6 +415,7 @@
             }
 
             $("#hidContact").attr("value", $("#empPhone").val());
+            $("#hidToId").attr("value",Id);
          
           
         });
@@ -412,8 +423,43 @@
        $("#btnSend").click(function (){
           var frommob= $("#lblUsrphn").html();
           var userid= $("#lbluser1").html();
-          var cmob =  $("#hidContact").attr("value").split(',');
-          $("#btnSend").attr("disabled", true);
+          //console.log('user id from' + userid);
+          var userToId =  $("#hidToId").attr("value");
+          //console.log('userid to ' + userToId);
+          var hiddennumbers =$("#hidContact").attr("value");
+          console.log(hiddennumbers);
+          if(hiddennumbers === undefined){
+            console.log('undefined part');
+            var cmob = $("#empPhone").val();
+            var mobile1 = cmob;
+            mobile1 = mobile1.replace('(','');
+            mobile1 = mobile1.replace(')','');
+            mobile1 = mobile1.replace(' ','');
+            mobile1 = mobile1.replace('-','');
+            //console.log(mobile1);
+            var SMSmsg = $('#smsmsg').val();
+            var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, userID : userid, useridTO : userToId};
+            console.log(dataS);
+             $.ajax({
+                 type: "POST",
+                 data :JSON.stringify(dataS),
+                 url: "./SendSMSSingle",
+                 contentType: "application/json"
+               }).done(function() {
+                $('#empPhone').val("");
+                $('#msg').val("");
+                $("#lblPass").show().delay(5000).fadeOut();;
+                $(".spinner").hide();
+                $("#btnSend").attr("disabled", false);
+
+              }).fail(function() {
+                $("#lblfail").show();
+              });
+          }
+          else
+          {
+            var cmob =  $("#hidContact").attr("value").split(',');
+            $("#btnSend").attr("disabled", true);
            //console.log(cmob);
            $.each(cmob, function(index, element){
               var mobile1 = element;
@@ -423,7 +469,8 @@
               mobile1 = mobile1.replace('-','');
               console.log(mobile1);
               var SMSmsg ="+1" + $('#msg').val();
-              var dataS = {FROM: frommob , Mobile : mobile1 ,Message :SMSmsg, userID : userid};
+              var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, userID : userid, useridTO : userToId};
+              console.log('data ' +dataS);
                $.ajax({
                    type: "POST",
                    data :JSON.stringify(dataS),
@@ -440,6 +487,11 @@
                   $("#lblfail").show();
                 });
            });
+          }
+
+          console.log(cmob);
+         
+          
 
 
        }); 
@@ -487,6 +539,21 @@
       })
     }
 
+     function getsmslist(){
+      $.get( "/smsList", function( data ){   
+        if(data.success==false){
+          
+        }
+        if(data.success==true){    
+          console.log(data.data)      ;
+          $.each(data.data.smsMessages, function(index, element){
+              var appStr ="<tr><td>"+element.to+"</td><td>"+element.from+"</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+element.date_sent+"</td><td>";
+              $("#demo-datatables-1 > tbody").append(appStr);
+          })
+        }
+      });
+    }
+
     function getMessageContacts()
     {
       $.get( "/getcontacts", function( data ){   
@@ -498,7 +565,8 @@
         if(data.success==true){          
           $.each(data.data, function(index, element){
             var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>jun 22</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>dummy message</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
-             $(createtag).insertAfter( $('.messenger-list'));
+             //$(createtag).append( $('.messenger-list'));
+              $('.messenger-list').append(createtag);
           
         });           
         $("#messengerlist").fadeIn();
@@ -507,10 +575,35 @@
     }); 
   } 
 
-   $("ul#msglist").on("click","li.messenger-list-item", function(){
-           var mobile = $(this).find("a").attr("data");         
-           var newmobile; 
+   $("ul.messenger-list").on("click","li.messenger-list-item", function(){
+          var m_names = new Array("Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
+           var idTo = $(this).find("a").attr("id");  
+           var useridFrom = $("#lbluser1").html();       
+           var name = $(this).find('.messenger-list-name').text();
+           $('.btn').css('text-transform','capitalize');           
+           $('#msgUser').html(name);
+           var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
+           $.get( "/getMessagesSent",dataSend, function( data ){
+            console.log(data);
+              if(data.success==true){
+                console.log(data);
+                $.each(data.data , function(index, element){
+                  //var formattedDate = getDateString(new Date(element.sendDate), "d-M-y") ;
+                  //var createHtm = "<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ element.sendDate +"</div></div><li>";
+                  var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'><div class='conversation-message'>"+element.messageText+"</div></div></div><li>";
+
+                  //$('.conversation').append(createHtm);
+                  $('.conversation').append(crthtml);
+                })
+              };
+           });
+
       });
+
+
+   function getSentMessages(){
+     
+   };
 
    function getmessngerProfile(){
        $.get( "/getmessngerProfile", function( data ){
@@ -549,7 +642,7 @@
         console.log(data.data)      ;
           $.each(data.data, function(index, element){
              
-            var createtag =(" <li class='contact-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+            var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
            
             $(".contact-list-heading").each(function(){
               if($(this).text()==='A' && element.FirstName.substring(0,1)=="A"){    

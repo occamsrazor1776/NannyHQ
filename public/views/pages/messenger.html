@@ -42,8 +42,8 @@
                     </div>
                     <div class="btn-group hidden-xs hidden-sm">
                       <button class="btn btn-link link-muted" title="Start group with Ruby Dixon" data-container="body" data-trigger="hover" data-placement="bottom" data-toggle="tooltip" type="button">
-                        <span class="icon icon-users icon-lg icon-fw"></span>
-                        Ruby Dixon
+                        <span id='msgUser' class="icon icon-users icon-lg icon-fw"></span>
+                       
                       </button>
                     </div>
                   </div>
@@ -53,6 +53,11 @@
             </div>
             <div class="messenger-content-body">
               <div class="messenger-content-body-inner">
+                <div class="messenger-scrollable-content">
+                  <ul class="conversation">
+                    
+                  </ul>
+                </div>
               </div>
             </div>
             <div class="messenger-content-footer">
@@ -114,8 +119,8 @@
   </div>
 </div>
 <% include ../partials/footer.html %>
-<script src="/js/messenger.js?v=1.2"></script>
 <script src="/js/main.js?v=1.2"></script>
+<script src="/js/messenger.js?v=1.2"></script>
 
 <script>
   $(document).ready(function(){ 
