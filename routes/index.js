@@ -40,7 +40,7 @@ exports.login = function(req, res){
 	handleDisconnect();
 	//var user = { username: 'admin', password: 'test1234'}
 
-	var sqlQuery="select * from tb_users where userName='"+ req.body.username +"' and userPassword ='" + req.body.password + "'";
+	var sqlQuery="select * from tb_users where userName='"+ req.body.uname +"' and userPassword ='" + req.body.upass + "'";
 	console.log(sqlQuery);
 	
 	connection.query(sqlQuery, function(err, user)
@@ -54,11 +54,21 @@ exports.login = function(req, res){
 			});
 		}
 		else{
-			
-			req.session.user = user;			
-			//req.session.user = user;
-			connection.destroy();
-			res.redirect('/');
+			if(!user.length){
+				//res.redirect('/login');
+				res.send({
+					success: false,
+					result: "Username/Password incorrect."
+				});
+			}
+			else
+			{
+				req.session.user = user;	
+				console.log(user)		;
+				//req.session.user = user;
+				connection.destroy();
+				res.redirect('/');
+			}
 		}
 	});
 
@@ -74,9 +84,9 @@ exports.getSMSList = function(req, res) {
 					status: err,
 					data:data
 				});
-		//data.smsMessages.forEach(function(sms) {
-			//console.log(sms);
-		//});
+		data.smsMessages.forEach(function(sms) {
+			console.log(sms);
+		});
 	});
 };
 
@@ -169,11 +179,11 @@ exports.sendMail = function(req, res){
 			connection.destroy();
 			console.log(result[0].userPassword);
 			var data = {
-	  		from: 'Excited User <me@samples.mailgun.org>',
+	  		from: 'NannyHQ <me@samples.mailgun.org>',
 			to: req.body.uName,
 			subject: 'sending Password',
 			//text: 'Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
-			html : 'Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
+			html : '<b>NannyHQ</b><br/>Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
 			};
 			console.log( data);
 			mailgun.messages().send(data, function (error, body) {
@@ -215,7 +225,8 @@ exports.SendSMSSingle = function(req, res) {
 
 		to: req.body.Mobile,
 		from: '+' + config.twilio.from,
-		body:  req.body.Message
+		body:  req.body.Message//,
+		//mediaUrl: req.body.MMSFILE
 
 	}, function(err, responseData) { //this function is executed when a response is received from Twilio
 		

@@ -83,6 +83,13 @@
                         <textarea id="smsmsg" class="form-control" rows="3"></textarea>
                       </div>
                     </div>
+                     <div class="form-group">
+                      <label class="col-md-3 control-label">Attach file to send MMS</label>
+                      <div class="col-md-9 col-lg-6">
+                       <input type="file" name="fileMMS" id="fileMMS">
+                       <input type="hidden" id="hiddFile" name="hiddFile">
+                      </div>
+                    </div>
                     <div class="form-group">
                       <div class="col-md-6 col-md-offset-3">
                         <button class="btn btn-primary" id="btnSend" type="button">Send</button>
@@ -100,7 +107,7 @@
     </div>
     <% include ../partials/footer.html %>
     <script src="/js/send.js?v=1.2"></script>
-    <script src="js/main.js?v=1.2"></script>
+    <script src="/js/main.js?v=1.2"></script>
     <script type="text/javascript">
       $(document).ready(function(){ 
         getContacts(); getuserDetails();

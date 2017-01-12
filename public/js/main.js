@@ -26,6 +26,36 @@
         //var dataS
      // });
 
+     $('#signin').click(function (){
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var dataS = { uname : username, upass : password};
+        console.log(dataS);
+        console.log(username);
+        if(username == "" || password== "")
+        {
+           $("#lbllogfail").html("Username/Password must be entered.");
+        }
+        else 
+        {
+          $.ajax({
+              type: "POST",
+              data: JSON.stringify(dataS),
+              url: "./login",
+              contentType: "application/json"
+          }).done (function ( data){
+            if(data.success == false)
+            {
+              console.log(data.success);
+              $("#lbllogfail").html("Username/Password Incorrect.");
+            }
+            else{
+              location.href='/';
+            }
+          });
+        }
+     });
+
      $('#btnforgot').click(function (){
         if($('#username').val()===''){
           alert('Please enter username');
@@ -51,6 +81,12 @@
             
           });
         }
+     });
+
+
+     $("#fileMMS").on('change', function(e){
+        console.log(URL.createObjectURL(e.target.files[0]));
+        $("#hiddFile").attr("value", URL.createObjectURL(e.target.files[0]) );
      });
 
       $('#btnData').prop("disabled", true);
@@ -265,6 +301,7 @@
               $('#notes').val('');
               $('#txtPlaces').val('');
               $("#lblSuccess").html("Contact Saved Successfully");
+              getContacts();
             }
             else
             {
@@ -427,6 +464,8 @@
           var userToId =  $("#hidToId").attr("value");
           //console.log('userid to ' + userToId);
           var hiddennumbers =$("#hidContact").attr("value");
+
+          var mmsfile = $("#hiddFile").attr("value");
           console.log(hiddennumbers);
           if(hiddennumbers === undefined){
             console.log('undefined part');
@@ -438,7 +477,7 @@
             mobile1 = mobile1.replace('-','');
             //console.log(mobile1);
             var SMSmsg = $('#smsmsg').val();
-            var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, userID : userid, useridTO : userToId};
+            var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE:mmsfile, userID : userid, useridTO : userToId};
             console.log(dataS);
              $.ajax({
                  type: "POST",
@@ -469,7 +508,7 @@
               mobile1 = mobile1.replace('-','');
               console.log(mobile1);
               var SMSmsg ="+1" + $('#msg').val();
-              var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, userID : userid, useridTO : userToId};
+              var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE : mmsfile, userID : userid, useridTO : userToId};
               console.log('data ' +dataS);
                $.ajax({
                    type: "POST",
@@ -539,23 +578,28 @@
       })
     }
 
-     function getsmslist(){
-      $.get( "/smsList", function( data ){   
+     function getsmslist(){      
+      $('#rptspinner').css('display','block');
+
+      $.get( "/smsList", function( data ){ 
+
         if(data.success==false){
           
         }
         if(data.success==true){    
-          console.log(data.data)      ;
+          console.log(data.data);
           $.each(data.data.smsMessages, function(index, element){
+            
               var appStr ="<tr><td>"+element.to+"</td><td>"+element.from+"</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+element.date_sent+"</td><td>";
               $("#demo-datatables-1 > tbody").append(appStr);
           })
+           $('#rptspinner').hide();
         }
       });
     }
 
     function getMessageContacts()
-    {
+    {$("#spinloadcontact").show();
       $.get( "/getcontacts", function( data ){   
 
         if(data.success==false){
@@ -576,29 +620,29 @@
   } 
 
    $("ul.messenger-list").on("click","li.messenger-list-item", function(){
-          var m_names = new Array("Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
-           var idTo = $(this).find("a").attr("id");  
-           var useridFrom = $("#lbluser1").html();       
-           var name = $(this).find('.messenger-list-name').text();
-           $('.btn').css('text-transform','capitalize');           
-           $('#msgUser').html(name);
-           var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
-           $.get( "/getMessagesSent",dataSend, function( data ){
+       var m_names = new Array("Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
+       var idTo = $(this).find("a").attr("id");  
+       var useridFrom = $("#lbluser1").html();       
+       var name = $(this).find('.messenger-list-name').text();
+       $('.btn').css('text-transform','capitalize');           
+       $('#msgUser').html(name);
+       $("ul.conversation").empty();
+       var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
+       $.get( "/getMessagesSent",dataSend, function( data ){
+        console.log(data);
+          if(data.success == true){
             console.log(data);
-              if(data.success==true){
-                console.log(data);
-                $.each(data.data , function(index, element){
-                  //var formattedDate = getDateString(new Date(element.sendDate), "d-M-y") ;
-                  //var createHtm = "<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ element.sendDate +"</div></div><li>";
-                  var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'><div class='conversation-message'>"+element.messageText+"</div></div></div><li>";
+            $.each(data.data , function(index, element){
+              //var formattedDate = getDateString(new Date(element.sendDate), "d-M-y") ;
+              //var createHtm = "<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ element.sendDate +"</div></div><li>";
+              var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'><div class='conversation-message'>"+element.messageText+"</div></div></div><li>";
 
-                  //$('.conversation').append(createHtm);
-                  $('.conversation').append(crthtml);
-                })
-              };
-           });
-
-      });
+              //$('.conversation').append(createHtm);
+              $('.conversation').append(crthtml);
+            })
+          };
+       });
+    });
 
 
    function getSentMessages(){
