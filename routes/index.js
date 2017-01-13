@@ -271,6 +271,48 @@ exports.SendSMSSingle = function(req, res) {
 	});
 };
 
+exports.SendSMSSingleBulk = function(req, res) {
+	var twilio = require('twilio');	
+	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+	console.log(mysqlTimestamp);
+
+	//var obj = JSON.parse(req.body);
+	//var mobile = obj[0];
+	//var smsmsg = obj[1];
+	//var lblSuccess = req.body.lblSucess;
+	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
+	//console.log(req.body.Mobile);
+	console.log(req.body);
+	//Send an SMS text message
+	client.messages.create({
+
+		to: req.body.Mobile,
+		from: '+' + config.twilio.from,
+		body:  req.body.Message//,
+		//mediaUrl: req.body.MMSFILE
+
+	}, function(err, responseData) { //this function is executed when a response is received from Twilio
+		
+		if (!err) { // "err" is an error received during the request, if any
+			
+			console.log(responseData.from); // outputs "+14506667788"
+			console.log(responseData.body); // outputs "word to your mother."
+			console.log(responseData);
+			
+			res.send({
+				success: true,
+				result: "Message Sent successfully."
+			});
+
+		} else {
+			result: "Message Sendingfailed failed."
+		}
+
+		
+
+	});
+};
+
 exports.getContacts = function(req, res) {
 	handleDisconnect();
 	var sqlQuery ="Select * from tb_contacts order by FirstName asc";
@@ -382,6 +424,29 @@ exports.getSingleContact = function(req, res) {
 };
 
 
+exports.getUserDetailsPhone = function(req, res){
+	handleDisconnect();
+	var sqlquery = "Select * from tb_contacts where Mobile=" + req.query.phone ;
+	connection.query(sqlquery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			connection.destroy(); 
+			res.send({
+				success: true,
+				status :"",
+				data: result
+			});
+		}
+	});
+};
 
 
 exports.findOne = function(req, res){
@@ -414,7 +479,7 @@ exports.findOne = function(req, res){
 
 exports.newContact = function(req, res) {
 	handleDisconnect();
-	var sqlQuery ="INSERT INTO tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate) VALUES ('" + req.body.F_name + "',' "+  req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"',NOW())";
+	var sqlQuery ="INSERT INTO tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES ('" + req.body.F_name + "',' "+  req.body.L_name + "','" + req.body.Emailadd +"','" + req.body.Mobile + "','" + req.body.J_title +"','" + req.body.Location + "','"+ req.body.Notes +"',NOW(),2)";
 	
 	connection.query(sqlQuery,function(err, result) 
 	{                                                      

@@ -147,15 +147,18 @@
                   // AJAX request
                   var formData = new FormData();
 
+                 
                   // loop through all the selected files
                   for (var i = 0; i < files.length; i++) {
                     var file = files[i];
-
-
+                    console.log(URL.createObjectURL(file) );
+                     $('#imgProfile').attr('src',URL.createObjectURL(file));
                     // add the files to formData object for the data payload
                     formData.append('uploads[]', file, file.name);
 
                     console.log(file, file.name)
+
+                    $("#hddProPic").attr("value",URL.createObjectURL(file));
                   }
                     $.ajax({
                      type: "POST",
@@ -202,9 +205,9 @@
                       $("#demo-datatables-1  > tbody").append(appStr); 
 
 
-                      console.log(csvvalue.length);
-                      for(var i = 1 ; i< csvval.length -1 ; i++)  
-                      {
+                      console.log(csvvalue);
+                     // for(var i = 1 ; i< csvvalue.length -1 ; i++)  
+                     // {
                         console.log(csvvalue[2]);
                         num1 = csvvalue[2];
                         num1 = csvvalue[2].replace('(','');
@@ -219,7 +222,7 @@
                         {
                           numlist = numlist + num1 + "," ;
                         }
-                     }
+                     //}
                     
                   }
                   console.log(numlist);
@@ -245,9 +248,10 @@
               var mobile;
               var SMSmsg;
               var allconts = $('#hiddenCOntacts').attr('value').split("\n");
-              for(var j = 1; j<allconts.length; j++){
+              for(var j = 1; j<allconts.length -1; j++){
                 var newallcontacts =  allconts[j].split(",");
-                 for(var i =1; i < newallcontacts.length; i++){
+                 //for(var i =1; i < newallcontacts.length; i++){
+                  //console.log('newall '+newallcontacts[2]);
                     num1 = newallcontacts[2].replace('(','');
                     num1 = num1.replace(')','');
                     num1 = num1.replace(' ', '');
@@ -255,19 +259,24 @@
                     mobile="+91" + num1;
                     SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  newallcontacts[4]+" that expired on "+ newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
                     var dataS = { Mobile : mobile ,Message :SMSmsg };
-                    console.log(mobile);
-                    console.log(SMSmsg);
+                   // console.log(mobile);
+                    //console.log(SMSmsg);
                     $.ajax({
                          type: "POST",
                          data :JSON.stringify(dataS),
-                         url: "./SendSMSSingle",
+                         url: "./SendSMSSingleBulk",
                          contentType: "application/json"
-                       }).done(function() {
+                       }).done(function( responseData ) {
+
+                        if(responseData.success == true){
+                          $( "#tab5").trigger( "click");
+
+                        }
                         
                       }).fail(function() {
                        
                       });
-                 }  
+                 //}  
               }
          });
 
@@ -589,9 +598,17 @@
         if(data.success==true){    
           console.log(data.data);
           $.each(data.data.smsMessages, function(index, element){
-            
-              var appStr ="<tr><td>"+element.to+"</td><td>"+element.from+"</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+element.date_sent+"</td><td>";
-              $("#demo-datatables-1 > tbody").append(appStr);
+
+            var datasend = {phone : element.to};
+
+             $.get('/getUserDetailsPhone',datasend,  function ( data ){
+              if(data.success== true){
+                console.log(data);
+              }
+
+             })
+            var appStr ="<tr><td>"+element.to+"</td><td>"+element.from+"</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+element.date_sent+"</td><td>";
+            $("#demo-datatables-1 > tbody").append(appStr);
           })
            $('#rptspinner').hide();
         }
@@ -669,7 +686,7 @@
               $("#lbluser1").html(element.userId);
               $("#lblUsrphn").html(element.userPhone);
               var usrId = $("#lblUsrphn").html();
-              console.log(usrId);
+             // console.log(usrId);
             })
           };
        });
@@ -685,111 +702,112 @@
         if(data.success==true){    
         console.log(data.data)      ;
           $.each(data.data, function(index, element){
+            console.log(element);
              
             var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
            
             $(".contact-list-heading").each(function(){
-              if($(this).text()==='A' && element.FirstName.substring(0,1)=="A"){    
+              if($(this).text().toLowerCase()==='a' && element.FirstName.substring(0,1).toLowerCase()=="a"){    
                 $(this).closest(".contact-list-divider").show();                
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='B' && element.FirstName.substring(0,1)=="B"){    
+              else if($(this).text().toLowerCase()==='b' && element.FirstName.substring(0,1).toLowerCase()=="b"){    
                 $(this).closest(".contact-list-divider").show();                                 
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='C' && element.FirstName.substring(0,1)=="C"){   
+              else if($(this).text().toLowerCase()==='c' && element.FirstName.substring(0,1).toLowerCase()=="c"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='D' && element.FirstName.substring(0,1)=="D"){    
+              else if($(this).text().toLowerCase()==='d' && element.FirstName.substring(0,1).toLowerCase()=="d"){    
                 $(this).closest(".contact-list-divider").show();                                 
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='E' && element.FirstName.substring(0,1)=="E"){  
+              else if($(this).text().toLowerCase()==='e' && element.FirstName.substring(0,1).toLowerCase=="e"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='F' && element.FirstName.substring(0,1)=="F"){  
+              else if($(this).text().toLowerCase()==='f' && element.FirstName.substring(0,1).toLowerCase()=="f"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='G' && element.FirstName.substring(0,1)=="G"){   
+              else if($(this).text().toLowerCase()==='g' && element.FirstName.substring(0,1).toLowerCase()=="g"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='H' && element.FirstName.substring(0,1)=="H"){   
+              else if($(this).text().toLowerCase()==='h' && element.FirstName.substring(0,1).toLowerCase()=="h"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='I' && element.FirstName.substring(0,1)=="I"){   
+              else if($(this).text().toLowerCase()==='i' && element.FirstName.substring(0,1).toLowerCase()=="i"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='J' && element.FirstName.substring(0,1)=="J"){   
+              else if($(this).text().toLowerCase()==='j' && element.FirstName.substring(0,1).toLowerCase()=="j"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='K' && element.FirstName.substring(0,1)=="K"){  
+              else if($(this).text().toLowerCase()==='k' && element.FirstName.substring(0,1).toLowerCase()=="k"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='L' && element.FirstName.substring(0,1)=="L"){   
+              else if($(this).text().toLowerCase()==='l' && element.FirstName.substring(0,1).toLowerCase()=="l"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='M' && element.FirstName.substring(0,1)=="M"){   
+              else if($(this).text().toLowerCase()==='m' && element.FirstName.substring(0,1).toLowerCase()=="m"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='N' && element.FirstName.substring(0,1)=="N"){  
+              else if($(this).text().toLowerCase()==='n' && element.FirstName.substring(0,1).toLowerCase()=="n"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='O' && element.FirstName.substring(0,1)=="O"){   
+              else if($(this).text().toLowerCase()==='o' && element.FirstName.substring(0,1).toLowerCase()=="o"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='P' && element.FirstName.substring(0,1)=="P"){   
+              else if($(this).text().toLowerCase()==='p' && element.FirstName.substring(0,1).toLowerCase()=="p"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='Q' && element.FirstName.substring(0,1)=="Q"){    
+              else if($(this).text().toLowerCase()==='q' && element.FirstName.substring(0,1).toLowerCase()=="q"){    
                 $(this).closest(".contact-list-divider").show();                                 
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='R' && element.FirstName.substring(0,1)=="R"){   
+              else if($(this).text().toLowerCase()==='r' && element.FirstName.substring(0,1).toLowerCase()=="r"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='S' && element.FirstName.substring(0,1)=="S"){  
+              else if($(this).text().toLowerCase()==='s' && element.FirstName.substring(0,1).toLowerCase()=="s"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='T' && element.FirstName.substring(0,1)=="T"){  
+              else if($(this).text().toLowerCase()==='t' && element.FirstName.substring(0,1).toLowerCase()=="t"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='U' && element.FirstName.substring(0,1)=="U"){  
+              else if($(this).text().toLowerCase()==='u' && element.FirstName.substring(0,1).toLowerCase()=="u"){  
                 $(this).closest(".contact-list-divider").show();                                   
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='V' && element.FirstName.substring(0,1)=="V"){  
+              else if($(this).text().toLowerCase()==='v' && element.FirstName.substring(0,1).toLowerCase()=="v"){  
                 $(this).closest(".contact-list-divider").show();                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='W' && element.FirstName.substring(0,1)=="W"){   
+              else if($(this).text().toLowerCase()==='w' && element.FirstName.substring(0,1).toLowerCase()=="w"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='X' && element.FirstName.substring(0,1)=="X"){   
+              else if($(this).text().toLowerCase()==='x' && element.FirstName.substring(0,1).toLowerCase()=="x"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='V' && element.FirstName.substring(0,1)=="V"){   
+              else if($(this).text().toLowerCase()==='v' && element.FirstName.substring(0,1).toLowerCase()=="v"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }
-              else if($(this).text()==='Z' && element.FirstName.substring(0,1)=="Z"){   
+              else if($(this).text().toLowerCase()==='z' && element.FirstName.substring(0,1).toLowerCase()=="z"){   
                 $(this).closest(".contact-list-divider").show();                                  
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
               }

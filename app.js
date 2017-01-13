@@ -200,7 +200,23 @@ var path = require('path');
  
 // ...
 app.post('/uploadPhoto', function (req, res) {
-     
+     //console.log(req);
+      if (!req.files) {
+        res.send('No files were uploaded.');
+        return;
+    }
+  
+    sampleFile = req.files.hddProPic;
+    console.log(req.files.name);
+    sampleFile.mv('uploads/' + sampleFile.name, function(err) {
+        if (err) {
+            res.status(500).send(err);
+        }
+        else {
+           // console.log(res);
+            res.send('importContact');
+        }
+    });
 
 });
 
@@ -210,11 +226,13 @@ app.post('/uploadPhoto', function (req, res) {
 
 //app.post('/savemessages',Routes.savemsg);
 app.post('/forgot',Routes.sendMail);
+app.get('/getUserDetailsPhone', Routes.getUserDetailsPhone);
 app.get('/getmessngerProfile',Routes.getmessngerProfile);
 app.post('/login', Routes.login);
 app.get('/smsList', Routes.getSMSList);
 app.post('/sendMultipleSMS', Routes.sendMultipleSMS);
 app.post('/SendSMSSingle', Routes.SendSMSSingle);
+app.post('/SendSMSSingleBulk', Routes.SendSMSSingleBulk);
 app.get('/getMessagesSent', Routes.getMessagesSent);
 app.get('/getContacts',  Routes.getContacts);
 app.get('/getSingleContact', Routes.getSingleContact);
