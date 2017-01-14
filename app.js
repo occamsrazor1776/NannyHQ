@@ -92,6 +92,8 @@ app.get('/password', function (req, res) {
   res.render('password.html', {Title:'Reset Your Password'});
 });
 
+
+
 app.get('/bulkmessaging', function (req, res) {
 	 if (req.session && req.session.user) { // Check if session exists
     	res.render('index.html', {Title:'Bulk Messaging'});
@@ -123,6 +125,15 @@ app.get('/newcontact', function(req,res){
     	res.redirect('/login');
 	}
 });
+
+app.get('/search', function (req,res){
+    if(req.session && req.session.user){
+        res.render('search.html',{Title: 'Search'});
+    }
+    else{
+        res.redirect('/login');
+    }
+})
 
 app.get('/profile', function(req,res){
      if (req.session && req.session.user) { // Check if session exists
@@ -225,6 +236,7 @@ app.post('/uploadPhoto', function (req, res) {
 //APIs
 
 //app.post('/savemessages',Routes.savemsg);
+app.get('/searchC', Routes.searchC);
 app.post('/forgot',Routes.sendMail);
 app.get('/getUserDetailsPhone', Routes.getUserDetailsPhone);
 app.get('/getmessngerProfile',Routes.getmessngerProfile);

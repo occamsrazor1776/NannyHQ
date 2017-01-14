@@ -85,7 +85,7 @@ exports.getSMSList = function(req, res) {
 					data:data
 				});
 		data.smsMessages.forEach(function(sms) {
-			console.log(sms);
+		//	console.log(sms);
 		});
 	});
 };
@@ -95,7 +95,7 @@ exports.getMessagesSent = function(req,res){
 	var userIdFrom = req.query.UserIdFrom;
 	handleDisconnect();
 	var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo;
-	console.log(querySql);
+	//console.log(querySql);
 	connection.query(querySql, function(err, result)
 	{		 
 		if(err){
@@ -107,6 +107,33 @@ exports.getMessagesSent = function(req,res){
 			});
 		}
 		else{			
+				connection.destroy();
+				res.send({
+					success: true, 
+					status: err,
+					data:result
+				});
+			//res.redirect('/');
+		}
+	});
+};
+
+exports.searchC = function(req, res){
+	handleDisconnect();
+	var sqlQuery ="Select * from tb_contacts where  FirstName LIKE '%"+ req.query.SearchCont ;
+	sqlQuery +="%' OR  LastName LIKE  '%"+ req.query.SearchCont+"%' or Mobile LIKE '%"+ req.query.SearchCont+"%' or Email LIKE '%"+req.query.SearchCont+"%'" ;
+	connection.query(sqlQuery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+
 				connection.destroy();
 				res.send({
 					success: true, 
@@ -426,7 +453,8 @@ exports.getSingleContact = function(req, res) {
 
 exports.getUserDetailsPhone = function(req, res){
 	handleDisconnect();
-	var sqlquery = "Select * from tb_contacts where Mobile=" + req.query.phone ;
+	console.log(req.query.phone);
+	var sqlquery = "Select * from tb_contacts where Mobile LIKE '%" + req.query.phone+"%'" ;
 	connection.query(sqlquery, function(err, result)
 	{		 
 		if(err){

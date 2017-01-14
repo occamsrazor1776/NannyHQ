@@ -589,30 +589,54 @@
 
      function getsmslist(){      
       $('#rptspinner').css('display','block');
-
+      var mobilenumer="";
+      var name="";
       $.get( "/smsList", function( data ){ 
-
         if(data.success==false){
           
         }
-        if(data.success==true){    
-          console.log(data.data);
-          $.each(data.data.smsMessages, function(index, element){
+        if(data.success==true){   
+          $.each(data.data.smsMessages, function(index, element){  
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June","July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
+          
+            var str = element.date_sent;
+            var date = new Date(str);
+            var day = date.getDate(); //Date of the month: 2 in our example
+            var month = monthNames[date.getMonth()]; //Month of the Year: 0-based index, so 1 in our example
+            var year = date.getFullYear()
             var datasend = {phone : element.to};
-
-             $.get('/getUserDetailsPhone',datasend,  function ( data ){
-              if(data.success== true){
+            $.get('/getUserDetailsPhone',datasend,  function ( data ){
+              console.log(data.success);
+              if(data.success == true){
                 console.log(data);
-              }
+                if(data.data.length === 0){
+                   console.log("no");
 
-             })
-            var appStr ="<tr><td>"+element.to+"</td><td>"+element.from+"</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+element.date_sent+"</td><td>";
-            $("#demo-datatables-1 > tbody").append(appStr);
+                    var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                    $("#demo-datatables-1 > tbody").append(appStr);
+                  }                 
+                else{
+                if(data.data[0].Mobile == element.to){ 
+                  var appStr ="<tr><td>" + data.data[0].FirstName+" "+ data.data[0].LastName + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                  $("#demo-datatables-1 > tbody").append(appStr);
+                }               
+              }
+            }
+              else if(data.success == false ){
+                console.log("no");
+                var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                $("#demo-datatables-1 > tbody").append(appStr);
+              }
+            })           
           })
            $('#rptspinner').hide();
         }
       });
+    }
+
+    function getuserPhoneDetails(phn){
+
     }
 
     function getMessageContacts()
@@ -645,18 +669,23 @@
        $('#msgUser').html(name);
        $("ul.conversation").empty();
        var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
+       var  crthtml1="";
+       var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'>";
        $.get( "/getMessagesSent",dataSend, function( data ){
         console.log(data);
           if(data.success == true){
-            console.log(data);
+            //console.log(data);
             $.each(data.data , function(index, element){
               //var formattedDate = getDateString(new Date(element.sendDate), "d-M-y") ;
               //var createHtm = "<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ element.sendDate +"</div></div><li>";
-              var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'><div class='conversation-message'>"+element.messageText+"</div></div></div><li>";
+            crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
 
               //$('.conversation').append(createHtm);
-              $('.conversation').append(crthtml);
+             
             })
+            var crthtml2="</div></div><li>";
+             $('.conversation').append(crthtml+crthtml1+crthtml2);
+
           };
        });
     });
@@ -669,7 +698,7 @@
    function getmessngerProfile(){
        $.get( "/getmessngerProfile", function( data ){
           if(data.success==true){
-            console.log("data : " + data);
+            //console.log("data : " + data);
             $.each(data.data , function(index, element){
               $("#username").html("Welcome  " + element.userName + " !");
             })
@@ -700,9 +729,9 @@
           $(".contact-sidebar-body").hide();
         }
         if(data.success==true){    
-        console.log(data.data)      ;
+        //console.log(data.data)      ;
           $.each(data.data, function(index, element){
-            console.log(element);
+           // console.log(element);
              
             var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
            
@@ -817,7 +846,49 @@
         $("#spinloadcontact").hide();
       }     
     }); 
-  }                    
+  }     
+
+  //txtSearch
+
+  $( "#txtSearch" ).keypress(function(e) {
+   if(e.which == 13) {
+    var searchContent = $("#txtSearch").val();
+    //console.log("your search content is  : "+ searchContent);
+    
+      location.href='/search?sc='+searchContent;
+    
+   }
+});   
+
+function searchText(){
+  var searchContent = GetParameterValues('sc');
+  console.log(searchContent);
+  var dataS = {SearchCont : searchContent};
+  $.get('/searchC',dataS, function( data){
+    console.log(data);
+    if(data.success == true){
+      if(data.data.length===0){
+          $('#lblfail').html('No Data Found');
+      }
+      else{
+        $.each(data.data, function(index, element){ 
+          var appStr ="<tr><td>"+element.FirstName+" "+ element.LastName +"</td><td>"+element.Mobile+"</td><td>"+element.Email+"</td><td>"+element.Location+"</td><td>"+element.jobTitle+"</td><td>";
+          $("#demo-datatables-1 > tbody").append(appStr);
+        });       
+      }
+    }
+  })
+}    
+
+function GetParameterValues(param) {
+  var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+  for (var i = 0; i < url.length; i++) {
+    var urlparam = url[i].split('=');
+    if (urlparam[0] == param) {
+      return urlparam[1];
+    }
+  }
+}        
 
 
    function formWizardBasicExample() {
@@ -860,8 +931,23 @@
 
     });    
   }
+  function datatablesBasicTableExample() {
+    var $datatables = $('#demo-datatables-1');
+    $datatables.DataTable({
+      dom: "<'row'<'col-sm-6'i><'col-sm-6'f>>" + "<'table-responsive'tr>" + "<'row'<'col-sm-6'l><'col-sm-6'p>>",
+      language: {
+        paginate: {
+          previous: '&laquo;',
+          next: '&raquo;'
+        },
+        search: "_INPUT_",
+        searchPlaceholder: "Search…"
+      },
+      order: [[5, "desc"]]
+    });
+  }
 
-
+  datatablesBasicTableExample();
   // Form wizards
   formWizardBasicExample();
   formWizardWithValidationExample();

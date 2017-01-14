@@ -11,10 +11,10 @@
      	 <div class="layout-content-body">
      	 	 <div class="title-bar">
             <h1 class="title-bar-title">
-              <span class="d-ib">Static Report
+              <span class="d-ib">Search Results
                 <small></small>
               </span>
-             
+              
 
             </h1>
           
@@ -22,22 +22,24 @@
             <div class="row gutter-xs">
             <div class="col-xs-12">
               <div class="panel panel-default">
-                <div class="panel-heading"><div class="spinner spinner-primary pos-c sq-32" id="rptspinner" style="display: none;"></div></div>
+                <div class="panel-heading"> <label class="label label-danger" id="lblfail"></label><div class="spinner spinner-primary pos-c sq-32" id="rptspinner" style="display: none;"></div></div>
                 <div class="panel-body panel-collapse">
-                  <table id="demo-datatables-1" class="table table-striped table-nowrap dataTable" cellspacing="0" width="100%">
+                  <table id="demo-datatables-1" class="searchtable table table-striped table-nowrap dataTable" cellspacing="0" width="100%">
                     <thead>
                       <tr>
-                        <th>To</th>
-                        <th>From</th>
-                        <th>Status</th>
-                        <th>Direction</th>
-                        <th>Date sent</th>
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Location</th>
+                        <th>Job Title</th>
                       </tr>
                     </thead>                  
                     <tbody>                     
                     
                     </tbody>
                   </table>
+                  
+                
                 </div>
               </div>
             </div>
@@ -48,10 +50,11 @@
    <% include ../partials/footer.html %>
     
 	<script src="js/main.js?v=1.2"></script>
+
 	<script type="text/javascript">
 	    $(document).ready(function(){ 
 	       getuserDetails();
-	       getsmslist();
+         searchText();
 	    });
 	</script>
 </body>	
