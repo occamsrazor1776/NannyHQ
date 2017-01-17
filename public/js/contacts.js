@@ -17,7 +17,7 @@
         $("#c_JobTitleText").val(element.jobTitle);
         $("#txtPlaces").val(element.Location);
         $("#c_notes").val(element.Notes);
-        $("#c_name").html(element.FirstName+" "+ element.MiddleName +" "+element.LastName);
+        $("#c_name").html(element.FirstName+" "+element.LastName);
         $("#c_JobTitle").html(element.jobTitle);
         if(element.ProfilePic != null)
           $("#c_img").attr("src",element.ProfilePic);

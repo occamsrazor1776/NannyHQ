@@ -64,7 +64,7 @@ exports.login = function(req, res){
 			else
 			{
 				req.session.user = user;	
-				console.log(user)		;
+				//console.log(user)		;
 				//req.session.user = user;
 				connection.destroy();
 				res.redirect('/');
@@ -88,14 +88,44 @@ exports.getSMSList = function(req, res) {
 		//	console.log(sms);
 		});
 	});
+
 };
+
+exports.getMessaegeDates = function(req, res){
+	var userIdTo = req.query.UserIdTo;
+	var userIdFrom = req.query.UserIdFrom;
+	handleDisconnect();
+	var sql ="SELECT distinct(DATE(sendDate)) as sentDate FROM tb_messagedetail where userFromId = " + userIdFrom +"  and userId = " + userIdTo+" order by sendDate";
+	connection.query(sql, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+				connection.destroy();
+				res.send({
+					success: true, 
+					status: err,
+					data:result
+				});
+			//res.redirect('/');
+		}
+	});
+}
 
 exports.getMessagesSent = function(req,res){
 	var userIdTo = req.query.UserIdTo;
 	var userIdFrom = req.query.UserIdFrom;
+	var _dt = req.query.date;
 	handleDisconnect();
-	var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo;
-	//console.log(querySql);
+	var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
+
+	console.log(querySql);
 	connection.query(querySql, function(err, result)
 	{		 
 		if(err){
@@ -237,7 +267,7 @@ exports.sendMail = function(req, res){
 
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
-	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+	var mysqlTimestamp = moment(Date.now()).format('LLL');
 	console.log(mysqlTimestamp);
 
 	//var obj = JSON.parse(req.body);

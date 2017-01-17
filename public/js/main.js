@@ -646,7 +646,7 @@
         if(data.success==false){
           $(".messenger-sidebar-body").hide();
         }
-        console.log(data);
+        //console.log(data);
         if(data.success==true){          
           $.each(data.data, function(index, element){
             var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>jun 22</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>dummy message</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
@@ -660,35 +660,61 @@
     }); 
   } 
 
-   $("ul.messenger-list").on("click","li.messenger-list-item", function(){
-       var m_names = new Array("Jan", "Feb", "Mar","Apr", "May", "Jun", "Jul", "Aug", "Sep","Oct", "Nov", "Dec");
-       var idTo = $(this).find("a").attr("id");  
-       var useridFrom = $("#lbluser1").html();       
-       var name = $(this).find('.messenger-list-name').text();
-       $('.btn').css('text-transform','capitalize');           
-       $('#msgUser').html(name);
-       $("ul.conversation").empty();
-       var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
-       var  crthtml1="";
-       var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'>";
-       $.get( "/getMessagesSent",dataSend, function( data ){
-        console.log(data);
-          if(data.success == true){
-            //console.log(data);
-            $.each(data.data , function(index, element){
-              //var formattedDate = getDateString(new Date(element.sendDate), "d-M-y") ;
-              //var createHtm = "<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ element.sendDate +"</div></div><li>";
-            crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
+   $("ul.messenger-list").on("click","li.messenger-list-item", function(){     
+     var idTo = $(this).find("a").attr("id");  
+     var useridFrom = $("#lbluser1").html();       
+     var name = $(this).find('.messenger-list-name').text();
+     var _dates = '';
+     $('.btn').css('text-transform','capitalize');           
+     $('#msgUser').html(name);
+     $("ul.conversation").empty();
+     var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
+     var  crthtml1="";
+     //debugger;
+     $.get('/getMessaegeDates', dataSend, function ( data1 ){
+        if(data1.success == true){           
+          $.each(data1.data, function (ind, ele){ 
+            console.log(data1.data.length);
+            var mdate = new Date(ele.sentDate);
+            console.log(ele.sentDate);
 
-              //$('.conversation').append(createHtm);
-             
-            })
-            var crthtml2="</div></div><li>";
-             $('.conversation').append(crthtml+crthtml1+crthtml2);
+            var format_date = mdate.getFullYear()+'-'+(mdate.getMonth() + 1)+'-'+mdate.getDate();
+            var tm ='';
+            if(mdate.getUTCHours >= 12){
+              tm = "PM";
+            }
+            else{
+              tm = "AM";
+            }
+            var format_time =mdate.getUTCHours()+":"+mdate.getUTCMinutes()+":"+mdate.getUTCSeconds()+" "+tm;
+            var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ format_date+ "</div><div></li>";
+            //$('.conversation').append(dthtml);
 
-          };
-       });
-    });
+            var dataSendDates  = {UserIdTo : idTo, UserIdFrom : useridFrom, date: format_date};
+            //console.log(dataSendDates);
+            var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'>";
+            $.get( "/getMessagesSent", dataSendDates, function( data ){
+              if(data.success == true){
+                console.log(data);
+                console.log(data.data.length);
+                $.each(data.data , function(index, element){
+                if(index == data.data.length -1 ){
+                  crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+format_time+"</div>";
+                }
+                else{
+                  crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
+                }
+                //console.log(element.messageText)
+                });
+                var crthtml2="</div></div></li>";
+                $('.conversation').append(dthtml,crthtml+crthtml1+crthtml2);
+
+              };
+            });
+          });
+        }
+     });       
+   });
 
 
    function getSentMessages(){
