@@ -237,6 +237,7 @@ app.post('/uploadPhoto', function (req, res) {
 
 //app.post('/savemessages',Routes.savemsg);
 app.get('/searchC', Routes.searchC);
+app.get('/searchCont',Routes.searchCont);
 app.get('/getMessaegeDates', Routes.getMessaegeDates);
 app.post('/forgot',Routes.sendMail);
 app.get('/getUserDetailsPhone', Routes.getUserDetailsPhone);

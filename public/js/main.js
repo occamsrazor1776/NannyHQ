@@ -876,15 +876,151 @@
 
   //txtSearch
 
-  $( "#txtSearch" ).keypress(function(e) {
-   if(e.which == 13) {
-    var searchContent = $("#txtSearch").val();
-    //console.log("your search content is  : "+ searchContent);
-    
-      location.href='/search?sc='+searchContent;
-    
-   }
-});   
+$( "#txtSearch" ).keypress(function(e) {
+ if(e.which == 13) {
+  var searchContent = $("#txtSearch").val();
+  //console.log("your search content is  : "+ searchContent);    
+    location.href='/search?sc='+searchContent;    
+ }
+}); 
+
+$("#txtContSearch").keypress(function(e){
+
+  if(e.which  == 13){
+    var searchContent = $("#txtContSearch").val(); 
+    console.log(searchContent) ;
+    if(searchContent != ''){
+    var dataS = {SearchCont : searchContent};
+
+    $.get('/searchCont', dataS, function( data ){
+       if(data.success==true){    
+        $('li.contact-list-item').empty();
+        //console.log(data.data);       
+
+          $.each(data.data, function(index, element){
+           // console.log(element);
+             
+            var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+           
+            $(".contact-list-heading").each(function(){
+              if($(this).text().toLowerCase()==='a' && searchContent.substring(0,1).toLowerCase()=="a"){    
+                $(this).closest(".contact-list-divider").show();                
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='b' && searchContent.substring(0,1).toLowerCase()=="b"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='c' && searchContent.substring(0,1).toLowerCase()=="c"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='d' && searchContent.substring(0,1).toLowerCase()=="d"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='e' && searchContent.substring(0,1).toLowerCase=="e"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='f' && searchContent.substring(0,1).toLowerCase()=="f"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='g' && searchContent.substring(0,1).toLowerCase()=="g"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='h' && searchContent.substring(0,1).toLowerCase()=="h"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='i' && searchContent.substring(0,1).toLowerCase()=="i"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='j' && searchContent.substring(0,1).toLowerCase()=="j"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='k' && searchContent.substring(0,1).toLowerCase()=="k"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='l' && searchContent.substring(0,1).toLowerCase()=="l"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='m' && searchContent.substring(0,1).toLowerCase()=="m"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='n' && searchContent.substring(0,1).toLowerCase()=="n"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='o' && searchContent.substring(0,1).toLowerCase()=="o"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='p' && searchContent.substring(0,1).toLowerCase()=="p"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='q' && searchContent.substring(0,1).toLowerCase()=="q"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='r' && searchContent.substring(0,1).toLowerCase()=="r"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='s' && searchContent.substring(0,1).toLowerCase()=="s"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='t' && searchContent.substring(0,1).toLowerCase()=="t"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='u' && searchContent.substring(0,1).toLowerCase()=="u"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='v' && searchContent.substring(0,1).toLowerCase()=="v"){  
+                $(this).closest(".contact-list-divider").show();                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='w' && searchContent.substring(0,1).toLowerCase()=="w"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='x' && searchContent.substring(0,1).toLowerCase()=="x"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='v' && searchContent.substring(0,1).toLowerCase()=="v"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='z' && searchContent.substring(0,1).toLowerCase()=="z"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+            }); 
+        });           
+        $("#contactlist").fadeIn();
+        $("#spinloadcontact").hide();
+      }     
+    });
+  }
+}
+else{
+  getContacts();
+}
+});
+
+
 
 function searchText(){
   var searchContent = GetParameterValues('sc');

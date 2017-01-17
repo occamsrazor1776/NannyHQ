@@ -152,6 +152,7 @@ exports.searchC = function(req, res){
 	handleDisconnect();
 	var sqlQuery ="Select * from tb_contacts where  FirstName LIKE '%"+ req.query.SearchCont ;
 	sqlQuery +="%' OR  LastName LIKE  '%"+ req.query.SearchCont+"%' or Mobile LIKE '%"+ req.query.SearchCont+"%' or Email LIKE '%"+req.query.SearchCont+"%'" ;
+
 	connection.query(sqlQuery, function(err, result)
 	{		 
 		if(err){
@@ -164,6 +165,35 @@ exports.searchC = function(req, res){
 		}
 		else{
 
+				connection.destroy();
+				res.send({
+					success: true, 
+					status: err,
+					data:result
+				});
+			//res.redirect('/');
+		}
+	});
+};
+
+exports.searchCont = function(req, res){
+	handleDisconnect();
+	//console.log(req);
+	var sqlQuery ="Select * from tb_contacts where  FirstName LIKE '%"+ req.query.SearchCont ;
+	sqlQuery +="%' OR  LastName LIKE  '%"+ req.query.SearchCont+"%'  or Email LIKE '%"+req.query.SearchCont+"%'" ;
+	console.log(sqlQuery);
+	connection.query(sqlQuery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+				console.log(result);
 				connection.destroy();
 				res.send({
 					success: true, 
