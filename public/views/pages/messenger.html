@@ -22,14 +22,12 @@
                 <span class="d-ib">Messenger</span>              
               </h1>
             </div>
-            <form class="search" action="/">
-              <div class="form-group form-group-sm">
-                <div class="input-with-icon">
-                  <input class="form-control" type="text" placeholder="Search for people and groups&hellip;">
-                  <span class="icon icon-search input-icon"></span>
-                </div>
+            <div class="form-group form-group-sm">
+              <div class="input-with-icon">
+                <input class="form-control" type="text" placeholder="Search for anyone&hellip;" id="txtmsgSearch">
+                <span class="icon icon-search input-icon"></span>
               </div>
-            </form>
+            </div>
           </div>
           <% include ../partials/messengerlist.html %>
         </div> 
@@ -48,7 +46,8 @@
                     <div class="btn-group hidden-xs hidden-sm">
                       <button class="btn btn-link link-muted" title="Start group with Ruby Dixon" data-container="body" data-trigger="hover" data-placement="bottom" data-toggle="tooltip" type="button">
                         <span id='msgUser' class="icon icon-users icon-lg icon-fw"></span>
-                       
+                        <label id="lblPass" name="lblPass"></label>
+                        <label id="lblfail" name="lblfail"></label>
                       </button>
                     </div>
                   </div>
@@ -84,11 +83,13 @@
                       </button>
                     </div>
                     <div class="messenger-compose-action">
-                      <button class="btn btn-link" type="button">Send</button>
+                    <input type="hidden" name="hidToId" id="hidToId">
+                    <input type="hidden" name="hidTonum" id="hidTonum">
+                      <button class="btn btn-link" type="button" id="btnmsgSend">Send</button>
                     </div>
                   </div>
                   <div class="messenger-compose-message">
-                    <textarea class="messenger-compose-input" name="messenger_compose_message" placeholder="Type a message..."></textarea>
+                    <textarea class="messenger-compose-input" name="messenger_compose_message" placeholder="Type a message..." id="txtMessage"></textarea>
                   </div>
                 </div>
               </div>

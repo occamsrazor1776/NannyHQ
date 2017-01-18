@@ -596,6 +596,7 @@
           
         }
         if(data.success==true){   
+          console.log(data);
           $.each(data.data.smsMessages, function(index, element){  
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June","July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -634,13 +635,9 @@
         }
       });
     }
-
-    function getuserPhoneDetails(phn){
-
-    }
-
     function getMessageContacts()
     {$("#spinloadcontact").show();
+      
       $.get( "/getcontacts", function( data ){   
 
         if(data.success==false){
@@ -649,10 +646,34 @@
         //console.log(data);
         if(data.success==true){          
           $.each(data.data, function(index, element){
-            var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>jun 22</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>dummy message</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
-             //$(createtag).append( $('.messenger-list'));
-              $('.messenger-list').append(createtag);
-          
+           var useridFrom = $("#lbluser1").html();              
+           var datase = { userTo : element.Id, userFrom :useridFrom};
+           var lastmsg ='';
+           var format_date='';
+            $.get('/getLastMessage', datase, function(dataR){
+             // console.log(dataR.data.length);
+             if(dataR.success == true){
+                $.each(dataR.data, function(inde, elem){
+                  lastmsg = elem.messageText;
+                  var mDate =new Date(elem.sendDate);
+                  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+                  format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
+                  //console.log(elem.messageText);  
+                });
+              }
+              else if(dataR.success== false){
+                
+                lastmsg = "No Recent Conversations";
+              }
+            
+            if(lastmsg==''){
+                lastmsg="No Recent Conversations";
+             }
+            var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+            $('.messenger-list').append(createtag);  
+           }); 
+            
         });           
         $("#messengerlist").fadeIn();
         $("#spinloadcontact").hide();
@@ -660,9 +681,17 @@
     }); 
   } 
 
+ $("#btnmsgSend").click(function(){
+    
+ }); 
+
+
    $("ul.messenger-list").on("click","li.messenger-list-item", function(){     
      var idTo = $(this).find("a").attr("id");  
+     var numTo = $(this).find("a").attr("data")
      var useridFrom = $("#lbluser1").html();       
+     $("#hidToId").attr("value", idTo);
+     $("#hidTonum").attr("value",numTo);
      var name = $(this).find('.messenger-list-name').text();
      var _dates = '';
      $('.btn').css('text-transform','capitalize');           
@@ -674,9 +703,9 @@
      $.get('/getMessaegeDates', dataSend, function ( data1 ){
         if(data1.success == true){           
           $.each(data1.data, function (ind, ele){ 
-            console.log(data1.data.length);
+            //console.log(data1.data.length);
             var mdate = new Date(ele.sentDate);
-            console.log(ele.sentDate);
+            //console.log(ele.sentDate);
 
             var format_date = mdate.getFullYear()+'-'+(mdate.getMonth() + 1)+'-'+mdate.getDate();
             var tm ='';
@@ -695,8 +724,8 @@
             var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'>";
             $.get( "/getMessagesSent", dataSendDates, function( data ){
               if(data.success == true){
-                console.log(data);
-                console.log(data.data.length);
+                //console.log(data);
+                //console.log(data.data.length);
                 $.each(data.data , function(index, element){
                 if(index == data.data.length -1 ){
                   crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+format_time+"</div>";
@@ -884,11 +913,55 @@ $( "#txtSearch" ).keypress(function(e) {
  }
 }); 
 
-$("#txtContSearch").keypress(function(e){
+$("#txtmsgSearch").keypress(function(e){
+   var searchContent = $("#txtmsgSearch").val(); 
+    if(searchContent != ''){
+    var dataS = {SearchCont : searchContent};
 
-  if(e.which  == 13){
+    $.get('/searchCont', dataS, function( data ){
+        $('.messenger-list').empty();
+        if(data.success == true){
+        $.each(data.data, function(index, element){
+           var useridFrom = $("#lbluser1").html();              
+           var datase = { userTo : element.Id, userFrom :useridFrom};
+           var lastmsg ='';
+           var format_date='';
+            $.get('/getLastMessage', datase, function(dataR){
+              
+             if(dataR.success == true){
+                console.log(dataR);
+                $.each(dataR.data, function(inde, elem){
+                  lastmsg = elem.messageText;
+                  var mDate =new Date(elem.sendDate);
+                  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                  format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
+                  //console.log(elem.messageText);  
+                });
+              }
+              else if(dataR.success== false){
+                
+                lastmsg = "No Recent Conversations";
+              }
+            
+            if(lastmsg==''){
+                lastmsg="No Recent Conversations";
+             }
+            //console.log(element.FirstName);
+            var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+            $('.messenger-list').append(createtag);  
+           }); 
+            
+        });
+        }        
+    });
+  }
+});
+
+$("#txtContSearch").keypress(function(e){
+ //console.log(e.which);
+  if(e.which  == 8){
+
     var searchContent = $("#txtContSearch").val(); 
-    console.log(searchContent) ;
     if(searchContent != ''){
     var dataS = {SearchCont : searchContent};
 
@@ -902,14 +975,17 @@ $("#txtContSearch").keypress(function(e){
              
             var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
            
+            $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
             $(".contact-list-heading").each(function(){
               if($(this).text().toLowerCase()==='a' && searchContent.substring(0,1).toLowerCase()=="a"){    
                 $(this).closest(".contact-list-divider").show();                
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+
               }
               else if($(this).text().toLowerCase()==='b' && searchContent.substring(0,1).toLowerCase()=="b"){    
                 $(this).closest(".contact-list-divider").show();                                 
                 $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+                console.log("b");
               }
               else if($(this).text().toLowerCase()==='c' && searchContent.substring(0,1).toLowerCase()=="c"){   
                 $(this).closest(".contact-list-divider").show();                                  
@@ -1015,8 +1091,137 @@ $("#txtContSearch").keypress(function(e){
     });
   }
 }
-else{
-  getContacts();
+else
+{
+     var searchContent = $("#txtContSearch").val(); 
+    if(searchContent != ''){
+    var dataS = {SearchCont : searchContent};
+
+    $.get('/searchCont', dataS, function( data ){
+       if(data.success==true){    
+        $('li.contact-list-item').empty();
+        //console.log(data.data);       
+
+          $.each(data.data, function(index, element){
+           // console.log(element);
+             
+            var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+           
+            $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+            $(".contact-list-heading").each(function(){
+              if($(this).text().toLowerCase()==='a' && searchContent.substring(0,1).toLowerCase()=="a"){    
+                $(this).closest(".contact-list-divider").show();                
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+
+              }
+              else if($(this).text().toLowerCase()==='b' && searchContent.substring(0,1).toLowerCase()=="b"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+                console.log("b");
+              }
+              else if($(this).text().toLowerCase()==='c' && searchContent.substring(0,1).toLowerCase()=="c"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='d' && searchContent.substring(0,1).toLowerCase()=="d"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='e' && searchContent.substring(0,1).toLowerCase=="e"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='f' && searchContent.substring(0,1).toLowerCase()=="f"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='g' && searchContent.substring(0,1).toLowerCase()=="g"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='h' && searchContent.substring(0,1).toLowerCase()=="h"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='i' && searchContent.substring(0,1).toLowerCase()=="i"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='j' && searchContent.substring(0,1).toLowerCase()=="j"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='k' && searchContent.substring(0,1).toLowerCase()=="k"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='l' && searchContent.substring(0,1).toLowerCase()=="l"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='m' && searchContent.substring(0,1).toLowerCase()=="m"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='n' && searchContent.substring(0,1).toLowerCase()=="n"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='o' && searchContent.substring(0,1).toLowerCase()=="o"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='p' && searchContent.substring(0,1).toLowerCase()=="p"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='q' && searchContent.substring(0,1).toLowerCase()=="q"){    
+                $(this).closest(".contact-list-divider").show();                                 
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='r' && searchContent.substring(0,1).toLowerCase()=="r"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='s' && searchContent.substring(0,1).toLowerCase()=="s"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='t' && searchContent.substring(0,1).toLowerCase()=="t"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='u' && searchContent.substring(0,1).toLowerCase()=="u"){  
+                $(this).closest(".contact-list-divider").show();                                   
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='v' && searchContent.substring(0,1).toLowerCase()=="v"){  
+                $(this).closest(".contact-list-divider").show();                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='w' && searchContent.substring(0,1).toLowerCase()=="w"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='x' && searchContent.substring(0,1).toLowerCase()=="x"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='v' && searchContent.substring(0,1).toLowerCase()=="v"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+              else if($(this).text().toLowerCase()==='z' && searchContent.substring(0,1).toLowerCase()=="z"){   
+                $(this).closest(".contact-list-divider").show();                                  
+                $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              }
+            }); 
+        });           
+        $("#contactlist").fadeIn();
+        $("#spinloadcontact").hide();
+      }     
+    });
+  }
 }
 });
 
