@@ -121,7 +121,10 @@
                     //for(var i =1; i <= csvvalue.length; i++)
                     //{ 
                          
-                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td> <td class='text-left'>" + csvvalue[4]+"</td><td class='text-left'>" + csvvalue[5] + "</td><td class='text-left'>"+csvvalue[6]+"</td>";
+                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
+                      appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
+                      appStr+=" <td class='text-left'>" + csvvalue[4]+"</td><td class='text-left'>" + csvvalue[5] + "</td>";
+                      appStr+="<td class='text-left'>"+csvvalue[6]+"</td>";
                       $("#tbContact  > tbody").append(appStr);   
                     //}
                   }
@@ -201,7 +204,9 @@
                     var csvvalue = csvval[j].split(",");
 
                     
-                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td> <td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td><td class='text-left'>"+ csvvalue[4] +"</td>";
+                      var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
+                      appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
+                      appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
                       $("#demo-datatables-1  > tbody").append(appStr); 
 
 
@@ -257,7 +262,8 @@
                     num1 = num1.replace(' ', '');
                     num1 = num1.replace('-', '');
                     mobile="+91" + num1;
-                    SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  newallcontacts[4]+" that expired on "+ newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+                    SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  newallcontacts[4]+" that expired on ";
+                    SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
                     var dataS = { Mobile : mobile ,Message :SMSmsg };
                    // console.log(mobile);
                     //console.log(SMSmsg);
@@ -614,19 +620,22 @@
                 if(data.data.length === 0){
                    console.log("no");
 
-                    var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                    var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td>";
+                    appStr+="<td>"+year +' '+month+' ' +day+"</td>";
                     $("#demo-datatables-1 > tbody").append(appStr);
                   }                 
                 else{
                 if(data.data[0].Mobile == element.to){ 
-                  var appStr ="<tr><td>" + data.data[0].FirstName+" "+ data.data[0].LastName + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                  var appStr ="<tr><td>" + data.data[0].FirstName+" "+ data.data[0].LastName + "</td><td>admin</td><td>"+element.status+"</td>";
+                  appStr+="<td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td>";
                   $("#demo-datatables-1 > tbody").append(appStr);
                 }               
               }
             }
               else if(data.success == false ){
                 console.log("no");
-                var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td><td>";
+                var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td>";
+                appStr+="<td>"+year +' '+month+' ' +day+"</td>";
                 $("#demo-datatables-1 > tbody").append(appStr);
               }
             })           
@@ -670,7 +679,11 @@
             if(lastmsg==''){
                 lastmsg="No Recent Conversations";
              }
-            var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
+            var createtag ="<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'>";
+            createtag+="<div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'>";
+            createtag+="</div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> ";
+            createtag+="<div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small>";
+            createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
             $('.messenger-list').append(createtag);  
            }); 
             
@@ -721,7 +734,9 @@
 
             var dataSendDates  = {UserIdTo : idTo, UserIdFrom : useridFrom, date: format_date};
             //console.log(dataSendDates);
-            var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'><img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div><div class='conversation-messages'>";
+            var crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
+            crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
+            crthtml+="<div class='conversation-messages'>";
             $.get( "/getMessagesSent", dataSendDates, function( data ){
               if(data.success == true){
                 //console.log(data);
@@ -729,6 +744,7 @@
                 $.each(data.data , function(index, element){
                 if(index == data.data.length -1 ){
                   crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+format_time+"</div>";
+
                 }
                 else{
                   crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
@@ -788,8 +804,13 @@
           $.each(data.data, function(index, element){
            // console.log(element);
              
-            var createtag =(" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/><a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'><div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='contact-list-details'><h5 class='contact-list-name'><span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'><span class='truncate'>" + element.Email + "</span></small><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
-           
+            var createtag =" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/>";
+            createtag+="<a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'>";
+            createtag+="<div class='contact-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'>";
+            createtag+="</div><div class='contact-list-details'><h5 class='contact-list-name'>";
+            createtag+="<span class='truncate'>" + element.FirstName + " "+ element.LastName + "</span></h5><small class='contact-list-email'>";
+            createtag+="<span class='truncate'>" + element.Email + "</span></small>";
+            createtag+="<input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
             $(".contact-list-heading").each(function(){
               if($(this).text().toLowerCase()==='a' && element.FirstName.substring(0,1).toLowerCase()=="a"){    
                 $(this).closest(".contact-list-divider").show();                
