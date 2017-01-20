@@ -78,15 +78,16 @@ exports.login = function(req, res){
 
 
 exports.getSMSList = function(req, res) {
+	console.log(client);
 	client.sms.messages.list(function(err, data) {
 		res.send({
 					success: true, 
 					status: err,
 					data:data
 				});
-		data.smsMessages.forEach(function(sms) {
-			console.log(sms);
-		});
+		//data.smsMessages.forEach(function(sms) {
+		//	console.log(sms);
+		//});
 	});
 
 };
@@ -123,8 +124,9 @@ exports.getMessagesSent = function(req,res){
 	var userIdFrom = req.query.UserIdFrom;
 	var _dt = req.query.date;
 	handleDisconnect();
-	var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
-
+	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
+	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userId = "+userIdTo+" and userFromId ="+userIdFrom;
+	querySql+=" and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
 	//console.log(querySql);
 	connection.query(querySql, function(err, result)
 	{		 
@@ -136,7 +138,8 @@ exports.getMessagesSent = function(req,res){
 				status: err
 			});
 		}
-		else{			
+		else{		
+		console.log(result)	;
 				connection.destroy();
 				res.send({
 					success: true, 
@@ -327,7 +330,7 @@ exports.sendMail = function(req, res){
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
 	var mysqlTimestamp = moment(Date.now()).format('LLL');
-	console.log(mysqlTimestamp);
+	//console.log(mysqlTimestamp);
 
 	//var obj = JSON.parse(req.body);
 	//var mobile = obj[0];
@@ -335,12 +338,13 @@ exports.SendSMSSingle = function(req, res) {
 	//var lblSuccess = req.body.lblSucess;
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
 	//console.log(req.body.Mobile);
-	console.log(req.body);
-	//Send an SMS text message
+	//console.log(req.body);
+	//Send an SMS text messagec\
+	console.log(config.twilio.from);
 	client.messages.create({
 
 		to: req.body.Mobile,
-		from: '+' + config.twilio.from,
+		from: '+'+config.twilio.from,
 		body:  req.body.Message//,
 		//mediaUrl: req.body.MMSFILE
 
@@ -442,7 +446,7 @@ exports.getContacts = function(req, res) {
 			});
 		}
 		else{
-			
+			console.log(result[0]);
 			connection.destroy();
 			res.send({
 				success: true, 
@@ -471,9 +475,10 @@ exports.getmessngerProfile = function(req,res){
 exports.LoginProfile = function(req, res){
 	handleDisconnect();
 	var userid = req.session.user;
-	console.log("session " + userid.userId);
-	var sqlQuery ="Select * from tb_users where userId = 2";
-	
+	var user_id = req.body.userid;
+	//console.log("session " + userid.userId);
+	var sqlQuery ="Select * from tb_users where userId = "+ user_id;
+
 	connection.query(sqlQuery, function(err,result){
 		if(err){
 			console.log(err);
