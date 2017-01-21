@@ -4,6 +4,8 @@ var mysql = require('mysql');
 var Config = require('../classes/config');
 var config = Config();
 var moment = require('moment');
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}));
 var connection;
 
 function handleDisconnect() {
@@ -41,7 +43,7 @@ exports.login = function(req, res){
 	//var user = { username: 'admin', password: 'test1234'}
 
 	var sqlQuery="select * from tb_users where userName='"+ req.body.uname +"' and userPassword ='" + req.body.upass + "'";
-	console.log(sqlQuery);
+	//console.log(sqlQuery);
 	
 	connection.query(sqlQuery, function(err, user)
 	{		 
@@ -139,13 +141,13 @@ exports.getMessagesSent = function(req,res){
 			});
 		}
 		else{		
-		console.log(result)	;
-				connection.destroy();
-				res.send({
-					success: true, 
-					status: err,
-					data:result
-				});
+		//console.log(result)	;
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: err,
+				data:result
+			});
 			//res.redirect('/');
 		}
 	});
@@ -156,7 +158,7 @@ exports.getLastMessage= function(req, res){
 	var userIdFrom = req.query.userFrom;
 	handleDisconnect();
 	var sqlQuery ="Select * from tb_messagedetail where userFromId="+ userIdFrom+" and userId = "+userIdTo+"  order by sendDate desc LIMIT 1";
-	console.log(sqlQuery);
+	//console.log(sqlQuery);
 	connection.query(sqlQuery, function(err, result)
 	{		 
 		if(err){
@@ -168,7 +170,7 @@ exports.getLastMessage= function(req, res){
 			});
 		}
 		else{
-				console.log(result);
+				//console.log(result);
 				connection.destroy();
 				res.send({
 					success: true, 
@@ -296,7 +298,7 @@ exports.sendMail = function(req, res){
 		else
 		{
 			connection.destroy();
-			console.log(result[0].userPassword);
+			//console.log(result[0].userPassword);
 			var data = {
 	  		from: 'NannyHQ <me@samples.mailgun.org>',
 			to: req.body.uName,
@@ -304,7 +306,7 @@ exports.sendMail = function(req, res){
 			//text: 'Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
 			html : '<b>NannyHQ</b><br/>Here is user password for login, <br/> <b> Password : </b>'+ result[0].userPassword
 			};
-			console.log( data);
+			//console.log( data);
 			mailgun.messages().send(data, function (error, body) {
 			  console.log(body);
 			  if(!error){
@@ -327,6 +329,12 @@ exports.sendMail = function(req, res){
 	
 }
 
+//recieving sms
+app.post("/message", function (request, response) {
+  console.log(request.body); 
+  response.send("<Response><Message>Hello</Message></Response>")
+}); 
+
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
 	var mysqlTimestamp = moment(Date.now()).format('LLL');
@@ -340,11 +348,13 @@ exports.SendSMSSingle = function(req, res) {
 	//console.log(req.body.Mobile);
 	//console.log(req.body);
 	//Send an SMS text messagec\
-	console.log(config.twilio.from);
+	console.log("M"+config.twilio.from);
+	var smsFrom ="+"+config.twilio.from;
+	console.log(smsFrom);
 	client.messages.create({
 
 		to: req.body.Mobile,
-		from: '+'+config.twilio.from,
+		from: smsFrom,
 		body:  req.body.Message//,
 		//mediaUrl: req.body.MMSFILE
 
@@ -547,7 +557,7 @@ exports.getSingleContact = function(req, res) {
 
 exports.getUserDetailsPhone = function(req, res){
 	handleDisconnect();
-	console.log(req.query.phone);
+	//console.log(req.query.phone);
 	var sqlquery = "Select * from tb_contacts where Mobile LIKE '%" + req.query.phone+"%'" ;
 	connection.query(sqlquery, function(err, result)
 	{		 
@@ -575,7 +585,7 @@ exports.findOne = function(req, res){
 	handleDisconnect();
 	handleDisconnect();
 	var userid = req.session.user;
-	console.log(userid);
+	//console.log(userid);
 	var sqlQuery ="Select * from tb_users where userId = 2";
 	
 	connection.query(sqlQuery, function(err,result){
@@ -641,7 +651,7 @@ exports.updateContact = function(req, res) {
 		}
 		else
 		{
-			console.log('Changed ' + result.changedRows + ' rows');	
+			//console.log('Changed ' + result.changedRows + ' rows');	
 			connection.destroy();
 			res.send({
 				success: true, 
@@ -654,7 +664,7 @@ exports.updateContact = function(req, res) {
 
 exports.updateUserProfile = function(req, res){
 	handleDisconnect();
-	console.log(req.body.PhoneNUm);
+	//console.log(req.body.PhoneNUm);
 	var querySql="Update tb_users set userName ='" + req.body.Username + "', userPassword ='" + req.body.Password +"', userFirstName ='" + req.body.F_name +"', userLastName = '" + req.body.L_name + "', userEmail='"+ req.body.Email +"', userPhone ='"+ req.body.PhoneNUm + "' where userId ="+req.body.Id;
 	connection.query(querySql,function(err, result) 
 	{                                                      
@@ -668,7 +678,7 @@ exports.updateUserProfile = function(req, res){
 		}
 		else
 		{
-			console.log('Changed ' + result.changedRows + ' rows');	
+			//console.log('Changed ' + result.changedRows + ' rows');	
 			connection.destroy();
 			res.send({
 				success: true, 
@@ -691,7 +701,7 @@ exports.importContact = function (req, res){
 			res.status(500).send(err);
 		}
 		else {
-			console.log(sampleFile.name);  
+		//	console.log(sampleFile.name);  
 			
 			res.send({
 				success: true,

@@ -472,6 +472,21 @@
           
         });
 
+       $("#").click(function(){
+        //var dataS={From : '+918557988984', Body:'Hello test message'};
+          $.ajax({
+            type:'POST',
+            data:dataS,
+            url:'/message',
+            contentType:"application/json"
+          }).done( function ( data ){
+              if(data.data.success == true)
+              {
+
+              }
+          });
+       });
+
        $("#btnSend").click(function (){
           var frommob= $("#lblUsrphn").html();
           var userid= $("#lbluser1").html();
@@ -940,11 +955,11 @@ $( "#txtSearch" ).keypress(function(e) {
  }
 }); 
 
-$("#txtmsgSearch").keypress(function(e){
+$("#txtmsgSearch").keydown(function(e){
    var searchContent = $("#txtmsgSearch").val(); 
     if(searchContent != ''){
       //console.log(e.which);
-      if(e.which == 13){
+     
     var dataS = {SearchCont : searchContent};
 
     $.get('/searchCont', dataS, function( data ){
@@ -957,18 +972,18 @@ $("#txtmsgSearch").keypress(function(e){
            console.log(datase);
            var lastmsg ='';
            var format_date='';
-            $.get('/getLastMessage', datase, function(data){
-                console.log(data);
-             if(data.success == true && data != null && data.length > 0){
+            //$.get('/getLastMessage', datase, function(data){
+               // console.log(data);
+             //if(data.success == true && data != null && data.length > 0){
                 //console.log(data);
-                $.each(data.data, function(inde, elem){
-                  lastmsg = elem.messageText;
-                  var mDate =new Date(elem.sendDate);
-                  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                  format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
-                  console.log(elem.messageText);  
-                });
-              }
+               // $.each(data.data, function(inde, elem){
+                 // lastmsg = elem.messageText;
+              //    var mDate =new Date(elem.sendDate);
+               //   var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+             //     format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
+                 // console.log(elem.messageText);  
+               // });
+             // }
             
             if(lastmsg == ''){
                 lastmsg = "No Recent Conversations";
@@ -977,17 +992,18 @@ $("#txtmsgSearch").keypress(function(e){
             var createtag =("<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'><div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'></div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> <div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small></div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>");
             ;
             $('.messenger-list').append(createtag);  
-           }); 
+           //}); 
             
         });
         }        
     });
-  }
+  
   }
 });
 
-$("#txtContSearch").keypress(function(e){  
+$("#txtContSearch").keydown(function(e){  
      var searchContent = $("#txtContSearch").val(); 
+     console.log(e.which);
     if(searchContent != ''){
     var dataS = {SearchCont : searchContent};
 
