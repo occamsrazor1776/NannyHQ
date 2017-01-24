@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('client-sessions');
 var fileUpload = require('express-fileupload');
 
+
 var app = express();
 var router = express.Router();
 
@@ -236,6 +237,7 @@ app.post('/uploadPhoto', function (req, res) {
 //APIs
 
 //app.post('/savemessages',Routes.savemsg);
+app.post('/savemessageDetails',Routes.savemessageDetails);
 app.post('/message',Routes.message);
 app.get('/searchC', Routes.searchC);
 app.get('/searchCont',Routes.searchCont);

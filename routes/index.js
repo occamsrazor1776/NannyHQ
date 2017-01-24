@@ -4,8 +4,7 @@ var mysql = require('mysql');
 var Config = require('../classes/config');
 var config = Config();
 var moment = require('moment');
-var bodyParser = require('body-parser');
-app.use(bodyParser.urlencoded({extended: false}));
+
 var connection;
 
 function handleDisconnect() {
@@ -329,11 +328,41 @@ exports.sendMail = function(req, res){
 	
 }
 
+exports.savemessageDetails = function (req, res){
+	console.log(req.body.date_created);
+	console.log(moment().format(req.body.date_created));
+	console.log(config.twilio.sid);
+
+	//var mysqlTimestamp = moment(req.body.date_created).format('YYYY-MM-DD HH:mm:ss');
+	//var onlyDate =moment(req.body.date_created).format('YYYY-MM-DD');
+	//var onlyTime = moment(req.body.date_created).format('HH:mm:ss');
+	handleDisconnect();
+	var sqlQuery ="INSERT INTO tb_messagedetail (messageText,userToPhone,sendDate,userFromPhone,sendingDate,sendingTime,desc,";
+	sqlQuery+="MessageSid,SmsSid,AccountSid,MessagingServiceSid,NumMedia) values ('"+ req.body.Body +"','"+req.body.To;
+	sqlQuery+="',NULL,'"+req.body.from+"',NULL,NULL,'"+req.body.sid+"','"+config.twilio.sid+"','"+req.body.MessagingServiceSid+"',NULL,'1')";
+	console.log(sqlQuery);
+	connection.query(sqlQuery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);				
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			connection.destroy();
+			res.send(result);
+		}
+	});
+};
+
 //recieving sms
-app.post("/message", function (request, response) {
+exports.message = function (request, response) {
   console.log(request.body); 
   response.send("<Response><Message>Hello</Message></Response>")
-}); 
+}; 
 
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
