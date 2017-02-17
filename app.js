@@ -252,6 +252,7 @@ app.post('/sendMultipleSMS', Routes.sendMultipleSMS);
 app.post('/SendSMSSingle', Routes.SendSMSSingle);
 app.post('/SendSMSSingleBulk', Routes.SendSMSSingleBulk);
 app.get('/getMessagesSent', Routes.getMessagesSent);
+app.get('/getMessagesRecieved', Routes.getMessagesRecieved);
 app.get('/getContacts',  Routes.getContacts);
 app.get('/getSingleContact', Routes.getSingleContact);
 app.post('/newContact', Routes.newContact);

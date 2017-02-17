@@ -121,14 +121,15 @@ exports.getMessaegeDates = function(req, res){
 }
 
 exports.getMessagesSent = function(req,res){
-	var userIdTo = req.query.UserIdTo;
-	var userIdFrom = req.query.UserIdFrom;
+	var userTo = req.query.UserTo;
+	var userFrom = req.query.UserFrom;
 	var _dt = req.query.date;
 	handleDisconnect();
 	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
-	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userId = "+userIdTo+" and userFromId ="+userIdFrom;
-	querySql+=" and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
-	//console.log(querySql);
+	
+	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userToPhone ='"+userTo+"' and userFromPhone  ='"+userFrom;
+	querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+	
 	connection.query(querySql, function(err, result)
 	{		 
 		if(err){
@@ -151,6 +152,41 @@ exports.getMessagesSent = function(req,res){
 		}
 	});
 };
+
+
+exports.getMessagesRecieved = function(req, res){
+	var userTo = req.query.UserTo;
+	var userFrom = req.query.UserFrom;
+	var _dt = req.query.date;
+	handleDisconnect();
+	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userFromPhone ='"+userTo+"' and userToPhone  ='"+userFrom;
+	querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
+	//var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userId = "+userIdTo+" and userFromId ="+userIdFrom;
+	//querySql+=" and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+	//console.log(querySql);
+	connection.query(querySql, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{		
+		//console.log(result)	;
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: err,
+				data:result
+			});
+			//res.redirect('/');
+		}
+	});
+}
 
 exports.getLastMessage= function(req, res){
 	var userIdTo = req.query.userTo;

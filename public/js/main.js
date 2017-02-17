@@ -720,8 +720,10 @@
 
    $("ul.messenger-list").on("click","li.messenger-list-item", function(){     
     var idTo = $(this).find("a").attr("id");  
-    var numTo = $(this).find("a").attr("data")
-    var useridFrom = $("#lbluser1").html();       
+    var numTo = $(this).find("a").attr("data");
+    var userFrom = $("#lblUsrphn").html();   
+    console.log(userFrom);
+    console.log(numTo);
     $("#hidToId").attr("value", idTo);
     $("#hidTonum").attr("value",numTo);
     var name = $(this).find('.messenger-list-name').text();
@@ -729,16 +731,42 @@
     $('.btn').css('text-transform','capitalize');           
     $('#msgUser').html(name);
     $("ul.conversation").empty();
-    var dataSend  = {UserIdTo : idTo, UserIdFrom : useridFrom}
+    var dataSend  = {UserIdTo : idTo, UserIdFrom : userFrom}
     var  crthtml1="";
-    var dataSendDates  = {UserIdTo : idTo, UserIdFrom : useridFrom};
+    var dataSendDates  = {UserTo : numTo, UserFrom : userFrom};
+
+    console.log(dataSendDates);
     var crthtml='';
     crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
     crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
     crthtml+="<div class='conversation-messages'>";
-     var crthtml2="</div></div></li>";
+    var crthtml2="</div></div></li>";
+    var chtml='';
+    var chtml2="</div></div></li>";
+    chtml ="<li class='conversation-item'><div class='conversation-other'><div class='conversation-avatar'>";
+    chtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
+    chtml+="<div class='conversation-messages'>";
     $.get( "/getMessagesSent", dataSendDates, function( data ){
-      var _dt='';       
+      var _dt='';    
+      $.get( "/getMessagesRecieved", dataSendDates, function( data1 ){
+        var _dt1=''; 
+        
+        $.each(data1.data, function(index, element){
+         
+          var chtml1='';       
+          var ndate1 = element.sendDate.split('T')[0];
+          if(_dt1 != ndate1){
+            _dt1 = ndate1;
+             var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate1+ "</div><div></li>";
+              chtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
+             $('.conversation').append(dthtml+chtml+chtml1+chtml2);
+          }
+          else if(_dt1==ndate1){
+             chtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>15:29:02 PM</div>";
+             $('.conversation').append(chtml+chtml1+chtml2);
+          }  
+        });
+       });   
          
       $.each(data.data, function(index, element){
         var crthtml1='';       
@@ -754,7 +782,7 @@
            $('.conversation').append(crthtml+crthtml1+crthtml2);
         }  
       });
-    });
+    }); 
    });
 
 
