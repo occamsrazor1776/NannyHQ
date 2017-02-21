@@ -207,25 +207,26 @@
                       var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
                       appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
                       appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
-                      $("#demo-datatables-1  > tbody").append(appStr); 
+                      $(".table  > tbody").append(appStr); 
 
 
-                      console.log(csvvalue);
+                   //   console.log(csvvalue);
                      // for(var i = 1 ; i< csvvalue.length -1 ; i++)  
                      // {
-                        console.log(csvvalue[2]);
-                        num1 = csvvalue[2];
-                        num1 = csvvalue[2].replace('(','');
+                      //  console.log(csvvalue[6]);
+                        num1 = csvvalue[6];
+                        num1 = csvvalue[6].replace('(','');
                         num1 = num1.replace(')','');
+                        num1 = num1.replace(' ', '');
                         num1 = num1.replace('-', '');
                         num1 = num1.replace(' ', '');
                         var  mobile = "+91" + num1;
                         if(numlist == null){
-                          numlist =  num1 + "," ;
+                          numlist =  mobile + "," ;
                         }
                         else
                         {
-                          numlist = numlist + num1 + "," ;
+                          numlist = numlist + mobile + "," ;
                         }
                      //}
                     
@@ -384,11 +385,13 @@
             {   
               var csvvalue = csvval[j].split(","); 
               num1 = csvvalue[6].replace('(','');
-              num1 = num1.replace(')','');
+
+              num1 = num1.replace(') ','');
               num1 = num1.replace(' ', '');
               num1 = num1.replace('-', '');
+            
               var dataS= {F_name : csvvalue[0], M_name : m_name, L_name : csvvalue[1], Emailadd :'', Mobile : '+1' +  num1, J_title : '', Location : csvvalue[2] + "," + csvvalue[3] + "," + csvvalue[4] + "," + csvvalue[5], Notes : ''};
-              $.ajax({
+               $.ajax({
                     type: "POST",
                     data :JSON.stringify(dataS),
                     url: "./newcontact",
@@ -408,11 +411,7 @@
                     $("#lbllblinfo").html("error occured during process.")
                     console.log("error occured during process.");
                  }); 
-            }   
-           
-            
-            
-
+            } 
        });
 
       
@@ -722,8 +721,7 @@
     var idTo = $(this).find("a").attr("id");  
     var numTo = $(this).find("a").attr("data");
     var userFrom = $("#lblUsrphn").html();   
-    console.log(userFrom);
-    console.log(numTo);
+    
     $("#hidToId").attr("value", idTo);
     $("#hidTonum").attr("value",numTo);
     var name = $(this).find('.messenger-list-name').text();
@@ -735,7 +733,7 @@
     var  crthtml1="";
     var dataSendDates  = {UserTo : numTo, UserFrom : userFrom};
 
-    console.log(dataSendDates);
+    
     var crthtml='';
     crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
     crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
@@ -747,49 +745,40 @@
     chtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
     chtml+="<div class='conversation-messages'>";
     $.get( "/getMessagesSent", dataSendDates, function( data ){
-      var _dt='';    
-      $.get( "/getMessagesRecieved", dataSendDates, function( data1 ){
-        var _dt1=''; 
-        
-        $.each(data1.data, function(index, element){
-         
-          var chtml1='';       
-          var ndate1 = element.sendDate.split('T')[0];
-          if(_dt1 != ndate1){
-            _dt1 = ndate1;
-             var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate1+ "</div><div></li>";
-              chtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
-             $('.conversation').append(dthtml+chtml+chtml1+chtml2);
-          }
-          else if(_dt1==ndate1){
-             chtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>15:29:02 PM</div>";
-             $('.conversation').append(chtml+chtml1+chtml2);
-          }  
-        });
-       });   
-         
+          var _dt='';    
+            
       $.each(data.data, function(index, element){
         var crthtml1='';       
         var ndate = element.sendDate.split('T')[0];
+        console.log( element.sendDate.split('T')[1]);
         if(_dt != ndate){
           _dt = ndate;
            var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate+ "</div><div></li>";
             crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
-           $('.conversation').append(dthtml+crthtml+crthtml1+crthtml2);
+           
+            if(element.MessageSid != null){
+                $('.conversation').append(dthtml+chtml+crthtml1+crthtml2);
+              }
+              else{
+                 $('.conversation').append(dthtml+crthtml+crthtml1+crthtml2);
+              }
         }
         else if(_dt==ndate){
-           crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>15:29:02 PM</div>";
-           $('.conversation').append(crthtml+crthtml1+crthtml2);
+
+           crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+element.sendingTime+"</div>";
+            if(element.MessageSid != null){
+                $('.conversation').append(chtml+crthtml1+crthtml2);
+              }
+              else{
+                 $('.conversation').append(crthtml+crthtml1+crthtml2);
+              }
         }  
       });
     }); 
    });
 
 
-   function getSentMessages(){
-     
-   };
-
+ 
    function getmessngerProfile(){
        $.get( "/getmessngerProfile", function( data ){
           if(data.success==true){

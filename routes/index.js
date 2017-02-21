@@ -79,7 +79,7 @@ exports.login = function(req, res){
 
 
 exports.getSMSList = function(req, res) {
-	console.log(client);
+	
 	client.sms.messages.list(function(err, data) {
 		res.send({
 					success: true, 
@@ -127,8 +127,13 @@ exports.getMessagesSent = function(req,res){
 	handleDisconnect();
 	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
 	
-	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userToPhone ='"+userTo+"' and userFromPhone  ='"+userFrom;
-	querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+	//var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userToPhone ='"+userTo+"' and userFromPhone  ='"+userFrom;
+	//querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+
+	var querySql =" select * from db_naan.tb_messagedetail where userToPhone ='"+userTo+"'  and userFromPhone ='"+userFrom+"'";
+	querySql+=" or  userFromPhone ='"+userTo+"'   and userToPhone ='"+userFrom+"'  and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
+	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from db_naan.tb_messagedetail t2 group by sendingTime order by sendingTime)";
+	querySql +=" order by sendDate";
 	
 	connection.query(querySql, function(err, result)
 	{		 
@@ -161,10 +166,7 @@ exports.getMessagesRecieved = function(req, res){
 	handleDisconnect();
 	var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userFromPhone ='"+userTo+"' and userToPhone  ='"+userFrom;
 	querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
-	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
-	//var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userId = "+userIdTo+" and userFromId ="+userIdFrom;
-	//querySql+=" and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
-	//console.log(querySql);
+	
 	connection.query(querySql, function(err, result)
 	{		 
 		if(err){
@@ -403,39 +405,39 @@ exports.message = function (request, response) {
 
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
-	var mysqlTimestamp = moment(Date.now()).format('LLL');
-	//console.log(mysqlTimestamp);
 
-	//var obj = JSON.parse(req.body);
-	//var mobile = obj[0];
-	//var smsmsg = obj[1];
-	//var lblSuccess = req.body.lblSucess;
+	var now = new Date();
+	//var mysqlTimestamp = moment(Date.now()).format('LLL');
+
+	var dateFormat = require('dateformat');
+    var mysqlTimestamp = dateFormat(now, "yyyy-mm-dd h:MM:ss");
+    var msgDate = dateFormat(now, "yyyy-mm-dd");
+    var msgTime = dateFormat(now, "h:MM:ss TT");
+	
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
-	//console.log(req.body.Mobile);
-	//console.log(req.body);
-	//Send an SMS text messagec\
-	console.log("M"+config.twilio.from);
+	
 	var smsFrom ="+"+config.twilio.from;
 	console.log(smsFrom);
-	client.messages.create({
+	//client.messages.create({
 
-		to: req.body.Mobile,
-		from: smsFrom,
-		body:  req.body.Message//,
+		//to: req.body.Mobile,
+		//from: smsFrom,
+		//body:  req.body.Message//,
 		//mediaUrl: req.body.MMSFILE
 
-	}, function(err, responseData) { //this function is executed when a response is received from Twilio
+	//}, function(err, responseData) { //this function is executed when a response is received from Twilio
 		
-		if (!err) { // "err" is an error received during the request, if any
+		//if (!err) { // "err" is an error received during the request, if any
 			
-			console.log(responseData.from); // outputs "+14506667788"
-			console.log(responseData.body); // outputs "word to your mother."
+			//console.log(responseData.from); // outputs "+14506667788"
+			//console.log(responseData.body); // outputs "word to your mother."
 			handleDisconnect();
-			if(req.body.userID === undefined){
+				if(req.body.userID === undefined){
 
 			}
 			else {
-				var sqlQuery ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId) values ('"+ req.body.Message +"',"+ req.body.useridTO +",'"+req.body.Mobile+"','"+ mysqlTimestamp +"','"+config.twilio.from+"',"+ req.body.userID +")";
+				var sqlQuery ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values ('";
+				sqlQuery+= req.body.Message +"',"+ req.body.useridTO +",'"+req.body.Mobile+"','"+ mysqlTimestamp +"','+"+config.twilio.from+"',"+ req.body.userID +",'"+msgDate+"','"+msgTime+"')";
 				console.log(sqlQuery);
 				connection.query(sqlQuery, function(err, result)
 				{		 
@@ -452,19 +454,13 @@ exports.SendSMSSingle = function(req, res) {
 						res.send(result);
 					}
 				});
-			}
-			//res.send({
-				//success: true,
-				//result: "Message Sent successfully."
-			//});
+			}		
 
-		} else {
-			result: "Message Sendingfailed failed."
-		}
+		//} else {
+		//	result: "Message Sending failed."
+		//}	
 
-		
-
-	});
+	//});
 };
 
 exports.SendSMSSingleBulk = function(req, res) {
@@ -522,7 +518,7 @@ exports.getContacts = function(req, res) {
 			});
 		}
 		else{
-			console.log(result[0]);
+			//console.log(result[0]);
 			connection.destroy();
 			res.send({
 				success: true, 
