@@ -251,7 +251,7 @@ exports.searchCont = function(req, res){
 	handleDisconnect();
 	//console.log(req);
 	var sqlQuery ="Select * from tb_contacts where  FirstName LIKE '%"+ req.query.SearchCont ;
-	sqlQuery +="%' OR  LastName LIKE  '%"+ req.query.SearchCont+"%'  or Email LIKE '%"+req.query.SearchCont+"%'" ;
+	sqlQuery +="%' OR  LastName LIKE  '%"+ req.query.SearchCont+"%'";//  or Email LIKE '%"+req.query.SearchCont+"%'" ;
 	//console.log(sqlQuery);
 	connection.query(sqlQuery, function(err, result)
 	{		 
@@ -405,7 +405,6 @@ exports.message = function (request, response) {
 
 exports.SendSMSSingle = function(req, res) {
 	var twilio = require('twilio');	
-
 	var now = new Date();
 	//var mysqlTimestamp = moment(Date.now()).format('LLL');
 
@@ -418,19 +417,19 @@ exports.SendSMSSingle = function(req, res) {
 	
 	var smsFrom ="+"+config.twilio.from;
 	console.log(smsFrom);
-	//client.messages.create({
+	client.messages.create({
 
-		//to: req.body.Mobile,
-		//from: smsFrom,
-		//body:  req.body.Message//,
+		to: req.body.Mobile,
+		from: smsFrom,
+		body:  req.body.Message//,
 		//mediaUrl: req.body.MMSFILE
 
-	//}, function(err, responseData) { //this function is executed when a response is received from Twilio
+	}, function(err, responseData) { //this function is executed when a response is received from Twilio
 		
-		//if (!err) { // "err" is an error received during the request, if any
+		if (!err) { // "err" is an error received during the request, if any
 			
-			//console.log(responseData.from); // outputs "+14506667788"
-			//console.log(responseData.body); // outputs "word to your mother."
+			console.log(responseData.from); // outputs "+14506667788"
+			console.log(responseData.body); // outputs "word to your mother."
 			handleDisconnect();
 				if(req.body.userID === undefined){
 
@@ -454,13 +453,12 @@ exports.SendSMSSingle = function(req, res) {
 						res.send(result);
 					}
 				});
-			}		
-
-		//} else {
-		//	result: "Message Sending failed."
-		//}	
-
-	//});
+			}
+		}
+		else {
+			result: "Message Sending failed."
+		}	
+	});
 };
 
 exports.SendSMSSingleBulk = function(req, res) {
@@ -497,7 +495,7 @@ exports.SendSMSSingleBulk = function(req, res) {
 			});
 
 		} else {
-			result: "Message Sendingfailed failed."
+			result: "Message Sending failed."
 		}
 
 		

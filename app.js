@@ -62,10 +62,10 @@ function requireHTTPS(req, res, next) {
 
 //Pages
 app.get('/', function(req, res) {
-    console.log(req.session.user);
+    //console.log(req.session.user);
 	 if (req.session && req.session.user) { 
-        console.log('enter');
-        console.log(req.session.user.userEmail);
+     //   console.log('enter');
+      //  console.log(req.session.user.userEmail);
         // Check if session exists
 	 	/*User.findOne({ email: req.session.user.email }, function (err, user) {
 	      if (!user) {
