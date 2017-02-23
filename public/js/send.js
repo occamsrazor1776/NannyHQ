@@ -10,7 +10,7 @@
    $('#btnSend').click(function(){
     var mobile = $('#empPhone').val();
     mobile = mobile.replace('(','');
-    mobile = mobile.replace(')','');
+    mobile = mobile.replace(') ','');
     mobile = mobile.replace(' ','');
     mobile = mobile.replace('-','');
     console.log(mobile);

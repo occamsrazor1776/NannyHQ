@@ -746,6 +746,7 @@
             //console.log("data : " + data);
             $.each(data.data , function(index, element){
               $("#lbluser").html(element.userName);
+              $("#lblMuserName").html(element.userName);
               $("#lbluser1").html(element.userId);
               $("#lblUsrphn").html(element.userPhone);
               var usrId = $("#lblUsrphn").html();
