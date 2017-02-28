@@ -65,7 +65,7 @@ exports.login = function(req, res){
 			else
 			{
 				req.session.user = user;	
-				//console.log(user)		;
+				//console.log(user);
 				//req.session.user = user;
 				connection.destroy();
 				res.redirect('/');
@@ -614,7 +614,6 @@ exports.getSingleContact = function(req, res) {
 	});
 };
 
-
 exports.getUserDetailsPhone = function(req, res){
 	handleDisconnect();
 	//console.log(req.query.phone);
@@ -639,6 +638,7 @@ exports.getUserDetailsPhone = function(req, res){
 		}
 	});
 };
+
 
 
 exports.findOne = function(req, res){
