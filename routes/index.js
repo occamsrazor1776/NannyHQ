@@ -417,6 +417,8 @@ exports.SendSMSSingle = function(req, res) {
 	
 	var smsFrom ="+"+config.twilio.from;
 	console.log(smsFrom);
+	console.log(req.body.Mobile);
+	console.log(req.body.Message);
 	client.messages.create({
 
 		to: req.body.Mobile,

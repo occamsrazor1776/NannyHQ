@@ -622,7 +622,37 @@ function getMessageContacts()
 } 
 
  $("#btnmsgSend").click(function(){
-    
+  var frommob= $("#lblUsrphn").html();
+  var userid= $("#lbluser1").html();
+  var userToId =  $("#hidToId").attr("value");
+  var hiddennumbers =$("#hidContact").attr("value");
+  var cmob = $("#hidTonum").attr("value");
+  console.log(cmob);
+  var mobile1 = cmob;
+  var mmsfile;
+  mobile1 = mobile1.replace('(','');
+  mobile1 = mobile1.replace(')','');
+  mobile1 = mobile1.replace(' ','');
+  mobile1 = mobile1.replace('-','');
+  //console.log(mobile1);
+  var SMSmsg = $('#txtMessage').val();
+  var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE:mmsfile, userID : userid, useridTO : userToId};
+  console.log(dataS);
+   $.ajax({
+       type: "POST",
+       data :JSON.stringify(dataS),
+       url: "./SendSMSSingle",
+       contentType: "application/json"
+     }).done(function() {
+     // $('#empPhone').val("");
+     // $('#msg').val("");
+     // $("#lblPass").show().delay(5000).fadeOut();;
+     // $(".spinner").hide();
+    //  $("#btnSend").attr("disabled", false);
+
+    }).fail(function() {
+     // $("#lblfail").show();
+    });
  }); 
 
 
