@@ -528,7 +528,7 @@ function getrole(id){
       
     }
     if(data.success==true && data.data != null){   
-      console.log(data);
+      console.log(data.data.smsMessages);
       $.each(data.data.smsMessages, function(index, element){  
         var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June","July", "Aug", "Sept", "Oct", "Nov", "Dec"];
 
@@ -539,30 +539,32 @@ function getrole(id){
         var month = monthNames[date.getMonth()]; //Month of the Year: 0-based index, so 1 in our example
         var year = date.getFullYear()
         var datasend = {phone : element.to};
+       // console.log(datasend);
         $.get('/getUserDetailsPhone',datasend,  function ( data ){
-          console.log(data.success);
-          if(data.success == true && data == null){
-            console.log(data);
+          console.log(data);
+         
+          if(data.success == true){
+           //console.log(data.length);
             if(data.data.length === 0){
-               console.log("no");
+             //  console.log("no");
 
                 var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td>";
                 appStr+="<td>"+year +' '+month+' ' +day+"</td>";
-                $("#demo-datatables-1 > tbody").append(appStr);
+                $(".table > tbody").append(appStr);
               }                 
             else{
-            if(data.data[0].Mobile == element.to){ 
-              var appStr ="<tr><td>" + data.data[0].FirstName+" "+ data.data[0].LastName + "</td><td>admin</td><td>"+element.status+"</td>";
-              appStr+="<td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td>";
-              $("#demo-datatables-1 > tbody").append(appStr);
+           if(data.data[0].Mobile == element.to){ 
+             var appStr ="<tr><td>" + data.data[0].FirstName+" "+ data.data[0].LastName + "</td><td>admin</td><td>"+element.status+"</td>";
+             appStr+="<td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td>";
+             $(".table > tbody").append(appStr);
             }               
           }
         }
-          else if(data.success == false ){
-            console.log("no");
-            var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td>";
-            appStr+="<td>"+year +' '+month+' ' +day+"</td>";
-            $("#demo-datatables-1 > tbody").append(appStr);
+         else if(data.success == false ){
+          // console.log("no");
+           var appStr ="<tr><td>" + element.to + "</td><td>admin</td><td>"+element.status+"</td><td>"+element.direction+"</td>";
+           appStr+="<td>"+year +' '+month+' ' +day+"</td>";
+           $(".table > tbody").append(appStr);
           }
         })           
       })

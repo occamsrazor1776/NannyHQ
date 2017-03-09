@@ -77,7 +77,7 @@ exports.login = function(req, res){
 	//res.redirect('/');
 };
 
-
+var client = require('twilio')(config.twilio.sid, config.twilio.token);
 exports.getSMSList = function(req, res) {
 	
 	client.sms.messages.list(function(err, data) {
