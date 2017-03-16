@@ -939,6 +939,12 @@ pre code {
 .col-xs-offset-12 {
   margin-left: 100%;
 }
+.table-flip-scroll > .table {
+    height: 400px;
+    overflow-y: scroll;
+    display: block;
+}
+
 @media (min-width: 768px) {
   .col-sm-1, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-sm-10, .col-sm-11, .col-sm-12 {
     float: left;
@@ -7832,6 +7838,8 @@ textarea {
     border: 1px solid #eee;
     display: block;
     position: relative;
+        height: auto !important;
+    overflow: hidden !important;
   }
   .table-flip-scroll > .table > thead > tr > th,
   .table-flip-scroll > .table > thead > tr > td,
