@@ -638,43 +638,29 @@
         buttonsClass: 'primary',
         columns: [{
           align: 'right',
-          field: 'rank',
+          field: 'to',
           sortable: false,
-          title: 'Rank'
+          title: 'To'
         }, {
           align: 'left',
-          field: 'country',
-          formatter: bootstrapTableFlagFormatter,
+          field: 'Mobile',
           sortable: false,
-          title: 'Country'
+          title: 'From'
         }, {
           align: 'right',
-          field: 'continent',
-          sortable: true,
-          title: 'Continent'
+          field: 'status',
+          sortable: false,
+          title: 'Status'
         }, {
           align: 'right',
-          field: 'region',
-          sortable: true,
-          title: 'Region'
+          field: 'direction',
+          sortable: false,
+          title: 'Direction'
         }, {
           align: 'right',
-          field: 'year2016',
-          sortable: true,
-          sorter: bootstrapTableCustomSort,
-          title: '2016'
-        }, {
-          align: 'right',
-          field: 'year2015',
-          sortable: true,
-          sorter: bootstrapTableCustomSort,
-          title: '2015'
-        }, {
-          align: 'right',
-          field: 'change',
-          sortable: true,
-          sorter: bootstrapTableCustomSort,
-          title: 'Change'
+          field: 'date_sent',
+          sortable: false,
+          title: 'Date sent'
         }],
         icons: {
           columns: 'icon-list-ul',
@@ -694,7 +680,7 @@
         showRefresh: true,
         showToggle: true,
         striped: true,
-        url: '/population.json'
+        url: '/app.js/smsList'
       });
 
       $(window).on('resize', function (evt) {

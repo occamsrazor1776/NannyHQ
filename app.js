@@ -251,15 +251,19 @@ app.get('/smsList', Routes.getSMSList);
 app.post('/sendMultipleSMS', Routes.sendMultipleSMS);
 app.post('/SendSMSSingle', Routes.SendSMSSingle);
 app.post('/SendSMSSingleBulk', Routes.SendSMSSingleBulk);
+app.post('/SendSMSBulk', Routes.SendSMSBulk);
 app.get('/getMessagesSent', Routes.getMessagesSent);
 app.get('/getMessagesRecieved', Routes.getMessagesRecieved);
 app.get('/getContacts',  Routes.getContacts);
 app.get('/getSingleContact', Routes.getSingleContact);
 app.post('/newContact', Routes.newContact);
+app.post('/newContacts', Routes.newContacts);
 app.post('/updateContact', Routes.updateContact);
 app.get('/getProfile',Routes.LoginProfile);
 app.get('/getrole', Routes.roles);
 app.post('/updateProfile', Routes.updateUserProfile);
+app.get('/getnamephone', Routes.getnamephone);
+//app.post('/SendSMSBulk', Routes.SendSMSBulk);
 
 //Starting Server
 http.createServer(app).listen(app.get('port'), function(){

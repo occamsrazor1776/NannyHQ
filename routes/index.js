@@ -467,21 +467,17 @@ exports.SendSMSSingleBulk = function(req, res) {
 	var twilio = require('twilio');	
 	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 	console.log(mysqlTimestamp);
-
-	//var obj = JSON.parse(req.body);
-	//var mobile = obj[0];
-	//var smsmsg = obj[1];
-	//var lblSuccess = req.body.lblSucess;
+	
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
-	//console.log(req.body.Mobile);
+	
 	console.log(req.body);
-	//Send an SMS text message
+
 	client.messages.create({
 
 		to: req.body.Mobile,
 		from: '+' + config.twilio.from,
 		body:  req.body.Message//,
-		//mediaUrl: req.body.MMSFILE
+		
 
 	}, function(err, responseData) { //this function is executed when a response is received from Twilio
 		
@@ -498,11 +494,51 @@ exports.SendSMSSingleBulk = function(req, res) {
 
 		} else {
 			result: "Message Sending failed."
-		}
-
-		
+		}	
 
 	});
+};
+
+exports.SendSMSBulk = function(req, res) {
+	var twilio = require('twilio');	
+	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
+	var allconts = req.body.conts;
+	var num1;	
+	var mobile;
+	var SMSmsg;
+	for(var j = 1; j<allconts.length -1; j++){
+		var newallcontacts =  allconts[j].split(",");
+		num1 = newallcontacts[2].replace('(','');
+     	num1 = num1.replace(') ','');
+    	num1 = num1.replace(' ', '');
+    	num1 = num1.replace('-', '');
+    	mobile="+91" + num1;
+    	SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  newallcontacts[4]+" that expired on ";
+      	SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+      	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+		client.messages.create({
+
+			to: mobile,
+			from: '+' + config.twilio.from,
+			body:  SMSmsg//,	
+		}, function(err, responseData) { //this function is executed when a response is received from Twilio
+		
+			if (!err) { // "err" is an error received during the request, if any
+			
+				console.log(responseData.from); // outputs "+14506667788"
+				console.log(responseData.body); // outputs "word to your mother."
+				console.log(responseData);
+				
+				res.send({
+					success: true,
+					result: "Message Sent successfully."
+				});
+
+			} else {
+				result: "Message Sending failed."
+			}	
+		});
+	}
 };
 
 exports.getContacts = function(req, res) {
@@ -529,6 +565,33 @@ exports.getContacts = function(req, res) {
 
 	});
 };
+
+
+exports.getContacts = function(req, res) {
+	handleDisconnect();
+	var sqlQuery ="Select * from tb_contacts order by FirstName asc";
+	connection.query(sqlQuery, function(err, result)
+	{		 
+		if(err){
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			//console.log(result[0]);
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "",
+				data:result
+			});
+		}
+
+	});
+};
+
 
 
 exports.getmessngerProfile = function(req,res){
@@ -641,6 +704,30 @@ exports.getUserDetailsPhone = function(req, res){
 	});
 };
 
+exports.getnamephone= function(req,res){
+	handleDisconnect();
+	var sqlquery="Select Mobile,FirstName,LastName from tb_contacts";
+	connection.query(sqlquery, function(err, result)
+	{		 
+		if(err){
+			console.log(err);
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			connection.destroy(); 
+			res.send({
+				success: true,
+				status :"",
+				data: result
+			});
+		}
+	});
+};
+
 
 
 exports.findOne = function(req, res){
@@ -695,6 +782,32 @@ exports.newContact = function(req, res) {
 		}	  
 	});	
 };
+
+exports.newContacts = function(req,res){
+	handleDisconnect();
+	var contval = req.body.conts;
+	var csvval = contval.split("\n");  
+	var m_name="";
+    var cmobile;
+    var num1 ='';
+    var count = 0 ;
+    var out = [];   
+    var obj = {};         
+    var j;  
+    var sqlquery="insert into tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES ";
+    var sqlquery1='';
+   
+	for( j = 1; j <  csvval.length -1; j++){
+		var csvvalue = csvval[j].split(","); 	
+
+		num1 = csvvalue[6].replace('(','');
+	    num1 = num1.replace(') ','');
+	    num1 = num1.replace('-', '');
+	    console.log(csvvalue[1]);
+    	sqlquery += "('"+ csvvalue[0]+"','"+csvvalue[1]+"','','"+num1+"','','"+csvvalue[2]+","+csvvalue[3]+","+csvvalue[4]+","+csvvalue[5]+"','','','')";
+    }
+	console.log(sqlquery);
+}
 
 
 
