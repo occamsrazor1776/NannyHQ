@@ -957,10 +957,17 @@ exports.newContacts = function(req,res){
 		    	num1 = num1.replace('-', '');
 		    	num1 = num1.replace('\r', '');
 		    	num1 = "+1" + num1;		    	
-	    		if(outp.indexOf(num1) == -1){
+	    		if(outp.length > 0 ) {
+	    			if(outp.indexOf(num1) == -1){
+		    			sqlquery1 = " ('"+ csvvalue[0] +"','"+ csvvalue[1] +"','','"+num1 +"','','"+ csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +""+ csvvalue[5] +"','','"+mysqlTimestamp+"',0),";
+		    			sqlquery +=sqlquery1;
+		    		}
+		    	}
+	    		else
+	    		{
 	    			sqlquery1 = " ('"+ csvvalue[0] +"','"+ csvvalue[1] +"','','"+num1 +"','','"+ csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +""+ csvvalue[5] +"','','"+mysqlTimestamp+"',0),";
-	    			sqlquery +=sqlquery1;
-	    		}		    	
+		    		sqlquery +=sqlquery1;
+	    		}	    	
 		    }
 		    sqlquery=sqlquery.substring(0,sqlquery.length-1);
 		    handleDisconnect();
