@@ -111,6 +111,8 @@
                     <img class="img-rounded" width="128" height="128" src="/img/nophoto.jpg" alt="Teddy Wilson">
                   </div>
                   <h1 id="username" class="messenger-heading">Welcome Teddy!</h1>
+                  <label id="Iduser" name="Iduser" ></label>
+                  <input type="hidden" name="uId" id="uId"/>
                   <h6 class="messenger-subheading">Select a conversation</h6>
                   <ul class="messenger-nav">
                     <li><a href="#">Settings</a></li>
@@ -134,9 +136,10 @@
 <script src="/js/main.js?v=1.2"></script>
 <script>
   $(document).ready(function(){ 
-    setTimeout(getuserDetails(), 5000) ;//();
-    getMessageContacts();
-    getmessngerProfile();       
+    getmessngerProfile(); 
+    getuserDetails();//();
+    getMessageContacts();  
+   // getmessengerContacts();      
     });
 </script>
 </body>

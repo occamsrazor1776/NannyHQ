@@ -87,6 +87,9 @@ $("#fileMMS").on('change', function(e){
   $("#hiddFile").attr("value", URL.createObjectURL(e.target.files[0]) );
 });
 
+
+//////////    IMPORT CONTACT SECTION Start
+
 $('#btnData').prop("disabled", true);
 $("#bulkspin").hide(); 
 $(".contact-list-divider").hide();
@@ -102,8 +105,8 @@ $("#impcontUpload").on('change',function(e) {
       var reader = new FileReader();
       reader.onload = function(e) {
         var csvval = e.target.result.split("\n");                 
-        $("#impSpin").show(); 
-        $('#hiddenCOntacts').attr('value', e.target.result);               
+        $("#impSpin").show();   
+        var arr=[];     
         for(var j=1;j<csvval.length -1;j++)
         { 
           var csvvalue = csvval[j].split(",");
@@ -111,8 +114,12 @@ $("#impcontUpload").on('change',function(e) {
             appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
             appStr+=" <td class='text-left'>" + csvvalue[4]+"</td><td class='text-left'>" + csvvalue[5] + "</td>";
             appStr+="<td class='text-left'>"+csvvalue[6]+"</td>";
-            $("#tbContact  > tbody").append(appStr);   
+            $("#tbContact  > tbody").append(appStr);  
+
+          arr.push(csvvalue); 
         }
+        $('#hiddenCOntacts').attr('value', JSON.stringify(arr));   
+      
         $("#impSpin").hide();
         $("#csvimporthinttitle").show();                  
         $('#btnData').prop("disabled", false);                
@@ -121,6 +128,129 @@ $("#impcontUpload").on('change',function(e) {
   }
   return false;
 });
+
+$(document).on("click", ".scont", function(){
+  var arr = new Array();
+    var contval =  $('#hiddenCOntacts').attr('value'); 
+     $.get("/getContacts", function ( data ){
+        $.each(data.data, function(index, element){
+          arr.push(element.Mobile);
+        })
+        console.log(arr);
+     });
+    var dataS = {conts: JSON.parse(contval), MobArr: arr} ;
+    $.ajax({
+      type: "POST",
+      data: JSON.stringify(dataS),
+      url: "./newcontacts",
+      contentType: "application/json"
+    }).done(function(data){
+      if(data.success==true){
+        $("#lblDone").html(data.status);
+        console.log("Saved Successfully");
+      }
+      else{
+         console.log(data.status);  
+      }
+    }).fail(function(){
+        $("#lblinfo").html("error occured during process.")
+        console.log(data.status);
+    });
+});
+
+//////////    IMPORT CONTACT SECTION END
+
+$("#btnComposeSend").click(function (){  
+  var nums = $("#txtTo").val().split(',');
+  var num1;           
+  var mobile;
+  var SMSmsg;
+  var allconts = $('#hiddenCOntacts').attr('value');
+  var dataS={conts : JSON.parse(allconts)};
+  console.log(dataS);
+  $.ajax({
+           type: "POST",
+           data :JSON.stringify(dataS),
+           url: "./SendSMSBulk",
+           contentType: "application/json"
+         }).done(function( responseData ) {
+
+          if(responseData.success == true){
+            $( "#tab5").trigger( "click");
+          }                        
+        }).fail(function() {
+         
+        });
+});
+
+
+
+$(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+
+ $("#impcontUpload1").on('change',function(e) {
+    var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
+    var numlist ;
+    var name;
+    var num1;   
+    var missingCertificates;
+    var expDate;
+    var arr=[];  
+    if($.inArray(ext, ["csv"]) == -1) {
+      alert('Format not supported Upload only CSV');
+      return false;
+    }
+    if (e.target.files != undefined) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var csvval = e.target.result.split("\n");                 
+       
+            $("#bulkspin").show(); 
+          for(var j=1;j<csvval.length - 1;j++)
+          {                    
+            var csvvalue = csvval[j].split(",");                    
+              var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
+              appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
+              appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
+              $(".table  > tbody").append(appStr); 
+             //   console.log(csvvalue);
+             // for(var i = 1 ; i< csvvalue.length -1 ; i++)  
+             // {
+              //  console.log(csvvalue[6]);
+                num1 = csvvalue[2];
+                num1 = csvvalue[2].replace('(','');
+                num1 = num1.replace(')','');
+                num1 = num1.replace(' ', '');
+                num1 = num1.replace('-', '');
+                num1 = num1.replace(' ', '');
+                var  mobile = "+91" + num1;
+                if(numlist == null){
+                  numlist =  mobile + "," ;
+                }
+                else
+                {
+                  numlist = numlist + mobile + "," ;
+                }
+
+                  arr.push(csvvalue); 
+             //}                    
+          }
+             $('#hiddenCOntacts').attr('value',  JSON.stringify(arr));
+          console.log($('#hiddenCOntacts').val());
+          $("#bulkspin").hide(); 
+          var formatnums = numlist.split(',');
+          var newfnums;
+          var num2;                  
+          $("#txtTo").val(numlist.substring(0, numlist.length-1));  
+          //$("#csvimporthinttitle").show();                  
+          $('#btnData').prop("disabled", false);                
+      };
+     reader.readAsText(e.target.files.item(0));
+  }
+  return false;
+});
+
+
 
 $("#profilepic").on('change',function(e) {                    
   var files = $(this).get(0).files;
@@ -150,90 +280,6 @@ $("#profilepic").on('change',function(e) {
       }
     });
   }
-});
-
-$(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
-$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
-
- $("#impcontUpload1").on('change',function(e) {
-    var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
-    var numlist ;
-    var name;
-    var num1;   
-    var missingCertificates;
-    var expDate;
-    if($.inArray(ext, ["csv"]) == -1) {
-      alert('Format not supported Upload only CSV');
-      return false;
-    }
-    if (e.target.files != undefined) {
-        var reader = new FileReader();
-        reader.onload = function(e) {
-          var csvval = e.target.result.split("\n");                 
-          $('#hiddenCOntacts').attr('value', e.target.result);
-            $("#bulkspin").show(); 
-          for(var j=1;j<csvval.length - 1;j++)
-          {                    
-            var csvvalue = csvval[j].split(",");                    
-              var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
-              appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
-              appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
-              $(".table  > tbody").append(appStr); 
-             //   console.log(csvvalue);
-             // for(var i = 1 ; i< csvvalue.length -1 ; i++)  
-             // {
-              //  console.log(csvvalue[6]);
-                num1 = csvvalue[2];
-                num1 = csvvalue[2].replace('(','');
-                num1 = num1.replace(')','');
-                num1 = num1.replace(' ', '');
-                num1 = num1.replace('-', '');
-                num1 = num1.replace(' ', '');
-                var  mobile = "+91" + num1;
-                if(numlist == null){
-                  numlist =  mobile + "," ;
-                }
-                else
-                {
-                  numlist = numlist + mobile + "," ;
-                }
-             //}                    
-          }
-          console.log(numlist);
-          $("#bulkspin").hide(); 
-          var formatnums = numlist.split(',');
-          var newfnums;
-          var num2;                  
-          $("#txtTo").val(numlist.substring(0, numlist.length-1));  
-          //$("#csvimporthinttitle").show();                  
-          $('#btnData').prop("disabled", false);                
-      };
-     reader.readAsText(e.target.files.item(0));
-  }
-  return false;
-});
-
-$("#btnComposeSend").click(function (){  
-  var nums = $("#txtTo").val().split(',');
-  var num1;           
-  var mobile;
-  var SMSmsg;
-  var allconts = $('#hiddenCOntacts').attr('value').split("\n");
-  var dataS={conts : allconts};
-  $.ajax({
-           type: "POST",
-           data :JSON.stringify(dataS),
-           url: "./SendSMSBulk",
-           contentType: "application/json"
-         }).done(function( responseData ) {
-
-          if(responseData.success == true){
-            $( "#tab5").trigger( "click");
-          }                        
-        }).fail(function() {
-         
-        });
-  console.log(allconts);
 });
 
 $("#btnSave").click(function(){ 
@@ -301,26 +347,7 @@ $("#btnUpdateProfile").click(function (){
   })
 });
 
-$(document).on("click", ".scont", function(){
-    var contval =  $('#hiddenCOntacts').attr('value'); 
-    var dataS = {conts:contval} ;
-    $.ajax({
-      type: "POST",
-      data: JSON.stringify(dataS),
-      url: "./newcontacts",
-      contentType: "application/json"
-    }).done(function(data){
-      if(data.success==true){
-        console.log("Saved Successfully");
-      }
-      else{
-         console.log(data.status);  
-      }
-    }).fail(function(){
-        $("#lbllblinfo").html("error occured during process.")
-        console.log("error occured during process.");
-    });
-});
+
 
 
 $("ul#contMulti").on("click","li.contact-list-item", function(){
@@ -533,11 +560,34 @@ function getsmslist(){
    });
 }
 
+function getmessengerContacts()
+{
+
+  $("#spinloadcontact").show();
+  var useridFrom = $("#lbluser1").html();  
+  console.log(useridFrom);
+  var datase = { userFrom : useridFrom };
+  //$.get('/getmessengerContacts', datase, function( data ){
+ //     console.log(data);
+ // });
+
+  $.ajax({
+    type: "GET",
+    data :JSON.stringify(datase),
+    url: "./getmessengerContacts",
+    contentType: "application/json"
+  }).done(function(data) {
+    console.log(data);
+  });
+
+}
+
 
 function getMessageContacts()
 {
   $("#spinloadcontact").show();
   
+
   $.get( "/getcontacts", function( data ){   
 
     if(data.success==false){
@@ -546,7 +596,7 @@ function getMessageContacts()
     //console.log(data);
     if(data.success==true){          
       $.each(data.data, function(index, element){
-       var useridFrom = $("#lbluser1").html();              
+       var useridFrom = $("#lbluser1").html(); 
        var datase = { userTo : element.Id, userFrom :useridFrom};
        var lastmsg ='';
        var format_date='';
@@ -692,6 +742,9 @@ function getmessngerProfile(){
          //console.log("data : " + data);
       $.each(data.data , function(index, element){
         $("#username").html("Welcome  " + element.userName + " !");
+        $("#Iduser").html(element.userId);
+       
+        $('input[name="uId"]').val(element.userId);
       })
     };
   });

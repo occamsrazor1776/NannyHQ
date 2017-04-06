@@ -232,12 +232,15 @@ app.post('/uploadPhoto', function (req, res) {
 
 });
 
+app.use(bodyParser.text({ type: 'text/html' }));
+
 //app.post('/ImportContact', Routes.)
 
 //APIs
 
 //app.post('/savemessages',Routes.savemsg);
 app.post('/savemessageDetails',Routes.savemessageDetails);
+app.get('/getmessengerContacts',Routes.getmessengerContacts);
 app.post('/message',Routes.message);
 app.get('/searchC', Routes.searchC);
 app.get('/searchCont',Routes.searchCont);
@@ -255,6 +258,7 @@ app.post('/SendSMSBulk', Routes.SendSMSBulk);
 app.get('/getMessagesSent', Routes.getMessagesSent);
 app.get('/getMessagesRecieved', Routes.getMessagesRecieved);
 app.get('/getContacts',  Routes.getContacts);
+
 app.get('/getSingleContact', Routes.getSingleContact);
 app.post('/newContact', Routes.newContact);
 app.post('/newContacts', Routes.newContacts);

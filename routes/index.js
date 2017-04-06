@@ -190,6 +190,97 @@ exports.getMessagesRecieved = function(req, res){
 	});
 }
 
+
+exports.getmessengerContacts = function(req, res) {
+	handleDisconnect();
+	var userIdFrom =12// req.query.userFrom;
+	
+	//console.log(req.query.userFrom);
+	var lastmsg =''; var format_date='';
+	var sqlQ ="Select * from tb_contacts order by FirstName asc";
+	var result1;
+	var res1;
+	var createtag;
+	var dataSS;
+	var res1;
+	connection.query(sqlQ, function(err, result)
+	{		 
+		if(err){
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			//console.log(result[0]);
+			connection.destroy();
+		//	console.log(result);
+			dataSS= result;
+			result.forEach(function(element){
+				handleDisconnect();
+				var sqlQuery ="Select * from tb_messagedetail where userFromId="+ userIdFrom+" and userId = "+element.Id+"  order by sendDate desc LIMIT 1";	
+			
+				connection.query(sqlQuery, function(err, res)
+				{		 
+					if(err){
+						console.log(err);
+						connection.destroy();
+						//res.send({
+							//success: false, 
+							//status: err
+						//});
+					}
+					else{
+						connection.destroy();
+						res1 =res;
+						console.log(res.length);
+						if(res.length != 0){
+							res.forEach(function(elem){
+							
+								if(elem.messageText!=''){
+									lastmsg = elem.messageText;
+		              				var mDate =new Date(elem.sendDate);
+			              			var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+			              			format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
+		              			}
+		              			else{
+		              				lastmsg = "No Recent Conversations";
+		              			}
+		              			createtag="<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'>";
+						        createtag+="<div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'>";
+						        createtag+="</div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> ";
+						        createtag+="<div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small>";
+						        createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
+						      //  console.log(createtag);
+						        dataSS+=createtag;
+
+							});						
+	              		}
+	              		else{
+	              			lastmsg = "No Recent Conversations";
+	              			createtag="<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'>";
+						    createtag+="<div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'>";
+						    createtag+="</div><div class='messenger-list-details'><div class='messenger-list-date'>"+format_date  +"</div> ";
+						    createtag+="<div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small>";
+						    createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
+						 //   console.log(createtag);
+						    dataSS+=createtag;
+	              		}						
+					}
+				});
+			});
+			
+		}
+
+	});
+	res.send({ 
+
+        data : createtag,
+        status :"Success"
+    });
+};
+
 exports.getLastMessage= function(req, res){
 	var userIdTo = req.query.userTo;
 	var userIdFrom = req.query.userFrom;
@@ -499,6 +590,10 @@ exports.SendSMSSingleBulk = function(req, res) {
 	});
 };
 
+
+
+
+
 exports.SendSMSBulk = function(req, res) {
 	var twilio = require('twilio');	
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
@@ -567,7 +662,7 @@ exports.getContacts = function(req, res) {
 };
 
 
-exports.getContacts = function(req, res) {
+exports.getContacts1= function(req, res) {
 	handleDisconnect();
 	var sqlQuery ="Select * from tb_contacts order by FirstName asc";
 	connection.query(sqlQuery, function(err, result)
@@ -591,6 +686,8 @@ exports.getContacts = function(req, res) {
 
 	});
 };
+
+
 
 
 
@@ -786,29 +883,76 @@ exports.newContact = function(req, res) {
 exports.newContacts = function(req,res){
 	handleDisconnect();
 	var contval = req.body.conts;
-	var csvval = contval.split("\n");  
+	var csvval = contval;
 	var m_name="";
     var cmobile;
-    var num1 ='';
+    
     var count = 0 ;
-    var out = [];   
+    var outp = new Array();   
     var obj = {};         
-    var j;  
+    var j; 
+    var arr = new Array(); 
+
     var sqlquery="insert into tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES ";
     var sqlquery1='';
+    var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+
+
+   	var sqlQ ="Select Mobile from tb_contacts";
+    connection.query(sqlQ, function(err, result)
+	{		 
+		if(err){
+			console.log(err);				
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			connection.destroy();
+			result.forEach(function(item){	
+				outp.push(item.Mobile);
+			});
+			//arr = outp;
+			for( j = 1; j <  csvval.length-1; j++){
+				var csvvalue = csvval[j]; 
+				var num1 ='';
+				num1 = csvvalue[6].replace(' (','');
+			    num1 = num1.replace(') ','');
+		    	num1 = num1.replace(' ', '');
+		    	num1 = num1.replace('-', '');
+		    	num1 = num1.replace('\r', '');
+		    	num1 = "+1" + num1;		    	
+	    		if(outp.indexOf(num1) == -1){
+	    			sqlquery1 = " ('"+ csvvalue[0] +"','"+ csvvalue[1] +"','','"+num1 +"','','"+ csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +""+ csvvalue[5] +"','','"+mysqlTimestamp+"',0),";
+	    			sqlquery +=sqlquery1;
+	    		}		    	
+		    }
+		    sqlquery=sqlquery.substring(0,sqlquery.length-1);
+		    handleDisconnect();
+		    connection.query(sqlquery, function(err, result)
+			{		 
+				if(err){
+					console.log(err);				
+					connection.destroy();
+					res.send({
+						success: false, 
+						status: err
+					});
+				}
+				else{
+					connection.destroy();
+					res.send({
+						success: true, 
+						status: "Contacts Inserted and contacts that already exists are ignored!!"
+					});
+				}
+			});
+		}
+	});   
    
-	for( j = 1; j <  csvval.length -1; j++){
-		var csvvalue = csvval[j].split(","); 	
-
-		num1 = csvvalue[6].replace('(','');
-	    num1 = num1.replace(') ','');
-	    num1 = num1.replace('-', '');
-	    console.log(csvvalue[1]);
-    	sqlquery += "('"+ csvvalue[0]+"','"+csvvalue[1]+"','','"+num1+"','','"+csvvalue[2]+","+csvvalue[3]+","+csvvalue[4]+","+csvvalue[5]+"','','','')";
-    }
-	console.log(sqlquery);
 }
-
 
 
 exports.updateContact = function(req, res) {
