@@ -241,6 +241,7 @@ app.use(bodyParser.text({ type: 'text/html' }));
 //app.post('/savemessages',Routes.savemsg);
 app.post('/savemessageDetails',Routes.savemessageDetails);
 app.get('/getmessengerContacts',Routes.getmessengerContacts);
+app.get('/getmessengerContacts1', Routes.getmessengerContacts1);
 app.post('/message',Routes.message);
 app.get('/searchC', Routes.searchC);
 app.get('/searchCont',Routes.searchCont);

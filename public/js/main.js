@@ -30,8 +30,6 @@ $('#signin').click(function (){
   var username = $('#username').val();
   var password = $('#password').val();
   var dataS = { uname : username, upass : password};
-  console.log(dataS);
-  console.log(username);
   if(username == "" || password== "")
   {
      $("#lbllogfail").html("Username/Password must be entered.");
@@ -46,7 +44,6 @@ $('#signin').click(function (){
     }).done (function ( data){
       if(data.success == false)
       {
-        console.log(data.success);
         $("#lbllogfail").html("Username/Password Incorrect.");
       }
       else{
@@ -80,13 +77,6 @@ $('#btnforgot').click(function (){
     });
   }
 });
-
-
-$("#fileMMS").on('change', function(e){
-  console.log(URL.createObjectURL(e.target.files[0]));
-  $("#hiddFile").attr("value", URL.createObjectURL(e.target.files[0]) );
-});
-
 
 //////////    IMPORT CONTACT SECTION Start
 
@@ -130,6 +120,7 @@ $("#impcontUpload").on('change',function(e) {
 });
 
 $(document).on("click", ".scont", function(){
+   $("#impSpin").show();   
   var arr = new Array();
     var contval =  $('#hiddenCOntacts').attr('value'); 
      $.get("/getContacts", function ( data ){
@@ -146,15 +137,17 @@ $(document).on("click", ".scont", function(){
       contentType: "application/json"
     }).done(function(data){
       if(data.success==true){
-        $("#lblDone").html(data.status);
+          $("#impSpin").hide();
+        $("#lblDone").html(data.errno);
         console.log("Saved Successfully");
       }
       else{
-         console.log(data.status);  
+          $("#impSpin").hide();
+         $("#lblinfo").html("Numbers are already exists.")
       }
     }).fail(function(){
-        $("#lblinfo").html("error occured during process.")
-        console.log(data.status);
+        $("#impSpin").hide();
+        $("#lblinfo").html("Numbers are already exists.")
     });
 });
 
@@ -167,7 +160,6 @@ $("#btnComposeSend").click(function (){
   var SMSmsg;
   var allconts = $('#hiddenCOntacts').attr('value');
   var dataS={conts : JSON.parse(allconts)};
-  console.log(dataS);
   $.ajax({
            type: "POST",
            data :JSON.stringify(dataS),
@@ -209,34 +201,27 @@ $("#form-control-8").html("Hello {Column1}, we still haven't received your {Colu
           for(var j=1;j<csvval.length - 1;j++)
           {                    
             var csvvalue = csvval[j].split(",");                    
-              var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
-              appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
-              appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
-              $(".table  > tbody").append(appStr); 
-             //   console.log(csvvalue);
-             // for(var i = 1 ; i< csvvalue.length -1 ; i++)  
-             // {
-              //  console.log(csvvalue[6]);
-                num1 = csvvalue[2];
-                num1 = csvvalue[2].replace('(','');
-                num1 = num1.replace(')','');
-                num1 = num1.replace(' ', '');
-                num1 = num1.replace('-', '');
-                num1 = num1.replace(' ', '');
-                var  mobile = "+91" + num1;
-                if(numlist == null){
-                  numlist =  mobile + "," ;
-                }
-                else
-                {
-                  numlist = numlist + mobile + "," ;
-                }
-
-                  arr.push(csvvalue); 
-             //}                    
+            var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
+            appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
+            appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
+            $(".table  > tbody").append(appStr);             
+              num1 = csvvalue[2];
+              num1 = csvvalue[2].replace('(','');
+              num1 = num1.replace(')','');
+              num1 = num1.replace(' ', '');
+              num1 = num1.replace('-', '');
+              num1 = num1.replace(' ', '');
+              var  mobile = "+91" + num1;
+              if(numlist == null){
+                numlist =  mobile + "," ;
+              }
+              else
+              {
+                numlist = numlist + mobile + "," ;
+              }
+              arr.push(csvvalue); 
           }
              $('#hiddenCOntacts').attr('value',  JSON.stringify(arr));
-          console.log($('#hiddenCOntacts').val());
           $("#bulkspin").hide(); 
           var formatnums = numlist.split(',');
           var newfnums;
@@ -248,38 +233,6 @@ $("#form-control-8").html("Hello {Column1}, we still haven't received your {Colu
      reader.readAsText(e.target.files.item(0));
   }
   return false;
-});
-
-
-
-$("#profilepic").on('change',function(e) {                    
-  var files = $(this).get(0).files;
-  if (files.length > 0){
-    // One or more files selected, process the file upload
-    // create a FormData object which will be sent as the data payload in the
-    // AJAX request
-    var formData = new FormData();                 
-    // loop through all the selected files
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      console.log(URL.createObjectURL(file) );
-       $('#imgProfile').attr('src',URL.createObjectURL(file));
-      // add the files to formData object for the data payload
-      formData.append('uploads[]', file, file.name);
-      console.log(file, file.name)
-      $("#hddProPic").attr("value",URL.createObjectURL(file));
-    }
-      $.ajax({
-       type: "POST",
-       data : formData,
-       url: "./uploadPhoto",
-       processData: false,
-       contentType: false,
-       success: function(data){
-        console.log('upload successful!');
-      }
-    });
-  }
 });
 
 $("#btnSave").click(function(){ 
@@ -373,14 +326,12 @@ $("ul#contMulti").on("click","li.contact-list-item", function(){
           // alert("Number is already added");
         }
         else{
-           newmobile =  $('#empPhone').val() + "," + mobile;
-            $('#empPhone').val(newmobile);
-        }
+          newmobile =  $('#empPhone').val() + "," + mobile;
+          $('#empPhone').val(newmobile);        }
     }   
     else{
       $("#empPhone").val(mobile);
     }
-
     $("#hidContact").attr("value", $("#empPhone").val());
 });
 
@@ -402,56 +353,45 @@ $("ul#contlistSingle").on("click","li.contact-list-item", function(){
  $("#btnSend").click(function (){
     var frommob= $("#lblUsrphn").html();
     var userid= $("#lbluser1").html();
-    //console.log('user id from' + userid);
     var userToId =  $("#hidToId").attr("value");
-    //console.log('userid to ' + userToId);
     var hiddennumbers =$("#hidContact").attr("value");
-
     var mmsfile = $("#hiddFile").attr("value");
-    console.log(hiddennumbers);
     if(hiddennumbers === undefined){
-      console.log('undefined part');
       var cmob = $("#empPhone").val();
       var mobile1 = cmob;
       mobile1 = mobile1.replace('(','');
       mobile1 = mobile1.replace(')','');
       mobile1 = mobile1.replace(' ','');
       mobile1 = mobile1.replace('-','');
-      //console.log(mobile1);
       var SMSmsg = $('#smsmsg').val();
       var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE:mmsfile, userID : userid, useridTO : userToId};
-      console.log(dataS);
-       $.ajax({
-           type: "POST",
-           data :JSON.stringify(dataS),
-           url: "./SendSMSSingle",
-           contentType: "application/json"
-         }).done(function() {
-          $('#empPhone').val("");
-          $('#msg').val("");
-          $("#lblPass").show().delay(5000).fadeOut();;
-          $(".spinner").hide();
-          $("#btnSend").attr("disabled", false);
-
-        }).fail(function() {
-          $("#lblfail").show();
-        });
+      $.ajax({
+        type: "POST",
+        data :JSON.stringify(dataS),
+        url: "./SendSMSSingle",
+        contentType: "application/json"
+      }).done(function() {
+        $('#empPhone').val("");
+        $('#msg').val("");
+        $("#lblPass").show().delay(5000).fadeOut();;
+        $(".spinner").hide();
+        $("#btnSend").attr("disabled", false);
+      }).fail(function() {
+        $("#lblfail").show();
+      });
     }
     else
     {
       var cmob =  $("#hidContact").attr("value").split(',');
       $("#btnSend").attr("disabled", true);
-     //console.log(cmob);
      $.each(cmob, function(index, element){
         var mobile1 = element;
         mobile1 = mobile1.replace('(','');
         mobile1 = mobile1.replace(')','');
         mobile1 = mobile1.replace(' ','');
         mobile1 = mobile1.replace('-','');
-        console.log(mobile1);
         var SMSmsg ="+1" + $('#msg').val();
         var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE : mmsfile, userID : userid, useridTO : userToId};
-        console.log('data ' +dataS);
          $.ajax({
              type: "POST",
              data :JSON.stringify(dataS),
@@ -469,18 +409,15 @@ $("ul#contlistSingle").on("click","li.contact-list-item", function(){
           });
      });
     }
-    console.log(cmob);
   }); 
 });  
 
 function getProfile(){
   var userid =$("#lbluser1").html();
   var dataS ={userid:userid};
-  console.log(userid);
   $.get("/getProfile",dataS, function ( data ){
      $("#spinProfile").show();   
     if( data.success == false){
-
     }
     if(data.success == true){
       $.each(data.data , function(index, element){
@@ -499,14 +436,12 @@ function getProfile(){
 };
 
 function getrole(id){
-  $('/getrole' ,{Id : id }, function( data ){
-    console.log(data);
+  $('/getrole' ,{Id : id }, function( data ){   
     if(data.success==false){
     }
     if(data.success==true){
        $.each(data.data, function(index, element){
           $("#u_role").val(element.role);
-          console.log(element.role);
       });
     }
   })
@@ -519,18 +454,14 @@ function getsmslist(){
   var name="";
   var carray = new Array(); 
    $.get('/getnamephone',  function ( data ){
-      if(data.success == true){
-      //  console.log(data);
-        $.each(data.data, function(index, element){  
-          //console.log(element.FirstName);
+      if(data.success == true){      
+        $.each(data.data, function(index, element){           
           carray.push([element.FirstName+" "+element.LastName,  element.Mobile]);
-        });
-       
+        });       
       }
    });
    $.get( "/smsList", function( data ){
-    if(data.success==true && data.data != null){   
-     
+    if(data.success==true && data.data != null){       
       $.each(data.data.smsMessages, function(index, element){
         var str = element.date_sent;
         var date = new Date(str);
@@ -539,11 +470,8 @@ function getsmslist(){
         var year = date.getFullYear()
         var i;
         var datasend = {phone : element.to};
-
         for(i=0;i<carray.length;i++){
-           console.log(carray[i][1]);
           if(element.to==carray[i][1]){
-
             var appStr ="<tr><td>" + carray[i][0]+ "</td><td>admin</td><td>"+element.status+"</td>";
             appStr+="<td>"+element.direction+"</td><td>"+year +' '+month+' ' +day+"</td>";
             $("#tblreport > tbody").append(appStr);
@@ -560,28 +488,34 @@ function getsmslist(){
    });
 }
 
-function getmessengerContacts()
-{
-
-  $("#spinloadcontact").show();
-  var useridFrom = $("#lbluser1").html();  
+function getmessengerContacts1(){
+  var useridFrom =$('input[name=uId]').val();// $('#uId').val();// $("#lbluser1").html(); 
   console.log(useridFrom);
+  var lastmsg;
   var datase = { userFrom : useridFrom };
-  //$.get('/getmessengerContacts', datase, function( data ){
- //     console.log(data);
- // });
-
-  $.ajax({
-    type: "GET",
-    data :JSON.stringify(datase),
-    url: "./getmessengerContacts",
-    contentType: "application/json"
-  }).done(function(data) {
-    console.log(data);
+  var arr = [];
+   $.get('/getmessengerContacts1', datase, function( data ){    
+     $.each(data.data, function(index, element){
+      if(element.messageText != null ){
+        lastmsg = element.messageText;
+      }
+      else{
+        lastmsg="No Recent conversation";
+      }
+      if(arr.indexOf(element.Id) == -1){
+        var createtag ="<li class='messenger-list-item'><a data='" + element.Mobile+ "' id='"+element.Id+"' class='messenger-list-link' href='#0531871454' data-toggle='tab'>";
+        createtag+="<div class='messenger-list-avatar'><img class='rounded' width='40' height='40' src='img/nophoto.jpg' alt='" + element.FirstName + " " + element.LastName + "'>";
+        createtag+="</div><div class='messenger-list-details'><div class='messenger-list-date'></div> ";
+        createtag+="<div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+"</small>";
+        createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
+        arr.push(element.Id);
+        $('.messenger-list').append(createtag);  
+      }
+    });
+    $("#messengerlist").fadeIn();
+    $("#spinloadcontact").hide();
   });
-
 }
-
 
 function getMessageContacts()
 {
@@ -593,7 +527,7 @@ function getMessageContacts()
     if(data.success==false){
       $(".messenger-sidebar-body").hide();
     }
-    //console.log(data);
+    
     if(data.success==true){          
       $.each(data.data, function(index, element){
        var useridFrom = $("#lbluser1").html(); 
@@ -601,7 +535,6 @@ function getMessageContacts()
        var lastmsg ='';
        var format_date='';
         $.get('/getLastMessage', datase, function(dataR){
-         // console.log(dataR.data.length);
          if(dataR.success == true){
             $.each(dataR.data, function(inde, elem){
               lastmsg = elem.messageText;
@@ -609,14 +542,12 @@ function getMessageContacts()
               var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
               format_date =  monthNames[mDate.getMonth()] +" "+mDate.getDate();
-              //console.log(elem.messageText);  
             });
           }
           else if(dataR.success== false){
             
             lastmsg = "No Recent Conversations";
-          }
-        
+          }        
         if(lastmsg==''){
             lastmsg="No Recent Conversations";
          }
@@ -626,8 +557,7 @@ function getMessageContacts()
         createtag+="<div class='messenger-list-name'>" + element.FirstName + " "+ element.LastName + "</div><div class='messenger-list-message'><small class='truncate'>"+lastmsg+ "</small>";
         createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
         $('.messenger-list').append(createtag);  
-       }); 
-        
+       });         
     });           
     $("#messengerlist").fadeIn();
     $("#spinloadcontact").hide();
@@ -641,28 +571,20 @@ function getMessageContacts()
   var userToId =  $("#hidToId").attr("value");
   var hiddennumbers =$("#hidContact").attr("value");
   var cmob = $("#hidTonum").attr("value");
-  console.log(cmob);
   var mobile1 = cmob;
   var mmsfile;
   mobile1 = mobile1.replace('(','');
   mobile1 = mobile1.replace(')','');
   mobile1 = mobile1.replace(' ','');
   mobile1 = mobile1.replace('-','');
-  //console.log(mobile1);
   var SMSmsg = $('#txtMessage').val();
   var dataS = {FROM : frommob, Mobile : mobile1, Message :SMSmsg, MMSFILE:mmsfile, userID : userid, useridTO : userToId};
-  console.log(dataS);
    $.ajax({
        type: "POST",
        data :JSON.stringify(dataS),
        url: "./SendSMSSingle",
        contentType: "application/json"
      }).done(function() {
-     // $('#empPhone').val("");
-     // $('#msg').val("");
-     // $("#lblPass").show().delay(5000).fadeOut();;
-     // $(".spinner").hide();
-    //  $("#btnSend").attr("disabled", false);
 
     }).fail(function() {
      // $("#lblfail").show();
@@ -708,7 +630,6 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
     $.each(data.data, function(index, element){
       var crthtml1='';       
       var ndate = element.sendDate.split('T')[0];
-      console.log( element.sendDate.split('T')[1]);
       if(_dt != ndate){
         _dt = ndate;
         var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate+ "</div><div></li>";
@@ -739,11 +660,9 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
 function getmessngerProfile(){
   $.get( "/getmessngerProfile", function( data ){
     if(data.success==true){
-         //console.log("data : " + data);
       $.each(data.data , function(index, element){
         $("#username").html("Welcome  " + element.userName + " !");
-        $("#Iduser").html(element.userId);
-       
+        $("#Iduser").html(element.userId);       
         $('input[name="uId"]').val(element.userId);
       })
     };
@@ -753,14 +672,12 @@ function getmessngerProfile(){
 function getuserDetails(){
   $.get( "/getmessngerProfile", function( data ){
     if(data.success==true){
-      //console.log("data : " + data);
       $.each(data.data , function(index, element){
         $("#lbluser").html(element.userName);
         $("#lblMuserName").html(element.userName);
         $("#lbluser1").html(element.userId);
         $("#lblUsrphn").html(element.userPhone);
         var usrId = $("#lblUsrphn").html();
-      // console.log(usrId);
       })
     };
   });
@@ -769,7 +686,6 @@ function getuserDetails(){
 function getProfileuserDetails(){
  $.get( "/getmessngerProfile", function( data ){
     if(data.success==true){
-      //console.log("data : " + data);
       $.each(data.data , function(index, element){
         $("#lbluser").html(element.userName);
         $("#lbluser1").html(element.userId);
@@ -785,7 +701,6 @@ function getProfileuserDetails(){
          $("#phoneNUmber").val(element.userPhone);
           getrole();
            $("#spinProfile").hide();
-       // console.log(usrId);
       })
     };
  });

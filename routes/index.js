@@ -189,7 +189,33 @@ exports.getMessagesRecieved = function(req, res){
 		}
 	});
 }
-
+exports.getmessengerContacts1 = function(req, res) {
+	handleDisconnect();
+	var userid = 12//req.query.userFrom;
+	console.log(req.query);
+	
+	var sqlquery ="select distinct t1.*, t2.messageText, t2.sendDate from tb_contacts t1 LEFT OUTER JOIN  tb_messagedetail t2 ON t1.Id = t2.userId";
+	sqlquery+=" union select distinct   t1.*, t2.messageText, t2.sendDate from tb_contacts t1 RIGHT OUTER JOIN  tb_messagedetail t2 ON t1.Id = t2.userId";
+	sqlquery+=" where t2.userFromId ="+userid +" order by sendDate desc, FirstName asc";	
+	
+	connection.query(sqlquery, function(err,result){
+		if(err){
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			connection.destroy();
+			res.send({
+				success: true, 
+				status: "success",
+				data:result
+			});
+		}
+	});
+};
 
 exports.getmessengerContacts = function(req, res) {
 	handleDisconnect();
@@ -203,6 +229,10 @@ exports.getmessengerContacts = function(req, res) {
 	var createtag;
 	var dataSS;
 	var res1;
+	var arr = [];
+	var arr1 = [];
+	var datasend ={};
+
 	connection.query(sqlQ, function(err, result)
 	{		 
 		if(err){
@@ -214,29 +244,34 @@ exports.getmessengerContacts = function(req, res) {
 		}
 		else{
 			//console.log(result[0]);
-			connection.destroy();
+			
 		//	console.log(result);
-			dataSS= result;
+			result1 = result;
 			result.forEach(function(element){
 				handleDisconnect();
+				arr.push(JSON.stringify(element));
 				var sqlQuery ="Select * from tb_messagedetail where userFromId="+ userIdFrom+" and userId = "+element.Id+"  order by sendDate desc LIMIT 1";	
 			
-				connection.query(sqlQuery, function(err, res)
+				connection.query(sqlQuery, function(err, resp)
 				{		 
 					if(err){
 						console.log(err);
 						connection.destroy();
-						//res.send({
-							//success: false, 
-							//status: err
-						//});
+
+						res.send({
+							success: false, 
+							status: err
+						});
 					}
 					else{
+						res1 = resp;
 						connection.destroy();
-						res1 =res;
-						console.log(res.length);
-						if(res.length != 0){
-							res.forEach(function(elem){
+						//arr.push(JSON.stringify(res));
+						if(resp.length != 0){
+							resp.forEach(function(elem){
+								arr1.push(JSON.stringify(elem));
+							
+								
 							
 								if(elem.messageText!=''){
 									lastmsg = elem.messageText;
@@ -254,7 +289,7 @@ exports.getmessengerContacts = function(req, res) {
 						        createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
 						      //  console.log(createtag);
 						        dataSS+=createtag;
-
+								
 							});						
 	              		}
 	              		else{
@@ -266,19 +301,17 @@ exports.getmessengerContacts = function(req, res) {
 						    createtag+="</div><input type='hidden' class='hdnServiceCode' name='hiddennumber' value='" + element.Mobile + "'/></div></a></li>";
 						 //   console.log(createtag);
 						    dataSS+=createtag;
-	              		}						
+						    console.log(createtag);
+	              		}             		
+								
 					}
+							   
 				});
 			});
-			
+			res.json({ data: createtag });		
+		
 		}
-
 	});
-	res.send({ 
-
-        data : createtag,
-        status :"Success"
-    });
 };
 
 exports.getLastMessage= function(req, res){
@@ -931,14 +964,17 @@ exports.newContacts = function(req,res){
 		    }
 		    sqlquery=sqlquery.substring(0,sqlquery.length-1);
 		    handleDisconnect();
+		    console.log(sqlquery);
+		    var errorno;
 		    connection.query(sqlquery, function(err, result)
 			{		 
 				if(err){
-					console.log(err);				
+					console.log(err.errno);	
+								
 					connection.destroy();
 					res.send({
-						success: false, 
-						status: err
+						status: err,
+						success: false
 					});
 				}
 				else{
