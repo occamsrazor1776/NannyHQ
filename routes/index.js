@@ -191,7 +191,7 @@ exports.getMessagesRecieved = function(req, res){
 }
 exports.getmessengerContacts1 = function(req, res) {
 	handleDisconnect();
-	var userid = 12//req.query.userFrom;
+	var userid = 22 ;    //req.query.userFrom;
 	console.log(req.query);
 	
 	var sqlquery ="select distinct t1.*, t2.messageText, t2.sendDate from tb_contacts t1 LEFT OUTER JOIN  tb_messagedetail t2 ON t1.Id = t2.userId";
