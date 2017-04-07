@@ -609,7 +609,7 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
 
   var  crthtml1="";
   var dataSendDates  = {UserTo : numTo, UserFrom : userFrom};
-  console.log(dataSendDates)   ;
+ 
   var crthtml='';
   crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
   crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
@@ -628,7 +628,7 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   chtmlN+="<div class='conversation-messages'>";
   $.get( "/getMessagesSent", dataSendDates, function( data ){
     var _dt='';    
-        
+         console.log(data.data)   ;
     $.each(data.data, function(index, element){
       var crthtml1='';       
       var ndate = element.sendDate.split('T')[0];
