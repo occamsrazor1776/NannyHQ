@@ -120,7 +120,7 @@ $("#impcontUpload").on('change',function(e) {
 });
 
 $(document).on("click", ".scont", function(){
-   $("#impSpin").show();   
+   setTimeout($("#impSpin").show(),10000);   
   var arr = new Array();
     var contval =  $('#hiddenCOntacts').attr('value'); 
      $.get("/getContacts", function ( data ){
@@ -138,7 +138,7 @@ $(document).on("click", ".scont", function(){
     }).done(function(data){
       if(data.success==true){
           $("#impSpin").hide();
-        $("#lblDone").html(data.errno);
+        $("#lblDone").html("Saved Successfully");
         console.log("Saved Successfully");
       }
       else{
@@ -716,7 +716,6 @@ function getContacts()
       if(data.success==true){    
       //console.log(data.data)      ;
         $.each(data.data, function(index, element){
-         // console.log(element);
            
           var createtag =" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/>";
           createtag+="<a data='" + element.Mobile+ "' id='"+element.Id+"' class='contact-list-link' href='#0531871454' data-toggle='tab'>";
@@ -795,9 +794,11 @@ function getContacts()
               $(this).closest(".contact-list-divider").show();                                 
               $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
             }
-            else if($(this).text().toLowerCase()==='r' && element.FirstName.substring(0,1).toLowerCase()=="r"){   
+            else if($(this).text().toLowerCase()==='r' && element.FirstName.substring(0,1).toLowerCase()=="r"){ 
+
               $(this).closest(".contact-list-divider").show();                                  
               $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
+              console.log("aa");
             }
             else if($(this).text().toLowerCase()==='s' && element.FirstName.substring(0,1).toLowerCase()=="s"){  
               $(this).closest(".contact-list-divider").show();                                   
