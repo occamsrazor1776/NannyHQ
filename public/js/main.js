@@ -628,7 +628,7 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   chtmlN+="<div class='conversation-messages'>";
   $.get( "/getMessagesSent", dataSendDates, function( data ){
     var _dt='';    
-         console.log(data.data)   ;
+         console.log(dataSendDates)   ;
     $.each(data.data, function(index, element){
       var crthtml1='';       
       var ndate = element.sendDate.split('T')[0];
