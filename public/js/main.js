@@ -594,6 +594,7 @@ function getMessageContacts()
 
 $("ul.messenger-list").on("click","li.messenger-list-item", function(){     
   var idTo = $(this).find("a").attr("id");  
+
   var numTo = $(this).find("a").attr("data");
   var userFrom = $("#lblUsrphn").html();   
   
@@ -605,9 +606,10 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   $('#msgUser').html(name);
   $("ul.conversation").empty();
   var dataSend  = {UserIdTo : idTo, UserIdFrom : userFrom}
+
   var  crthtml1="";
   var dataSendDates  = {UserTo : numTo, UserFrom : userFrom};
-     
+  console.log(dataSendDates)   ;
   var crthtml='';
   crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
   crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
