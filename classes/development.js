@@ -8,6 +8,7 @@ module.exports = {
 		user     : 'bbf17523027856',
 		password : 'ff4d2a6c',
 		database : 'heroku_b37fff5796a819f'
+
 	},smtp: {
 		apikey      : 'key-8da93bbc51c1fd6f92d0de0e6b6ea3b9',
 		user     	: 'postmaster@app6b366b66c2db417b8f3347a30ad6bbe1.mailgun.org',
