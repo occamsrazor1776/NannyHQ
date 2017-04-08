@@ -130,9 +130,9 @@ exports.getMessagesSent = function(req,res){
 	//var querySql="SELECT t1.* FROM db_naan.tb_messagedetail t1 where userToPhone ='"+userTo+"' and userFromPhone  ='"+userFrom;
 	//querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
 
-	var querySql =" select * from db_naan.tb_messagedetail where userToPhone ='"+userTo+"'  and userFromPhone ='"+userFrom+"'";
-	querySql+=" or  userFromPhone ='"+userTo+"'   and userToPhone ='"+userFrom+"'  and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
-	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from db_naan.tb_messagedetail t2 group by sendingTime order by sendingTime)";
+	var querySql =" select * from tb_messagedetail where userToPhone ='"+userTo+"'  and userFromPhone ='"+userFrom+"'";
+	querySql+=" or  userFromPhone ='"+userTo+"'   and userToPhone ='"+userFrom+"'  and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from .tb_messagedetail t2  group by sendDate order by sendDate)";
+	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from .tb_messagedetail t2 group by sendingTime order by sendingTime)";
 	querySql +=" order by sendDate";
 	
 	connection.query(querySql, function(err, result)
@@ -733,6 +733,7 @@ exports.getmessngerProfile = function(req,res){
 				data:req.session.user
 			});
 	}
+
 	else{
 		
 	}
