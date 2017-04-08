@@ -131,8 +131,8 @@ exports.getMessagesSent = function(req,res){
 	//querySql+="' and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from db_naan.tb_messagedetail t2  group by sendDate order by sendDate)";
 
 	var querySql =" select * from tb_messagedetail where userToPhone ='"+userTo+"'  and userFromPhone ='"+userFrom+"'";
-	querySql+=" or  userFromPhone ='"+userTo+"'   and userToPhone ='"+userFrom+"'  and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from .tb_messagedetail t2  group by sendDate order by sendDate)";
-	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from .tb_messagedetail t2 group by sendingTime order by sendingTime)";
+	querySql+=" or  userFromPhone ='"+userTo+"'   and userToPhone ='"+userFrom+"'  and DATE(sendDate) IN (select distinct(DATE(t2.sendDate)) as sd from tb_messagedetail t2  group by sendDate order by sendDate)";
+	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from tb_messagedetail t2 group by sendingTime order by sendingTime)";
 	querySql +=" order by sendDate";
 	
 	connection.query(querySql, function(err, result)
