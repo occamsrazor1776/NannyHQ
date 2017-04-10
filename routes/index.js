@@ -192,8 +192,14 @@ exports.getMessagesRecieved = function(req, res){
 exports.getmessengerContacts1 = function(req, res) {
 	handleDisconnect();
 	//var userid = 22 ;    //req.query.userFrom;
-	var userid = 22;
-	console.log(req.query);
+	var userid;// = 12;
+	
+	var user = req.session.user;
+	user.forEach(function(element){
+		console.log(element.userId);
+		userid= element.userId;
+	});
+
 	
 	var sqlquery ="select distinct t1.*, t2.messageText, t2.sendDate from tb_contacts t1 LEFT OUTER JOIN  tb_messagedetail t2 ON t1.Id = t2.userId";
 	sqlquery+=" union select distinct   t1.*, t2.messageText, t2.sendDate from tb_contacts t1 RIGHT OUTER JOIN  tb_messagedetail t2 ON t1.Id = t2.userId";
@@ -221,6 +227,8 @@ exports.getmessengerContacts1 = function(req, res) {
 exports.getmessengerContacts = function(req, res) {
 	handleDisconnect();
 	var userIdFrom =12// req.query.userFrom;
+
+
 	
 	//console.log(req.query.userFrom);
 	var lastmsg =''; var format_date='';

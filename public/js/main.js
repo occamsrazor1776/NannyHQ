@@ -490,7 +490,7 @@ function getsmslist(){
 
 function getmessengerContacts1(){
   var useridFrom =$('input[name=uId]').val();// $('#uId').val();// $("#lbluser1").html(); 
-  console.log(useridFrom);
+  console.log( "id " +useridFrom);
   var lastmsg;
   var datase = { userFrom : useridFrom };
   var arr = [];
