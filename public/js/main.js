@@ -166,7 +166,7 @@ $("#btnComposeSend").click(function (){
            url: "./SendSMSBulk",
            contentType: "application/json"
          }).done(function( responseData ) {
-
+          console.log(responseData);
           if(responseData.success == true){
             $( "#tab5").trigger( "click");
           }                        
