@@ -756,10 +756,15 @@ exports.getmessngerProfile = function(req,res){
 
 exports.LoginProfile = function(req, res){
 	handleDisconnect();
+	var user = req.session.user;
+
 	var userid = req.session.user;
+	user.forEach(function(element){
+		userid = element.userId;
+	});
 	var user_id = req.body.userid;
 	//console.log("session " + userid.userId);
-	var sqlQuery ="Select * from tb_users where userId = "+ user_id;
+	var sqlQuery ="Select * from tb_users where userId = "+ userid;
 
 	connection.query(sqlQuery, function(err,result){
 		if(err){
