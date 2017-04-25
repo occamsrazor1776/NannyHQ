@@ -139,8 +139,11 @@
     getuserDetails();
     getmessngerProfile(); 
     // getMessageContacts();  
-    setTimeout(getmessengerContacts1(), 15000);      
-    });
+   // setInterval((), 2000);   
+    
+    getmessengerContacts1();
+    var myVar = self.setInterval(realsentMessages, 8000);
+  });
 </script>
 </body>
 </html>

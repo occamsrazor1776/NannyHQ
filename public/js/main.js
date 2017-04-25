@@ -574,6 +574,8 @@ function getmessengerContacts1(){
   });
 }
 
+
+
 function getMessageContacts()
 {
   $("#spinloadcontact").show();
@@ -642,7 +644,8 @@ function getMessageContacts()
        url: "./SendSMSSingle",
        contentType: "application/json"
      }).done(function() {
-
+        $('#txtMessage').val('');
+       
     }).fail(function() {
      // $("#lblfail").show();
     });
@@ -657,6 +660,7 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   
   $("#hidToId").attr("value", idTo);
   $("#hidTonum").attr("value",numTo);
+
   var name = $(this).find('.messenger-list-name').text();
   var _dates = '';
   $('.btn').css('text-transform','capitalize');           
@@ -714,6 +718,58 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   }); 
 });
 
+function realsentMessages(){
+  var numTo =  $("#hidTonum").attr("value");
+  var userFrom = $("#lblUsrphn").html(); 
+  var  crthtml1="";
+  var dataSendDates  = {UserTo : numTo, UserFrom : userFrom};
+ 
+  var crthtml='';
+  crthtml ="<li class='conversation-item'><div class='conversation-self'><div class='conversation-avatar'>";
+  crthtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
+  crthtml+="<div class='conversation-messages'>";
+  var crthtmlN='';
+  crthtmlN ="<li class='conversation-item'><div class='conversation-self'>";
+  crthtmlN+="<div class='conversation-messages'>";
+  var crthtml2="</div></div></li>";
+  var chtmlN='';
+  var chtml='';
+  var chtml2="</div></div></li>";
+  chtml ="<li class='conversation-item'><div class='conversation-other'><div class='conversation-avatar'>";
+  chtml+="<img class='rounded' width='36' height='36' src='img/nophoto.jpg' alt='Teddy Wilson'></div>";
+  chtml+="<div class='conversation-messages'>";
+  chtmlN ="<li class='conversation-item'><div class='conversation-other'>";
+  chtmlN+="<div class='conversation-messages'>";
+   $.get( "/getMessagesSent", dataSendDates, function( data ){
+    var _dt='';    
+         console.log(dataSendDates)   ;
+    $.each(data.data, function(index, element){
+      var crthtml1='';       
+      var ndate = element.sendDate.split('T')[0];
+      if(_dt != ndate){
+        _dt = ndate;
+        var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate+ "</div><div></li>";
+        crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
+         
+        if(element.MessageSid != null){
+          $('.conversation').append(dthtml+chtml+crthtml1+crthtml2);
+        }
+        else{
+           $('.conversation').append(dthtml+crthtml+crthtml1+crthtml2);
+        }
+      }
+       else if(_dt==ndate){
+        crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+element.sendingTime+"</div>";
+        if(element.MessageSid != null){
+        $('.conversation').append(chtml+crthtml1+crthtml2);
+        }
+        else{
+         $('.conversation').append(crthtml+crthtml1+crthtml2);
+        }
+      }  
+    });
+  }); 
+}
 
  
 function getmessngerProfile(){
