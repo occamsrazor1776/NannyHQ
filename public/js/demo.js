@@ -689,19 +689,77 @@
     }
   }
 
+  function bootstrapTableWithToolbarAndPaginationExample1() {
+    var $demoBootstrapTable = $('#demo-bootstrap-table-8');
+    if ($demoBootstrapTable.length) {
+      $demoBootstrapTable.bootstrapTable({
+        buttonsClass: 'primary',
+        columns: [{
+          align: 'right',
+          field: 'to',
+          sortable: false,
+          title: 'To'
+        }, {
+          align: 'left',
+          field: 'Mobile',
+          sortable: false,
+          title: 'From'
+        }, {
+          align: 'right',
+          field: 'status',
+          sortable: false,
+          title: 'Status'
+        }, {
+          align: 'right',
+          field: 'direction',
+          sortable: false,
+          title: 'Direction'
+        }, {
+          align: 'right',
+          field: 'date_sent',
+          sortable: false,
+          title: 'Date sent'
+        }],
+        icons: {
+          columns: 'icon-list-ul',
+          paginationSwitchDown: 'icon-expand',
+          paginationSwitchUp: 'icon-compress',
+          refresh: 'glyphicon-refresh icon-refresh',
+          toggle: 'icon-columns'
+        },
+        iconsPrefix: 'icon',
+        minimumCountColumns: 2,
+        pageList: [],
+        pagination: true,
+        search: true,
+        showColumns: true,
+        showFooter: false,
+        showPaginationSwitch: true,
+        showRefresh: true,
+        showToggle: true,
+        striped: true,
+        url: '/app.js/smsList'
+      });
+
+      $(window).on('resize', function (evt) {
+        $demoBootstrapTable.bootstrapTable('resetView');
+      });
+    }
+  }
+
   function datatablesBasicTableExample() {
     var $datatables = $('#demo-datatables-1');
     $datatables.DataTable({
       dom: "<'row'<'col-sm-6'i><'col-sm-6'f>>" + "<'table-responsive'tr>" + "<'row'<'col-sm-6'l><'col-sm-6'p>>",
+      destroy: true,
+      fixedHeader: true,
       language: {
         paginate: {
           previous: '&laquo;',
           next: '&raquo;'
-        },
-        search: "_INPUT_",
-        searchPlaceholder: "Search…"
-      },
-      order: [[5, "desc"]]
+        }
+      }
+      
     });
   }
 

@@ -159,7 +159,7 @@ $("#btnComposeSend").click(function (){
   var mobile;
   var SMSmsg;
   var allconts = $('#hiddenCOntacts').attr('value');
-  var dataS={conts : JSON.parse(allconts)};
+  var dataS={conts : JSON.parse(allconts), nums : nums};
   $.ajax({
            type: "POST",
            data :JSON.stringify(dataS),
@@ -177,8 +177,7 @@ $("#btnComposeSend").click(function (){
 
 
 
-$(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
-$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+
 
  $("#impcontUpload1").on('change',function(e) {
     var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
@@ -195,9 +194,26 @@ $("#form-control-8").html("Hello {Column1}, we still haven't received your {Colu
     if (e.target.files != undefined) {
         var reader = new FileReader();
         reader.onload = function(e) {
-          var csvval = e.target.result.split("\n");                 
-       
+          var csvval = e.target.result.split("\n");  
+         
+           var count = csvval.length-2;
+           console.log(count);
+           // $("#lblcount").val(count);
+            $("label[for='ccount']").html(count);
+          for(var k = 0; k < 1; k++){
+            var cval = csvval[k].split(",");
+            if(k < 1){
+             
+              var strCompose = "Hello "+ cval[0]+ ", we still haven't received your "+cval[3]+"  that expired on "+cval[2]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+             // $(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+              $(".compose-editor").html(strCompose);
+              //$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+              $("#form-control-8").html(strCompose  );
+            }
+          }
             $("#bulkspin").show(); 
+
+           
           for(var j=1;j<csvval.length - 1;j++)
           {                    
             var csvvalue = csvval[j].split(",");                    
@@ -236,14 +252,54 @@ $("#form-control-8").html("Hello {Column1}, we still haven't received your {Colu
 });
 
 $("#btnSave").click(function(){ 
-  var f_name = $("#f_name").val();      
-  var l_name = $("#l_name").val();
-  var emailadd = $("#emailadd").val();
-  var mobile = $("#mobile").val();
+
+  if($("#f_name").val() == '')     {
+    $('#f_name').addClass("error"); 
+  }
+  else{
+    var f_name = $("#f_name").val(); 
+    $('#f_name').removeClass("error"); 
+  }
+
+  if($("#l_name").val() == '')     {
+    $('#l_name').addClass("error"); 
+  }
+  else{
+    var l_name = $("#l_name").val();
+    $('#l_name').removeClass("error"); 
+  }
+
+  if($("#emailadd").val() == '')     {
+    $('#emailadd').addClass("error"); 
+  }
+  else{
+    var emailadd = $("#emailadd").val();
+    $('#emailadd').removeClass("error"); 
+  }
+
+
+  if($("#mobile").val() == '')     {
+    $('#mobile').addClass("error"); 
+  }
+  else{
+    var mobile = $("#mobile").val();
+    $('#mobile').removeClass("error"); 
+  }
+
+  if($("#txtPlaces").val() == '')     {
+    $('#txtPlaces').addClass("error"); 
+  }
+  else{
+    var location = $("#txtPlaces").val();
+    $('#txtPlaces').removeClass("error"); 
+  }
+ 
+ 
   var j_title = $("#j_title").val();
-  var location = $("#txtPlaces").val();
+  
   var notes = $("#notes").val();    
   var dataS= {F_name : f_name, L_name : l_name, Emailadd : emailadd, Mobile : mobile, J_title : j_title, Location : location, Notes : notes};
+
   $.ajax({
     type: "POST",
     data :JSON.stringify(dataS),
@@ -271,6 +327,7 @@ $("#btnSave").click(function(){
     $("#lblfail").html("error occured during process.");
 
  });      
+  
 });  
 
 $("#btnUpdateProfile").click(function (){ 

@@ -12,8 +12,7 @@
     <div class="layout-content-body">
         <div class="title-bar">
           <h1 class="title-bar-title">
-            <span class="d-ib">Import Contacts</span>
-            
+            <span class="d-ib">Import Contacts</span>            
           </h1>
           <p class="title-bar-description">
             <small>Upload Contact CSV and then save them.</small>
@@ -57,8 +56,7 @@
                         <div id="impSpin" class="spinner spinner-primary"></div>
                         <div class="form-group">                           
                           <input type="button" id="btnData" class="btn btn-primary btn-next" value="Next"></input>
-                        </div>
-                          
+                        </div>                          
                     </div>
                   </div>
                 </div>
@@ -72,7 +70,6 @@
                       <div class="panel-heading">View Imported Contacts</div>
                       <input type="hidden" name="hiddenCOntacts" id="hiddenCOntacts"/>
                       <div class="panel-body panel-collapse  table-flip-scroll" data-toggle="match-height">
-
                        <table  class="table table-striped table-bordered m-b-0" cellspacing="0" width="100%" id="tbContact">
                         <thead>
                           <tr>
@@ -87,8 +84,7 @@
                         </thead>
                         <tbody>                        
                         </tbody>
-                      </table>
-                    
+                      </table>                    
                       <a href="#tab-1" data-toggle="tab" class="btn btn-info">Previous</a>
                      <input type="button" id="btnContactSave" name="btnContactSave" class="scont btn btn-primary" value="SAVE">
                      <label class="label label-success" id="lblDone"></label>
@@ -104,14 +100,14 @@
               </form> 
             </div>
          </div>
-       </div>
-     
+       </div>     
    </div>
   </div>
 </div>
 <% include ../partials/footer.html %>
 <script src="js/contacts.js?v=1.2"></script>
 <script src="js/main.js?v=1.2"></script>
+ <script src="js/demo.js?v=1.2"></script>
 <script type="text/javascript">
  $(document).ready(function (){
      getuserDetails();

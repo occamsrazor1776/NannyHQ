@@ -641,14 +641,13 @@ exports.SendSMSBulk = function(req, res) {
 	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
 	var allconts = req.body.conts;
 	var docreq;
-	console.log(allconts.length);
-	var num1;	
+	console.log(allconts);
+	var num1 = req.body.nums;
 	var mobile;
 	var SMSmsg;
 	for(var j = 1; j<allconts.length; j++){
-		console.log(mobile);
-      	console.log(SMSmsg);
-      	console.log(config.twilio.from);
+		mobile = num1[j-1];
+		
 		var newallcontacts =  allconts[j];
 		num1 = newallcontacts[2].replace('(','');
      	num1 = num1.replace(') ','');
@@ -659,7 +658,9 @@ exports.SendSMSBulk = function(req, res) {
     	SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  docreq+" that expired on ";
       	SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
       	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-      
+     	 console.log(mobile);
+      	console.log(SMSmsg);
+      	console.log(config.twilio.from);
 		client.messages.create({
 
 			to: mobile,
