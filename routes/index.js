@@ -732,9 +732,9 @@ exports.SendSMSBulk = function(req, res) {
 								connection.destroy();	
 								console.log(rest[0].Id);
 
-								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime,MessageSid,SmsSid,AccountSid,MessagingServiceSid) values (";
+								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values (";
 								sqlmsgs+="'"+responseData.body+"',"+rest[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
-								sqlmsgs+="','"+msgTime+"','"+responseData.sid+"','"+responseData.sid+"','"+responseData.account_sid+"','"+responseData.messaging_service_sid+"')";
+								sqlmsgs+="','"+msgTime+"')";
 								console.log(sqlmsgs);
 								handleDisconnect();
 						
@@ -769,9 +769,9 @@ exports.SendSMSBulk = function(req, res) {
 								connection.destroy();
 								console.log(rests[0].Id);
 								handleDisconnect();
-								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime,MessageSid,SmsSid,AccountSid,MessagingServiceSid) values (";
+								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values (";
 								sqlmsgs+="'"+responseData.body+"',"+rests[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
-								sqlmsgs+="','"+msgTime+"','"+responseData.sid+"','"+responseData.sid+"','"+responseData.account_sid+"','"+responseData.messaging_service_sid+"')";
+								sqlmsgs+="','"+msgTime+"')";
 								console.log(sqlmsgs);
 								connection.query(sqlmsgs, function(err, result1)
 								{		 
