@@ -196,7 +196,6 @@ exports.getmessengerContacts1 = function(req, res) {
 	
 	var user = req.session.user;
 	user.forEach(function(element){
-		//console.log(element.userId);
 		userid= element.userId;
 	});
 

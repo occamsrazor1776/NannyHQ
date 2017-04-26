@@ -831,7 +831,6 @@ function getContacts()
         $(".contact-sidebar-body").hide();
       }
       if(data.success==true){    
-      //console.log(data.data)      ;
         $.each(data.data, function(index, element){
            
           var createtag =" <li class='contact-list-item'><input type='hidden' name='hidToId' id='hidToId'/>";
