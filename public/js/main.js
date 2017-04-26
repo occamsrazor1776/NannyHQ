@@ -740,10 +740,12 @@ function realsentMessages(){
   chtml+="<div class='conversation-messages'>";
   chtmlN ="<li class='conversation-item'><div class='conversation-other'>";
   chtmlN+="<div class='conversation-messages'>";
+    $('.conversation').empty();
    $.get( "/getMessagesSent", dataSendDates, function( data ){
     var _dt='';    
          console.log(dataSendDates)   ;
     $.each(data.data, function(index, element){
+
       var crthtml1='';       
       var ndate = element.sendDate.split('T')[0];
       if(_dt != ndate){

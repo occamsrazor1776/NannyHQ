@@ -196,7 +196,7 @@ exports.getmessengerContacts1 = function(req, res) {
 	
 	var user = req.session.user;
 	user.forEach(function(element){
-		console.log(element.userId);
+		//console.log(element.userId);
 		userid= element.userId;
 	});
 
@@ -570,6 +570,7 @@ exports.SendSMSSingle = function(req, res) {
 
 			}
 			else {
+				
 				var sqlQuery ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values ('";
 				sqlQuery+= req.body.Message +"',"+ req.body.useridTO +",'"+req.body.Mobile+"','"+ mysqlTimestamp +"','+"+config.twilio.from+"',"+ req.body.userID +",'"+msgDate+"','"+msgTime+"')";
 				console.log(sqlQuery);
@@ -637,53 +638,185 @@ exports.SendSMSSingleBulk = function(req, res) {
 
 
 exports.SendSMSBulk = function(req, res) {
-	var twilio = require('twilio');	
-	var client = new twilio.RestClient(config.twilio.sid, config.twilio.token);
 	var allconts = req.body.conts;
-	var docreq;
-	console.log(allconts);
-	var num1 = req.body.nums;
-	var mobile;
-	var SMSmsg;
-	for(var j = 1; j<allconts.length; j++){
-		mobile = num1[j-1];
-		
-		var newallcontacts =  allconts[j];
-		num1 = newallcontacts[2].replace('(','');
-     	num1 = num1.replace(') ','');
-    	num1 = num1.replace(' ', '');
-    	num1 = num1.replace('-', '');
-    	docreq=newallcontacts[4].replace('\r', '');
-    	mobile="+1" + num1;
-    	SMSmsg ="Hello "+newallcontacts[0] +" "+ newallcontacts[1] + ", we still haven't received your " +  docreq+" that expired on ";
-      	SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
-      	var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-     	 console.log(mobile);
-      	console.log(SMSmsg);
-      	console.log(config.twilio.from);
-		client.messages.create({
+	var mobnums = req.body.nums;
+	var arr1 = [];
+	
+	
+	var sqlContacts ="Select Mobile from tb_contacts";
 
-			to: mobile,
+	handleDisconnect();
+	connection.query(sqlContacts, function(err, result)
+	{		 
+		if(err){
+			connection.destroy();
+			res.send({
+				success: false, 
+				status: err
+			});
+		}
+		else{
+			//console.log(result[0]);
+			connection.destroy();
+			if(result.length != 0){
+				result.forEach(function(elem){
+					//console.log(elem);
+					arr1.push(elem.Mobile);
+				});
+			}
+			
+		}
+
+	});
+	for(var j = 0; j<allconts.length; j++){
+		var mobile= '';
+		var SMSmsg = '';
+		var num1 = '';
+		var newallcontacts =  allconts[j];
+		var firstname = newallcontacts[0];
+
+		while( firstname.charAt( 0 ) === '"' )
+		    firstname = firstname.slice( 1 );
+
+
+		var LastName = newallcontacts[1];
+		while( LastName.charAt( LastName.length-1 ) === '"' )
+		    LastName = LastName.slice( 1 );
+
+		num1 = mobnums[j];
+        docreq=newallcontacts[4].replace('\r', '');
+        
+		SMSmsg ="Hello "+firstname +" "+ LastName + " we still havent received your " +  docreq+" that expired on ";
+      	SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+      	//var mysqlTimestamp = moment(Date.now()).format('');
+      	var now = new Date();
+		var dateFormat = require('dateformat');
+		var sendingDate=dateFormat(now,"yyyy-mm-dd HH:MM:SS");
+		var msgDate = dateFormat(now, "yyyy-mm-dd");
+    	var msgTime = dateFormat(now, "h:MM:ss TT");
+    	var mysqlTimestamp = dateFormat(now, "yyyy-mm-dd h:MM:ss");
+      	client.messages.create({
+
+			to: num1,
 			from: '+' + config.twilio.from,
 			body:  SMSmsg//,	
 		}, function(err, responseData) { //this function is executed when a response is received from Twilio
 		
 			if (!err) { // "err" is an error received during the request, if any
 			
-				console.log(responseData.from); // outputs "+14506667788"
-				console.log(responseData.body); // outputs "word to your mother."
-				console.log(responseData);
-				
-				res.send({
-					success: true,
-					result: "Message Sent successfully."
-				});
+				//console.log(responseData.from); // outputs "+14506667788"
+				//console.log(responseData.body); // outputs "word to your mother."
+				//console.log(responseData);
+				handleDisconnect();
+				if(arr1.length > 0 ) {
+					if(arr1.indexOf(responseData.to) == -1){
+						//var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+						handleDisconnect();
+						var sql = "INSERT INTO tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES (";
+						sql+="'"	+firstname+"','"+LastName+"','','"+responseData.to+"','','','','"+mysqlTimestamp+"',0)";
+						connection.query(sql, function(err, result)
+						{		 
+							if(err){
+								connection.destroy();								
+							}
+							else{
+								//console.log(result[0]);
+								connection.destroy();
+							}
 
-			} else {
-				result: "Message Sending failed."
+						});
+						var userTo_id;
+						handleDisconnect();
+						var sqlgetuserid ="SELECT max(Id) as Id FROM tb_contacts order by id desc ";
+						connection.query(sqlgetuserid, function(err,rest){
+							if(!err){
+								connection.destroy();	
+								console.log(rest[0].Id);
+
+								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime,MessageSid,SmsSid,AccountSid,MessagingServiceSid) values (";
+								sqlmsgs+="'"+responseData.body+"',"+rest[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
+								sqlmsgs+="','"+msgTime+"','"+responseData.sid+"','"+responseData.sid+"','"+responseData.account_sid+"','"+responseData.messaging_service_sid+"')";
+								console.log(sqlmsgs);
+								handleDisconnect();
+						
+								connection.query(sqlmsgs, function(err, result1)
+								{		 
+									if(err){
+										connection.destroy();								
+									}
+									else{
+										console.log(result1[0]);
+										connection.destroy();	
+										console.log(result1)							;
+									}
+								});
+							}
+						});
+						handleDisconnect();
+						 var user = req.session.user;
+
+						var userid ;
+						user.forEach(function(element){
+							userid = element.userId;
+						});
+					}
+					else{
+
+						handleDisconnect();
+						var userTo_id;
+						var sqlgetuserid ="SELECT max(Id) as Id FROM tb_contacts where Mobile ='"+responseData.to+"' order by id desc ";
+						connection.query(sqlgetuserid, function(err,rests){
+							if(!err){
+								connection.destroy();
+								console.log(rests[0].Id);
+								handleDisconnect();
+								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime,MessageSid,SmsSid,AccountSid,MessagingServiceSid) values (";
+								sqlmsgs+="'"+responseData.body+"',"+rests[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
+								sqlmsgs+="','"+msgTime+"','"+responseData.sid+"','"+responseData.sid+"','"+responseData.account_sid+"','"+responseData.messaging_service_sid+"')";
+								console.log(sqlmsgs);
+								connection.query(sqlmsgs, function(err, result1)
+								{		 
+									if(err){
+										connection.destroy();								
+									}
+									else{
+										console.log(result1[0]);
+										connection.destroy();	
+										console.log(result1)							;
+									}
+								});
+							}
+						});
+						handleDisconnect();
+						 var user = req.session.user;
+
+						var userid ;
+						user.forEach(function(element){
+							userid = element.userId;
+						});
+
+							
+						
+					}
+				}
+
+				
+
+			//res.send({
+				//	success: true,
+				//	result: "Message Sent successfully."
+				//});
+				
+			} 
+			else {
+				res.send({
+					success: false,
+					status: "Message sending failed."
+				});
 			}	
 		});
 	}
+
 };
 
 exports.getContacts = function(req, res) {
