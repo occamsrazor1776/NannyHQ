@@ -120,66 +120,109 @@ $("#impcontUpload").on('change',function(e) {
 });
 
 $(document).on("click", ".scont", function(){
-   setTimeout($("#impSpin").show(),10000);   
-  var arr = new Array();
-    var contval =  $('#hiddenCOntacts').attr('value'); 
+   $(".impSpin").show();   
+    var contacts = new Array();
+    var userId = $("#lbluser1").html();
+
+    var iContacts =  $('#hiddenCOntacts').attr('value'); 
      $.get("/getContacts", function ( data ){
         $.each(data.data, function(index, element){
-          arr.push(element.Mobile);
+          contacts.push(element.Mobile);
         })
-        console.log(arr);
-     });
-    var dataS = {conts: JSON.parse(contval), MobArr: arr} ;
-    $.ajax({
-      type: "POST",
-      data: JSON.stringify(dataS),
-      url: "./newcontacts",
-      contentType: "application/json"
-    }).done(function(data){
-      if(data.success==true){
-          $("#impSpin").hide();
-        $("#lblDone").html("Saved Successfully");
-        console.log("Saved Successfully");
-      }
-      else{
-          $("#impSpin").hide();
-         $("#lblinfo").html("Numbers are already exists.")
-      }
-    }).fail(function(){
-        $("#impSpin").hide();
-        $("#lblinfo").html("Numbers are already exists.")
-    });
+
+        var dataS = {iContacts: JSON.parse(iContacts), eContacts: contacts, userId: userId} ;
+        //console.log(dataS);
+        $.ajax({
+          type: "POST",
+          data: JSON.stringify(dataS),
+          url: "./newcontacts",
+          contentType: "application/json"
+        }).done(function(data){
+          if(data.success==true){
+              $(".impSpin").hide();
+          }
+          else{
+              $(".impSpin").hide();
+             $("#lblinfo").html(data.status)
+          }
+        }).fail(function(){
+            $(".impSpin").hide();
+            $("#lblinfo").html("Error: Problem while importing contacts")
+        });
+     });    
 });
 
 //////////    IMPORT CONTACT SECTION END
 
-$("#btnComposeSend").click(function (){  
-  var nums = $("#txtTo").val().split(',');
-  var num1;           
-  var mobile;
-  var SMSmsg;
-  var allconts = $('#hiddenCOntacts').attr('value');
-  var dataS={conts : JSON.parse(allconts), nums : nums};
-  $.ajax({
-           type: "POST",
-           data :JSON.stringify(dataS),
-           url: "./SendSMSBulk",
-           contentType: "application/json"
-         }).done(function( responseData ) {
-          console.log(responseData);
-          if(responseData.success == true){
-            $( "#tab5").trigger( "click");
-          }                        
-        }).fail(function() {
-         
+$("#btnComposeSend").click(function (){    
+    $(".impSpin").show();   
+    $("lblinfo").hide();
+
+    var contacts = new Array();
+    var userId = $("#lbluser1").html(); 
+
+    var iContacts =  $('#hiddenContacts2').attr('value'); 
+
+     $.get("/getContacts", function ( data ){
+        $.each(data.data, function(index, element){
+          contacts.push(element.Mobile);
+        })
+
+        var dataS = {iContacts: JSON.parse(iContacts), eContacts: contacts, userId: userId};
+        //console.log(dataS);
+        $.ajax({
+          type: "POST",
+          data: JSON.stringify(dataS),
+          url: "./newcontacts",
+          contentType: "application/json"
+        }).done(function(data){
+          if(data.success==true){
+
+            var nums = $("#txtTo").val().split(',');
+            var allconts = $('#hiddenCOntacts').attr('value');
+            var temp=$(".compose-editor").html();
+            var cols=$("#hiddenCol").attr('value');
+            var dataS1={bMessages : JSON.parse(allconts), eContacts : nums, userId: userId, temp:temp, cols:cols };
+            //console.log(dataS1);
+            $.ajax({
+                type: "POST",
+                data :JSON.stringify(dataS1),
+                url: "./SendSMSBulk",
+                contentType: "application/json"
+            }).done(function( responseData ) {
+              console.log(responseData);
+              if(responseData.success == true){                    
+                $(".impSpin").hide();
+                $("#lblinfo").show().addClass("label-success");
+                $( "#tab5").trigger( "click");
+              }   
+              else
+              {
+                $(".impSpin").hide();
+                $("#lblinfo").html(responseData.status).show().addClass("label-danger");
+              }                     
+            }).fail(function() {
+              $(".impSpin").hide();
+              $("#lblinfo").html("Error: Problem while sending messages").show().addClass("label-danger");                 
+            });
+          }
+          else{
+              $(".impSpin").hide();
+             $("#lblinfo").html(data.status).show().addClass("label-danger");
+          }
+        }).fail(function(){
+            $(".impSpin").hide();
+            $("#lblinfo").html("Error: Problem while adding new contacts").show().addClass("label-danger");
         });
+     });  
+});
+
+$("#btnCopmose").click(function (){  
+  $("#form-control-8").html($(".compose-editor").html());  
 });
 
 
-
-
-
- $("#impcontUpload1").on('change',function(e) {
+$("#impcontUpload1").on('change',function(e) {
     var ext = $("input#impcontUpload1").val().split(".").pop().toLowerCase();
     var numlist ;
     var name;
@@ -187,6 +230,7 @@ $("#btnComposeSend").click(function (){
     var missingCertificates;
     var expDate;
     var arr=[];  
+    var iContacts=[];  
     if($.inArray(ext, ["csv"]) == -1) {
       alert('Format not supported Upload only CSV');
       return false;
@@ -197,26 +241,34 @@ $("#btnComposeSend").click(function (){
           var csvval = e.target.result.split("\n");  
          
            var count = csvval.length-2;
-           console.log(count);
            // $("#lblcount").val(count);
             $("label[for='ccount']").html(count);
-          for(var k = 0; k < 1; k++){
-            var cval = csvval[k].split(",");
-            if(k < 1){
-             
-              var strCompose = "Hello "+ cval[0]+ ", we still haven't received your "+cval[3]+"  that expired on "+cval[2]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
-             // $(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
-              $(".compose-editor").html(strCompose);
-              //$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
-              $("#form-control-8").html(strCompose  );
-            }
-          }
-            $("#bulkspin").show(); 
 
-           
+            if(csvval.length > 1){
+              for(var k = 0; k <= 0; k++){
+                var cval = csvval[k].split(",");
+                 if(cval[0])
+                  cval[0]=cval[0].trim();
+                 if(cval[2])
+                  cval[2]=cval[2].trim();
+                 if(cval[3])
+                  cval[3]=cval[3].trim();
+
+                  var strCompose = "Hello {"+ cval[0]+ "}, we still haven't received your {"+cval[3]+"}  that expired on {"+cval[2]+"}. Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+                 // $(".compose-editor").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+                  $(".compose-editor").html(strCompose);
+                  //$("#form-control-8").html("Hello {Column1}, we still haven't received your {Column4} that expired on {Column3}. Please reply to this message with an updated copy or fax to (xxx) xxx-xxxx. Thank you");
+              }
+            }
+            $("#bulkspin").show();            
+
+            $("#hiddenCol").attr('value',  csvval[0]);
           for(var j=1;j<csvval.length - 1;j++)
           {                    
-            var csvvalue = csvval[j].split(",");                    
+            var csvvalue = csvval[j].split(",");  
+            csvvalue[0]=csvvalue[0].replace('"','').trim();
+            csvvalue[1]=csvvalue[1].replace('"','').trim();
+
             var appStr ="<tr> <td class='text-left'>"+csvvalue[0] + " </td> <td class='text-left'> "+ csvvalue[1] + "</td>";
             appStr+="<td class='text-left'>" + csvvalue[2] + "</td> <td class='text-left'>"+ csvvalue[3] +"</td>";
             appStr+="<td class='text-left'>"+ csvvalue[4] +"</td>";
@@ -227,7 +279,7 @@ $("#btnComposeSend").click(function (){
               num1 = num1.replace(' ', '');
               num1 = num1.replace('-', '');
               num1 = num1.replace(' ', '');
-              var  mobile = "+91" + num1;
+              var  mobile = num1;
               if(numlist == null){
                 numlist =  mobile + "," ;
               }
@@ -236,8 +288,20 @@ $("#btnComposeSend").click(function (){
                 numlist = numlist + mobile + "," ;
               }
               arr.push(csvvalue); 
+
+              var iContact=new Array();
+              iContact.push(csvvalue[0]); 
+              iContact.push(csvvalue[1]); 
+              iContact.push(""); 
+              iContact.push(""); 
+              iContact.push(""); 
+              iContact.push("");  
+              iContact.push(mobile); 
+              iContacts.push(iContact); 
           }
              $('#hiddenCOntacts').attr('value',  JSON.stringify(arr));
+             $('#hiddenContacts2').attr('value',  JSON.stringify(iContacts)); 
+
           $("#bulkspin").hide(); 
           var formatnums = numlist.split(',');
           var newfnums;
@@ -547,7 +611,7 @@ function getsmslist(){
 
 function getmessengerContacts1(){
   var useridFrom =$('input[name=uId]').val();// $('#uId').val();// $("#lbluser1").html(); 
-  console.log( "id " +useridFrom);
+  //console.log( "id " +useridFrom);
   var lastmsg;
   var datase = { userFrom : useridFrom };
   var arr = [];
@@ -689,7 +753,7 @@ $("ul.messenger-list").on("click","li.messenger-list-item", function(){
   chtmlN+="<div class='conversation-messages'>";
   $.get( "/getMessagesSent", dataSendDates, function( data ){
     var _dt='';    
-         console.log(dataSendDates)   ;
+         //console.log(dataSendDates)   ;
     $.each(data.data, function(index, element){
       var crthtml1='';       
       var ndate = element.sendDate.split('T')[0];
@@ -740,36 +804,36 @@ function realsentMessages(){
   chtml+="<div class='conversation-messages'>";
   chtmlN ="<li class='conversation-item'><div class='conversation-other'>";
   chtmlN+="<div class='conversation-messages'>";
-    $('.conversation').empty();
    $.get( "/getMessagesSent", dataSendDates, function( data ){
-    var _dt='';    
-         console.log(dataSendDates)   ;
-    $.each(data.data, function(index, element){
+      var _dt='';    
+        //console.log(data);
+      $('.conversation').empty();
+      $.each(data.data, function(index, element){
 
-      var crthtml1='';       
-      var ndate = element.sendDate.split('T')[0];
-      if(_dt != ndate){
-        _dt = ndate;
-        var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate+ "</div><div></li>";
-        crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
-         
-        if(element.MessageSid != null){
-          $('.conversation').append(dthtml+chtml+crthtml1+crthtml2);
+        var crthtml1='';       
+        var ndate = element.sendDate.split('T')[0];
+        if(_dt != ndate){
+          _dt = ndate;
+          var dthtml="<li class='conversation-item'><div class='divider'><div class='divider-content'>"+ ndate+ "</div><div></li>";
+          crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div>";
+           
+          if(element.MessageSid != null){
+            $('.conversation').append(dthtml+chtml+crthtml1+crthtml2);
+          }
+          else{
+             $('.conversation').append(dthtml+crthtml+crthtml1+crthtml2);
+          }
         }
-        else{
-           $('.conversation').append(dthtml+crthtml+crthtml1+crthtml2);
-        }
-      }
-       else if(_dt==ndate){
-        crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+element.sendingTime+"</div>";
-        if(element.MessageSid != null){
-        $('.conversation').append(chtml+crthtml1+crthtml2);
-        }
-        else{
-         $('.conversation').append(crthtml+crthtml1+crthtml2);
-        }
-      }  
-    });
+         else if(_dt==ndate){
+          crthtml1 +="<div class='conversation-message'>"+element.messageText+"</div><div class='conversation-timestamp'>"+element.sendingTime+"</div>";
+          if(element.MessageSid != null){
+          $('.conversation').append(chtml+crthtml1+crthtml2);
+          }
+          else{
+           $('.conversation').append(crthtml+crthtml1+crthtml2);
+          }
+        }  
+      });
   }); 
 }
 
@@ -914,7 +978,6 @@ function getContacts()
 
               $(this).closest(".contact-list-divider").show();                                  
               $(createtag).insertAfter( $(this).closest(".contact-list-divider") );
-              console.log("aa");
             }
             else if($(this).text().toLowerCase()==='s' && element.FirstName.substring(0,1).toLowerCase()=="s"){  
               $(this).closest(".contact-list-divider").show();                                   

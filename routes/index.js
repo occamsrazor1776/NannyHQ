@@ -124,6 +124,8 @@ exports.getMessagesSent = function(req,res){
 	var userTo = req.query.UserTo;
 	var userFrom = req.query.UserFrom;
 	var _dt = req.query.date;
+	//console.log(userTo);
+	//console.log(userFrom);
 	handleDisconnect();
 	//var querySql = "select * from tb_messagedetail where userFromId ="+ userIdFrom +" and userId =" + userIdTo +" and DATE(sendDate) = '"+_dt+ "' order by sendDate;"
 	
@@ -135,10 +137,11 @@ exports.getMessagesSent = function(req,res){
 	querySql+=" and sendingTime IN (select distinct(t2.sendingTime) as sd from tb_messagedetail t2 group by sendingTime order by sendingTime)";
 	querySql +=" order by sendDate";
 	
+	//console.log(querySql);
 	connection.query(querySql, function(err, result)
 	{		 
 		if(err){
-			console.log(err);
+			//console.log(err);
 			connection.destroy();
 			res.send({
 				success: false, 
@@ -153,7 +156,6 @@ exports.getMessagesSent = function(req,res){
 				status: err,
 				data:result
 			});
-			//res.redirect('/');
 		}
 	});
 };
@@ -633,16 +635,17 @@ exports.SendSMSSingleBulk = function(req, res) {
 };
 
 
-
-
-
 exports.SendSMSBulk = function(req, res) {
-	var allconts = req.body.conts;
-	var mobnums = req.body.nums;
-	var arr1 = [];
+	var allconts = req.body.bMessages;
+	var mobnums = req.body.eContacts;
+	var userId = req.body.userId;
+	var template = req.body.temp;
+	var cols = req.body.cols;
+	var eMobiles = [];
+	var eIds = [];
 	
 	
-	var sqlContacts ="Select Mobile from tb_contacts";
+	var sqlContacts ="Select Mobile,Id from tb_contacts";
 
 	handleDisconnect();
 	connection.query(sqlContacts, function(err, result)
@@ -655,168 +658,124 @@ exports.SendSMSBulk = function(req, res) {
 			});
 		}
 		else{
-			//console.log(result[0]);
 			connection.destroy();
 			if(result.length != 0){
 				result.forEach(function(elem){
 					//console.log(elem);
-					arr1.push(elem.Mobile);
+					eMobiles.push(elem.Mobile);
+					eIds.push(elem.Id);
 				});
-			}
-			
+				sendSMSToUsers(allconts, mobnums,eMobiles,eIds,userId,template,cols,res);
+			}			
 		}
 
 	});
+	
+};
+
+sendSMSToUsers =function(allconts, mobnums,eMobiles,eIds,userId,template,cols,res)
+{
+	var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) VALUES ";
+	var count=0;	
+	var counter = [];
+	var colHeaders=	cols.split(",");
+
 	for(var j = 0; j<allconts.length; j++){
 		var mobile= '';
 		var SMSmsg = '';
 		var num1 = '';
 		var newallcontacts =  allconts[j];
+
 		var firstname = newallcontacts[0];
 
 		while( firstname.charAt( 0 ) === '"' )
 		    firstname = firstname.slice( 1 );
 
-
 		var LastName = newallcontacts[1];
 		while( LastName.charAt( LastName.length-1 ) === '"' )
 		    LastName = LastName.slice( 1 );
 
-		num1 = mobnums[j];
+		num1 = "+1"+ mobnums[j];
         docreq=newallcontacts[4].replace('\r', '');
         
-		SMSmsg ="Hello "+firstname +" "+ LastName + " we still havent received your " +  docreq+" that expired on ";
-      	SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
+        SMSmsg=template;
+        SMSmsg=SMSmsg.replace("{" + colHeaders[0] +"}",firstname +" "+ LastName);
+        SMSmsg=SMSmsg.replace("{" + colHeaders[3].trim() +"}",docreq);
+        SMSmsg=SMSmsg.replace("{" + colHeaders[2] +"}",newallcontacts[3]);
+		//console.log(colHeaders[3].trim());
+		//console.log(SMSmsg);
+		//SMSmsg ="Hello "+firstname +" "+ LastName + " we still haven't received your " +  docreq+" that expired on ";
+      	//SMSmsg+= newallcontacts[3]+". Please reply to this message with an updated copy or fax to (954) 440-7348. Thank you";
       	//var mysqlTimestamp = moment(Date.now()).format('');
+
       	var now = new Date();
 		var dateFormat = require('dateformat');
 		var sendingDate=dateFormat(now,"yyyy-mm-dd HH:MM:SS");
 		var msgDate = dateFormat(now, "yyyy-mm-dd");
     	var msgTime = dateFormat(now, "h:MM:ss TT");
     	var mysqlTimestamp = dateFormat(now, "yyyy-mm-dd h:MM:ss");
-      	client.messages.create({
 
+    	var sUser=eIds[eMobiles.indexOf(num1)];
+		//console.log(sUser);
+
+      	client.messages.create({
 			to: num1,
 			from: '+' + config.twilio.from,
 			body:  SMSmsg//,	
 		}, function(err, responseData) { //this function is executed when a response is received from Twilio
-		
-			if (!err) { // "err" is an error received during the request, if any
-			
-				//console.log(responseData.from); // outputs "+14506667788"
-				//console.log(responseData.body); // outputs "word to your mother."
-				//console.log(responseData);
-				handleDisconnect();
-				if(arr1.length > 0 ) {
-					if(arr1.indexOf(responseData.to) == -1){
-						//var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
-						handleDisconnect();
-						var sql = "INSERT INTO tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES (";
-						sql+="'"	+firstname+"','"+LastName+"','','"+responseData.to+"','','','','"+mysqlTimestamp+"',0)";
-						connection.query(sql, function(err, result)
-						{		 
-							if(err){
-								connection.destroy();								
-							}
-							else{
-								//console.log(result[0]);
-								connection.destroy();
-							}
-
-						});
-						var userTo_id;
-						handleDisconnect();
-						var sqlgetuserid ="SELECT max(Id) as Id FROM tb_contacts order by id desc ";
-						connection.query(sqlgetuserid, function(err,rest){
-							if(!err){
-								connection.destroy();	
-								console.log(rest[0].Id);
-
-								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values (";
-								sqlmsgs+="'"+responseData.body+"',"+rest[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
-								sqlmsgs+="','"+msgTime+"')";
-								console.log(sqlmsgs);
-								handleDisconnect();
-						
-								connection.query(sqlmsgs, function(err, result1)
-								{		 
-									if(err){
-										connection.destroy();								
-									}
-									else{
-										console.log(result1[0]);
-										connection.destroy();	
-										console.log(result1)							;
-									}
-								});
-							}
-						});
-						handleDisconnect();
-						 var user = req.session.user;
-
-						var userid ;
-						user.forEach(function(element){
-							userid = element.userId;
-						});
-					}
-					else{
-
-						handleDisconnect();
-						var userTo_id;
-						var sqlgetuserid ="SELECT max(Id) as Id FROM tb_contacts where Mobile ='"+responseData.to+"' order by id desc ";
-						connection.query(sqlgetuserid, function(err,rests){
-							if(!err){
-								connection.destroy();
-								console.log(rests[0].Id);
-								handleDisconnect();
-								var sqlmsgs ="INSERT INTO tb_messagedetail (messageText,userId,userToPhone,sendDate,userFromPhone,userFromId,sendingDate,sendingTime) values (";
-								sqlmsgs+="'"+responseData.body+"',"+rests[0].Id+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userid+",'"+msgDate;
-								sqlmsgs+="','"+msgTime+"')";
-								console.log(sqlmsgs);
-								connection.query(sqlmsgs, function(err, result1)
-								{		 
-									if(err){
-										connection.destroy();								
-									}
-									else{
-										console.log(result1[0]);
-										connection.destroy();	
-										console.log(result1)							;
-									}
-								});
-							}
-						});
-						handleDisconnect();
-						 var user = req.session.user;
-
-						var userid ;
-						user.forEach(function(element){
-							userid = element.userId;
-						});
-
-							
-						
-					}
-				}
-
-				
-
-			//res.send({
-				//	success: true,
-				//	result: "Message Sent successfully."
-				//});
-				
-			} 
+        	counter.push(true);		
+			if (!err) { 
+				var messageText=responseData.body;
+				messageText=messageText.replace("'","´");
+				messageText=messageText.replace('"',"´");
+				sqlmsgs+=" ('"+messageText+"',"+sUser+",'"+responseData.to+"','"+mysqlTimestamp+"','"+responseData.from+"',"+userId+",'"+msgDate+"','"+msgTime+"') ";
+				count++;
+				//console.log(sqlmsgs);	
+			}
 			else {
+				//console.log(err);
+			}	
+			if(counter.length === allconts.length){
+            	//console.log('all messages sent');
+            	sendMessages(sqlmsgs, count, res);
+        	}
+		});
+	}	
+}
+
+sendMessages=function(sql, count,res)
+{
+    //console.log(sql);
+	if(count > 0)
+	{			
+		handleDisconnect();		
+		connection.query(sql, function(err, result1)
+		{	
+			connection.destroy();	 
+			if(err){			
 				res.send({
 					success: false,
-					status: "Message sending failed."
-				});
-			}	
+					status: "Error: Problem while sending messages."+err
+				});							
+			}
+			else{			
+				res.send({
+					success: true,
+					status: "messages successfully sent."
+				});		
+			}
 		});
 	}
+	else
+	{	
+		res.send({
+			success: true,
+			status: "messages successfully sent."
+		});	
 
-};
+	}
+}
+
 
 exports.getContacts = function(req, res) {
 	handleDisconnect();
@@ -1070,86 +1029,110 @@ exports.newContact = function(req, res) {
 
 exports.newContacts = function(req,res){
 	handleDisconnect();
-	var contval = req.body.conts;
-	var csvval = contval;
-	var m_name="";
-    var cmobile;
+	var iContacts = req.body.iContacts;
+	var eContacts = req.body.eContacts;
+	var userId = req.body.userId;
+	var csvval = iContacts;
     
-    var count = 0 ;
-    var outp = new Array();   
-    var obj = {};         
-    var j; 
-    var arr = new Array(); 
+    if(csvval.length > 0)
+    {
+	    var count = 0;
+	    var ecount = 0;
+	    var obj = {};         
+	    var j; 
 
-    var sqlquery="insert into tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES ";
-    var sqlquery1='';
-    var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
+	    var sqlquery="insert into tb_contacts (FirstName,LastName,Email,Mobile,jobTitle,Location,Notes,createdDate,userId) VALUES ";
+	    var sqlquery1='';
+	    var mysqlTimestamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
 
+		for( j = 0; j <=  csvval.length-1; j++){
+			var csvvalue = csvval[j]; 
 
-   	var sqlQ ="Select Mobile from tb_contacts";
-    connection.query(sqlQ, function(err, result)
-	{		 
-		if(err){
-			console.log(err);				
-			connection.destroy();
-			res.send({
-				success: false, 
-				status: err
-			});
+			var firstname=csvvalue[0];
+			firstname=firstname.replace("'","");
+
+			var lastname=csvvalue[1];
+			lastname=lastname.replace("'","");
+					
+			var email="";
+
+			var mobile ='';
+			mobile = csvvalue[6].replace(' (','');
+			mobile = mobile.replace(') ','');
+			mobile = mobile.replace(' ', '');
+			mobile = mobile.replace('-', '');
+			mobile = mobile.replace('\r', '');
+			mobile = "+1" + mobile;	
+			var title ='';
+
+			var location=csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +" "+ csvvalue[5];
+			location=location.replace("'","");
+
+			var notes ='';
+
+			var title=csvvalue[2];
+			title=email.replace("'","");
+
+		    if(eContacts.length > 0 ) {
+		    	if(eContacts.indexOf(mobile) == -1){
+			    	sqlquery1 = " ('"+ firstname +"','"+ lastname +"','"+email+"','"+mobile +"','"+title+"','"+ location +"','"+notes+"','"+mysqlTimestamp+"',"+userId+"),";
+			    	sqlquery +=sqlquery1;
+			    	count++;
+			    }
+			    else
+			    {
+			    	ecount++;
+			    }
+			}
+		    else
+		    {
+		    	sqlquery1 = " ('"+ firstname +"','"+ lastname +"','"+email+"','"+mobile +"','"+title+"','"+ location +"','"+notes+"','"+mysqlTimestamp+"',"+userId+"),";
+			    sqlquery +=sqlquery1;
+			    count++;
+		    }	    	
 		}
-		else{
-			connection.destroy();
-			result.forEach(function(item){	
-				outp.push(item.Mobile);
-			});
-			//arr = outp;
-			for( j = 1; j <  csvval.length-1; j++){
-				var csvvalue = csvval[j]; 
-				var num1 ='';
-				num1 = csvvalue[6].replace(' (','');
-			    num1 = num1.replace(') ','');
-		    	num1 = num1.replace(' ', '');
-		    	num1 = num1.replace('-', '');
-		    	num1 = num1.replace('\r', '');
-		    	num1 = "+1" + num1;		    	
-	    		if(outp.length > 0 ) {
-	    			if(outp.indexOf(num1) == -1){
-		    			sqlquery1 = " ('"+ csvvalue[0] +"','"+ csvvalue[1] +"','','"+num1 +"','','"+ csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +""+ csvvalue[5] +"','','"+mysqlTimestamp+"',0),";
-		    			sqlquery +=sqlquery1;
-		    		}
-		    	}
-	    		else
-	    		{
-	    			sqlquery1 = " ('"+ csvvalue[0] +"','"+ csvvalue[1] +"','','"+num1 +"','','"+ csvvalue[2] +" "+ csvvalue[3] +" "+ csvvalue[4] +""+ csvvalue[5] +"','','"+mysqlTimestamp+"',0),";
-		    		sqlquery +=sqlquery1;
-	    		}	    	
-		    }
-		    sqlquery=sqlquery.substring(0,sqlquery.length-1);
-		    handleDisconnect();
-		    console.log(sqlquery);
-		    var errorno;
-		    connection.query(sqlquery, function(err, result)
+
+		if(count> 0)
+		{
+			sqlquery=sqlquery.substring(0,sqlquery.length-1);
+			handleDisconnect();
+			console.log(sqlquery);
+			var errorno;
+			connection.query(sqlquery, function(err, result)
 			{		 
 				if(err){
 					console.log(err.errno);	
-								
+										
 					connection.destroy();
 					res.send({
-						status: err,
-						success: false
+						success: false,
+						status: "Error: " + err
 					});
 				}
 				else{
 					connection.destroy();
 					res.send({
 						success: true, 
-						status: "Contacts Inserted and contacts that already exists are ignored!!"
+						status: count + " Contacts Inserted and " + ecount + " Existing Contacts found."
 					});
 				}
-			});
+			}); 
 		}
-	});   
-   
+		else
+		{
+			res.send({
+				success: true,
+				status: "No Contact found for Insertion and " + ecount + " Existing Contacts found."
+			});	
+		}
+	}
+	else
+	{
+		res.send({
+			success: false,
+			status: "No Contact found for Insertion"
+		});		
+	}
 }
 
 

@@ -464,6 +464,20 @@ html {
           box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
   margin-bottom: 10px;
 }
+
+#msgUser.icon-users:before {
+    content: "\f0c0";
+    padding-right: 10px;
+}
+
+#form-control-8
+{
+      width: 100%;
+    float: left;
+    height: auto;
+    background-color: #ccc;
+}
+
 @media (min-width: 768px) {
   .navbar-header {
     -webkit-transition: width 0.3s;
